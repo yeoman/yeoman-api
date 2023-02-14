@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/lerna/schemas/lerna-schema.json",
+  "useWorkspaces": true,
+  "command": {
+    "version": {
+      "conventionalCommits": true,
+      "createRelease": "github",
+      "changelogPreset": "conventionalcommits"
+    }
+  },
+  "ignoreChanges": ["**/*.test.ts", "**/test/fixtures/**", "**/.*"],
+  "version": "independent"
+}

@@ -1,4 +1,4 @@
-# yeoman-api
+# @yeoman/api
 
 [![NPM version][npm-image]][npm-url]
 [![NPM Test](https://github.com/yeoman/yeoman-api/workflows/NPM%20Test/badge.svg)](https://github.com/yeoman/yeoman-api/actions?query=workflow%3A%22NPM+Test%22)

@@ -1,6 +1,6 @@
-node_modules
-coverage
-.nyc_output
-.idea
-/.project
 dist
+build
+coverage
+node_modules
+lerna-debug.log
+.DS_Store

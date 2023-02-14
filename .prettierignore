@@ -1,5 +1,4 @@
-.nyc_output
-.vscode
-coverage
-dist
-test/fixtures
+workspaces/*/build/**
+workspaces/*/dist/**
+workspaces/*/coverage/**
+package-lock.json

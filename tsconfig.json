@@ -1,5 +1,5 @@
 {
-  "include": ["src/**/*"],
+  "include": [],
   "compilerOptions": {
     /* Language and Environment */
     "target": "ES2022" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
@@ -8,16 +8,14 @@
 
     /* Modules */
     "module": "node16" /* Specify what module code is generated. */,
-    "rootDir": "./src" /* Specify the root folder within your source files. */,
-    "resolveJsonModule": true,
+    "rootDir": "" /* Specify the root folder within your source files. */,
 
     /* Emit */
     "outDir": "./dist" /* Specify an output folder for all emitted files. */,
     "declaration": true,
+    "sourceMap": true,
 
     /* Interop Constraints */
-    "allowSyntheticDefaultImports": true /* Allow 'import x from y' when a module doesn't have a default export. */,
-    "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
     "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
 
     /* Type Checking */
