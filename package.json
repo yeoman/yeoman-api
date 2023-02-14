@@ -1,0 +1,75 @@
+{
+  "name": "@yeoman/api",
+  "version": "0.0.0",
+  "description": "Common API for yeoman's generator/environment stack",
+  "keywords": [
+    "yeoman",
+    "api"
+  ],
+  "homepage": "http://yeoman.io/authoring/testing.html",
+  "repository": "yeoman/yeoman-api",
+  "license": "MIT",
+  "author": "The Yeoman Team",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "precommit": "lint-staged",
+    "prepare": "npm run build",
+    "prettier": "prettier . --write",
+    "pretest": "xo",
+    "test": "c8 mocha --forbid-only"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run precommit"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "xo --fix",
+      "git add"
+    ],
+    "*.json": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@node-loaders/esbuild": "^0.7.1",
+    "@types/mocha": "^10.0.0",
+    "cpy-cli": "^4.2.0",
+    "mem-fs": "^2.2.1",
+    "mocha": "^10.2.0",
+    "prettier": "^2.8.2",
+    "prettier-plugin-packagejson": "^2.3.0",
+    "typescript": "^4.9.4",
+    "xo": "^0.53.1"
+  },
+  "peerDependencies": {
+    "@types/inquirer": "^9.0.3",
+    "mem-fs": "^2.2.1"
+  },
+  "peerDependenciesMeta": {
+    "inquirer": {
+      "optional": true
+    },
+    "mem-fs": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": "^16.13.0 || >=18.12.0"
+  }
+}
