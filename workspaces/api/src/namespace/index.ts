@@ -1,4 +1,5 @@
 // ===================== | == @ ======== scope ======== | ===== unscoped ===== | = : ========== generator ======== | = @ ===== semver ===== @  | = # ========= instanceId ======== | == + ======== method ======= |= flags = |
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const NAMESPACE_REGEX =
   /^(?:(@[a-z\d-~][a-z\d-._~]*)\/)?([a-z\d-~][a-z\d-._~]*)(?::((?:[a-z\d-~][a-z\d-._~]*:?)*))?(?:@([a-z\d-.~><+=^* ]*)@?)?(?:#((?:[a-z\d-~][a-z\d-._~]*|\*)))?(?:\+((?:[a-zA-Z\d]\w*\+?)*))?(\?)?$/;
 
@@ -24,46 +25,59 @@ function parseNamespace(complete: string): YeomanNamespace | undefined {
     return;
   }
 
-  const parsed = { complete };
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  const parsed = { complete } as ParsedNamespace;
   // Populate fields
   for (const [name, value] of Object.entries(groups)) {
     if (result[value]) {
-      parsed[name] = result[value];
+      (parsed as any)[name] = result[value];
     }
   }
 
   return new YeomanNamespace(parsed);
 }
 
-export class YeomanNamespace {
-  _original: string;
-  scope: string;
+type ParsedNamespace = {
+  complete: string;
+  scope?: string;
   unscoped: string;
   generator: string;
-  instanceId: string;
-  semver: string;
-  methods: string[];
+  instanceId?: string;
+  semver?: string;
+  method?: string;
   flags: any;
-  command: any;
+};
 
-  constructor(parsed) {
+export class YeomanNamespace {
+  _original: string;
+  scope?: string;
+  unscoped: string;
+  generator: string;
+  instanceId?: string;
+  semver?: string;
+  methods?: string[];
+  flags?: any;
+  command?: any;
+
+  constructor(parsed: ParsedNamespace) {
     this._original = parsed.complete;
     this.scope = parsed.scope;
     this.unscoped = parsed.unscoped;
     this.generator = parsed.generator;
     this.instanceId = parsed.instanceId;
     this.semver = parsed.semver;
-    this.methods = parsed.method ? parsed.method.split('+') : parsed.methods;
+    this.methods = parsed.method?.split('+');
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     this.flags = parsed.flags;
 
     // Populate flags
     if (this.flags) {
       for (const [name, value] of Object.entries(flags)) {
         if (this.flags === value) {
-          this[name] = true;
+          (this as any)[name] = true;
         } else {
           // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-          delete this[name];
+          delete (this as any)[name];
         }
       }
     }
@@ -87,7 +101,8 @@ export class YeomanNamespace {
       methods = '+' + this.methods.join('+');
     }
 
-    const postSemver = `${this.instanceName}${methods}${this.flags || ''}`;
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    const postSemver = `${this.instanceName}${methods}${this.flags ?? ''}`;
     return `${this.namespace}${this._semverAddition(postSemver)}`;
   }
 
@@ -124,11 +139,11 @@ export class YeomanNamespace {
     return this.semver ? `${this.generatorHint}@"${this.semver}"` : this.generatorHint;
   }
 
-  with(newValues) {
+  with(newValues: Partial<ParsedNamespace>) {
     return new YeomanNamespace({
       ...this,
       ...newValues,
-    });
+    } as any);
   }
 
   toString() {
@@ -147,13 +162,15 @@ export class YeomanNamespace {
     return `@${this.semver}`;
   }
 
-  private _update(parsed) {
-    this.scope = parsed.scope || this.scope;
-    this.unscoped = parsed.unscoped || this.unscoped;
-    this.generator = parsed.generator || this.generator;
-    this.instanceId = parsed.instanceId || this.instanceId;
-    this.command = parsed.command || this.command;
-    this.flags = parsed.flags || this.flags;
+  private _update(parsed: YeomanNamespace) {
+    this.scope = parsed.scope ?? this.scope;
+    this.unscoped = parsed.unscoped ?? this.unscoped;
+    this.generator = parsed.generator ?? this.generator;
+    this.instanceId = parsed.instanceId ?? this.instanceId;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    this.command = parsed.command ?? this.command;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    this.flags = parsed.flags ?? this.flags;
   }
 }
 
@@ -187,7 +204,7 @@ export function namespaceFromPackageName(packageName: string): YeomanNamespace {
 export function requireNamespace(namespace: string | YeomanNamespace): YeomanNamespace {
   const parsed = toNamespace(namespace);
   if (!parsed) {
-    throw new Error(`Error parsing namespace ${namespace}`);
+    throw new Error(`Error parsing namespace ${namespace.toString()}`);
   }
 
   return parsed;

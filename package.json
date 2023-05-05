@@ -3,38 +3,35 @@
   "version": "0.0.2",
   "private": true,
   "type": "module",
+  "workspaces": [
+    "./workspaces/api",
+    "./workspaces/types"
+  ],
   "scripts": {
+    "prebuild": "npm run clean",
     "build": "npm run build --workspaces",
+    "clean": "npm run clean --workspaces",
+    "clean-all": "npm run clean-all --workspaces && rimraf node_modules",
+    "fix": "npm run fix --workspaces",
     "prepare": "npm run build",
     "prettier": "prettier --write .",
     "test": "npm run test --workspaces",
-    "test-coverage": "npm run test-coverage --workspaces",
-    "prebuild": "npm run clean",
-    "fix": "npm run fix --workspaces",
-    "clean-all": "npm run clean-all --workspaces && rimraf node_modules",
-    "clean": "npm run clean --workspaces"
+    "test-coverage": "npm run test-coverage --workspaces"
   },
   "devDependencies": {
-    "@node-loaders/esbuild": "^0.7.1",
-    "@types/mocha": "^10.0.1",
+    "@types/node": "^18.11.9",
+    "c8": "^7.12.0",
+    "conventional-changelog-conventionalcommits": "^5.0.0",
     "cpy-cli": "^4.2.0",
-    "mocha": "^10.2.0",
+    "esmocha": "^0.1.4",
+    "lerna": "^6.3.0",
     "prettier": "^2.8.2",
     "prettier-plugin-packagejson": "^2.3.0",
-    "typescript": "^4.9.4",
-    "xo": "^0.53.1",
     "rimraf": "^3.0.2",
-    "lerna": "^6.3.0",
-    "conventional-changelog-conventionalcommits": "^5.0.0",
-    "c8": "^7.12.0",
-    "@types/node": "^18.11.9"
+    "typescript": "^4.9.4",
+    "xo": "^0.53.1"
   },
-  "peerDependencies": {},
-  "peerDependenciesMeta": {},
   "engines": {
     "node": "^16.13.0 || >=18.12.0"
-  },
-  "workspaces": [
-    "./workspaces/api"
-  ]
+  }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@yeoman/api",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": false,
   "description": "Common API for yeoman's generator/environment stack",
   "keywords": [
@@ -24,45 +24,14 @@
     "dist"
   ],
   "scripts": {
+    "prebuild": "npm run clean",
     "build": "tsc",
     "clean": "rimraf dist",
     "clean-all": "npm run clean && rimraf node_modules",
     "precommit": "lint-staged",
     "prepare": "npm run build",
-    "prettier": "prettier . --write",
     "pretest": "xo",
-    "test": "c8 mocha --forbid-only"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run precommit"
-    }
-  },
-  "lint-staged": {
-    "*.js": [
-      "xo --fix",
-      "git add"
-    ],
-    "*.json": [
-      "prettier --write",
-      "git add"
-    ]
-  },
-  "dependencies": {},
-  "devDependencies": {
-    "mem-fs": "^2.2.1"
-  },
-  "peerDependencies": {
-    "@types/inquirer": "^9.0.3",
-    "mem-fs": "^2.2.1"
-  },
-  "peerDependenciesMeta": {
-    "inquirer": {
-      "optional": true
-    },
-    "mem-fs": {
-      "optional": true
-    }
+    "test": "c8 esmocha --forbid-only"
   },
   "engines": {
     "node": "^16.13.0 || >=18.12.0"
