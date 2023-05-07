@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "workspaces": [
-    "./workspaces/api",
+    "./workspaces/namespace",
     "./workspaces/types"
   ],
   "scripts": {
