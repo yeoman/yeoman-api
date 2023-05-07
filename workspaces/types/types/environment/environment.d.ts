@@ -100,4 +100,19 @@ export type BaseEnvironment<A = InputOutputAdapter, S extends Store = Store> = {
    * @param packagePath The path to the npm package of the generator.
    */
   registerStub(generator: GetGeneratorConstructor, namespace: string, resolved?: string, packagePath?: string): void;
+
+  /**
+   * Queue tasks
+   * @param priority
+   * @param task
+   * @param options
+   */
+  queueTask(priority: string, task: (...args: any[]) => void | Promise<void>, options?: { once?: string, startQueue?: boolean }): void;
+
+  /**
+   * Add priority
+   * @param priority
+   * @param before
+   */
+  addPriority(priority: string, before: string): void;
 };
