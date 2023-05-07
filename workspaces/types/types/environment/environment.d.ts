@@ -114,5 +114,5 @@ export type BaseEnvironment<A = InputOutputAdapter, S extends Store = Store> = {
    * @param priority
    * @param before
    */
-  addPriority(priority: string, before: string): void;
+  addPriority(priority: string, before?: string): void;
 };
