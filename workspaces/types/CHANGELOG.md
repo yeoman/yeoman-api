@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.2](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@0.1.1...@yeoman/types@0.1.2) (2023-05-08)
+
+### Bug Fixes
+
+- use generic return type ([e0ab6d4](https://github.com/yeoman/yeoman-api/commit/e0ab6d46b0c1a0b55a18d7e309a58f81bcc4c952))
+
 ## [0.1.1](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@0.1.0...@yeoman/types@0.1.1) (2023-05-07)
 
 ### Bug Fixes
