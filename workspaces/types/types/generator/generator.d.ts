@@ -1,6 +1,6 @@
 import type { BaseEnvironment } from '../environment/environment.js';
-import type { GeneratorCustomFeatures, GeneratorFeatures } from './generator-features.js';
-import type { GeneratorCustomOptions, GeneratorOptions } from './generator-options.js';
+import type { GeneratorFeatures } from './generator-features.js';
+import type { GeneratorOptions } from './generator-options.js';
 
 export type EnvironmentGenerator = {
   readonly env: BaseEnvironment;

@@ -5,5 +5,5 @@ export type GetGeneratorOptions<T extends BaseGenerator = BaseGenerator> = T ext
 export type GetGeneratorFeatures<T extends BaseGenerator = BaseGenerator> = T extends BaseGenerator<any, infer features> ? features : never;
 
 export type GetGeneratorConstructor<T extends BaseGenerator = BaseGenerator> =
-  | (new (args: string[], options: GetGeneratorOptions<T>, features: GetGeneratorFeatures<T>) => BaseGenerator)
-  | (new (options: GetGeneratorOptions<T>, features: GetGeneratorFeatures<T>) => BaseGenerator);
+  | (new (args: string[], options: GetGeneratorOptions<T>, features: GetGeneratorFeatures<T>) => T)
+  | (new (options: GetGeneratorOptions<T>, features: GetGeneratorFeatures<T>) => T);
