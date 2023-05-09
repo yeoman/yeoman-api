@@ -29,17 +29,22 @@
   },
   "devDependencies": {
     "@types/inquirer": "^9.0.3",
-    "mem-fs": "^3.0.0"
+    "mem-fs": "^3.0.0",
+    "mem-fs-editor": "^10.0.2"
   },
   "peerDependencies": {
     "@types/inquirer": "^9.0.3",
-    "mem-fs": "^3.0.0"
+    "mem-fs": "^3.0.0",
+    "mem-fs-editor": "^10.0.2"
   },
   "peerDependenciesMeta": {
     "inquirer": {
       "optional": true
     },
     "mem-fs": {
+      "optional": true
+    },
+    "mem-fs-editor": {
       "optional": true
     }
   },

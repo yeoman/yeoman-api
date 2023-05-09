@@ -1,5 +1,6 @@
 import type { Transform } from 'node:stream';
 import type { Store } from 'mem-fs';
+import type { MemFsEditorFile } from 'mem-fs-editor';
 
 import type { GeneratorBaseOptions } from '../generator/generator-options.js';
 import type { BaseGenerator } from '../generator/generator.js';
@@ -36,8 +37,8 @@ export type BaseEnvironmentOptions = GeneratorBaseOptions & {
 export type ApplyTransformsOptions = {
   name?: string;
   log?: boolean;
-  stream?: ReturnType<Store['stream']>;
-  streamOptions: Parameters<Store['stream']>[0];
+  stream?: ReturnType<Store<MemFsEditorFile>['stream']>;
+  streamOptions: Parameters<Store<MemFsEditorFile>['stream']>[0];
 };
 
 export type BaseEnvironment<A = InputOutputAdapter, S extends Store = Store> = {
