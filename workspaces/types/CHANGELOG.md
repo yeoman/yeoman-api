@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.3](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@0.1.2...@yeoman/types@0.1.3) (2023-05-09)
+
+### Bug Fixes
+
+- fix applyTransforms options parameter ([5d57818](https://github.com/yeoman/yeoman-api/commit/5d578188bdb780abae734ccf4a6be2643ce1ba62))
+
 ## [0.1.2](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@0.1.1...@yeoman/types@0.1.2) (2023-05-08)
 
 ### Bug Fixes
