@@ -1,0 +1,9 @@
+{
+  "space": true,
+  "envs": ["es2020", "node"],
+  "prettier": true,
+  "printWidth": 120,
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  }
+}
