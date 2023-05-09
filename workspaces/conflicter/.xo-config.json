@@ -1,0 +1,7 @@
+{
+  "space": true,
+  "envs": ["es2020", "node"],
+  "prettier": true,
+  "ignores": ["test/fixtures"],
+  "printWidth": 120
+}
