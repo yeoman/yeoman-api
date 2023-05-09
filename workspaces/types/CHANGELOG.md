@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.4](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@0.1.3...@yeoman/types@0.1.4) (2023-05-09)
+
+### Bug Fixes
+
+- store should be a mem-fs-editor store ([20dafaf](https://github.com/yeoman/yeoman-api/commit/20dafaf6eec06b12a5e94930e273692a587b323c))
+
 ## [0.1.3](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@0.1.2...@yeoman/types@0.1.3) (2023-05-09)
 
 ### Bug Fixes
