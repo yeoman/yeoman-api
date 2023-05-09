@@ -33,6 +33,13 @@ export type BaseEnvironmentOptions = GeneratorBaseOptions & {
   sharedFs?: Store;
 };
 
+export type ApplyTransformsOptions = {
+  name?: string;
+  log?: boolean;
+  stream?: ReturnType<Store['stream']>;
+  streamOptions: Parameters<Store['stream']>[0];
+};
+
 export type BaseEnvironment<A = InputOutputAdapter, S extends Store = Store> = {
   cwd: string;
   adapter: A;
@@ -40,7 +47,7 @@ export type BaseEnvironment<A = InputOutputAdapter, S extends Store = Store> = {
 
   emit(eventName: string | symbol, ...args: any[]): boolean;
 
-  applyTransforms(transformStreams: Transform[], stream?: NodeJS.ReadableStream): Promise<void>;
+  applyTransforms(transformStreams: Transform[], options?: ApplyTransformsOptions): Promise<void>;
 
   create<G extends BaseGenerator = BaseGenerator>(
     namespaceOrPath: string | GetGeneratorConstructor<G>,
