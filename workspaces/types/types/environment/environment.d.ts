@@ -115,7 +115,7 @@ export type BaseEnvironment<A = InputOutputAdapter, S extends Store = Store> = {
    * @param task
    * @param options
    */
-  queueTask(priority: string, task: (...args: any[]) => void | Promise<void>, options?: { once?: string, startQueue?: boolean }): void;
+  queueTask(priority: string, task: (...args: any[]) => void | Promise<void>, options?: { once?: string; startQueue?: boolean }): void;
 
   /**
    * Add priority

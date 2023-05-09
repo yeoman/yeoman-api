@@ -36,14 +36,12 @@ export type InputOutputAdapter = {
    * Close underline inputs.
    */
   close(): void;
+};
 
-  /**
-   * Shows a color-based diff of two strings.
-   *
-   * @param actual The actual text.
-   * @param expected The expected text.
-   * @param changes The changes returned by `diff`.
-   * @returns The formatted message.
-   */
-  diff(actual: string, expected: string, changes: unknown[]): string;
+type Task<TaskResultType> =
+  | ((adapter: InputOutputAdapter) => PromiseLike<TaskResultType>)
+  | ((adapter: InputOutputAdapter) => TaskResultType);
+
+export type QueuedAdapter = InputOutputAdapter & {
+  queue<TaskResultType>(fn: Task<TaskResultType>): Promise<void | TaskResultType>;
 };

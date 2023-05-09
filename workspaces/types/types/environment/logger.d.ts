@@ -3,7 +3,18 @@ import type { format } from 'node:util';
 /**
  * Provides default color-categories.
  */
-export type DefaultLoggerCategories = 'skip' | 'force' | 'create' | 'invoke' | 'conflict' | 'identical' | 'info';
+export type DefaultLoggerCategories = 'skip' | 'force' | 'create' | 'invoke' | 'conflict' | 'identical' | 'info' | 'added' | 'removed';
+
+export type ColoredMessage<Color extends string | number | symbol = DefaultLoggerCategories> = {
+  /**
+   * Text content.
+   */
+  message: string;
+  /**
+   * Color to apply.
+   */
+  color?: Color;
+};
 
 /**
  * Provides the functionality to log messages.
@@ -50,4 +61,10 @@ export type Logger<LoggerCategories extends string | number | symbol = DefaultLo
    * Writes an error-message with a prepended cross mark.
    */
   error(...args: Parameters<typeof format>): Logger<LoggerCategories>;
+
+  /**
+   * @since `yeoman-environment` version 3.17.0
+   * Shows a colored message.
+   */
+  colored(coloredMessage: Array<ColoredMessage<LoggerCategories>>): Logger<LoggerCategories>;
 };
