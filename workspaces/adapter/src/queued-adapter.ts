@@ -39,7 +39,7 @@ export class QueuedAdapter implements QueuedAdapterApi {
       this.queueLog(() => {
         this.actualAdapter.log(...args);
       });
-      return this;
+      return defferredLogger;
     };
 
     Object.assign(defferredLogger, this.actualAdapter.log);
@@ -47,6 +47,7 @@ export class QueuedAdapter implements QueuedAdapterApi {
       this.queueLog(() => {
         this.actualAdapter.log.write(...args);
       }).catch(console.error);
+      return defferredLogger;
     };
 
     this.log = defferredLogger as unknown as Logger;
