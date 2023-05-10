@@ -1,6 +1,6 @@
 {
   "name": "@yeoman/conflicter",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": false,
   "description": "Conflict resolution for yeoman's generator/environment stack",
   "keywords": [
@@ -33,7 +33,7 @@
     "test": "c8 esmocha --forbid-only"
   },
   "dependencies": {
-    "@yeoman/types": "^0.1.4",
+    "@yeoman/types": "^0.2.0",
     "binary-extensions": "^2.2.0",
     "cli-table": "^0.3.11",
     "dateformat": "^5.0.3",
@@ -49,7 +49,7 @@
     "@types/dateformat": "^5.0.0",
     "@types/diff": "^5.0.3",
     "@types/textextensions": "^2.4.0",
-    "@yeoman/adapter": "^0.0.0",
+    "@yeoman/adapter": "^0.1.0",
     "esmocha": "^0.1.4",
     "lodash-es": "^4.17.21",
     "sinon": "^15.0.4",

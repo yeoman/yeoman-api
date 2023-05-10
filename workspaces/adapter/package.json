@@ -1,6 +1,6 @@
 {
   "name": "@yeoman/adapter",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": false,
   "description": "Input Output adapter for yeoman's generator/environment stack",
   "keywords": [
@@ -32,16 +32,9 @@
     "pretest": "xo",
     "test": "c8 esmocha --forbid-only"
   },
-  "engines": {
-    "node": "^16.13.0 || >=18.12.0"
-  },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
-  },
   "dependencies": {
     "@types/inquirer": "^9.0.3",
-    "@yeoman/types": "^0.1.4",
+    "@yeoman/types": "^0.2.0",
     "are-we-there-yet": "^4.0.0",
     "chalk": "^5.2.0",
     "inquirer": "^9.2.2",
@@ -59,5 +52,12 @@
     "sinon": "^15.0.4",
     "strip-ansi": "^7.0.1",
     "yeoman-assert": "^3.1.1"
+  },
+  "engines": {
+    "node": "^16.13.0 || >=18.12.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

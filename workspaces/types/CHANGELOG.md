@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@0.1.4...@yeoman/types@0.2.0) (2023-05-10)
+
+### ⚠ BREAKING CHANGES
+
+- drop diff from adapter and add logger.colored
+
+### Features
+
+- drop diff from adapter and add logger.colored ([ad5697d](https://github.com/yeoman/yeoman-api/commit/ad5697d3c1abf02c47b3df1db469ba55640bd47e))
+
 ## [0.1.4](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@0.1.3...@yeoman/types@0.1.4) (2023-05-09)
 
 ### Bug Fixes

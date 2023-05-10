@@ -7,8 +7,4 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-- implement adapter ([8322b54](https://github.com/yeoman/yeoman-api/commit/8322b54e30425073543d754d419039fc71bd9fb4))
-
-## 0.0.1 (2023-05-07)
-
-**Note:** Version bump only for package @yeoman/namespace
+- implement conflicter ([d69760b](https://github.com/yeoman/yeoman-api/commit/d69760b31c0ae94ec4a68ef58e6b630ae0134799))
