@@ -18,6 +18,19 @@ export type ConflicterLog = ConflicterStatus | 'conflict';
 
 export type ConflicterAction = 'write' | 'abort' | 'diff' | 'reload' | 'force' | 'edit';
 
+export function setConflicterStatus<F extends ConflicterFile = ConflicterFile>(
+  file: F,
+  status: ConflicterStatus,
+  { log }: { log?: ConflicterLog } = {},
+) {
+  file.conflicter = status;
+  if (log) {
+    file.conflicterLog = log;
+  }
+
+  return file;
+}
+
 export type ConflicterFile = MemFsEditorFile & {
   conflicterLog?: ConflicterLog;
   conflicter?: ConflicterStatus;
@@ -247,8 +260,7 @@ export class Conflicter {
       }
 
       this._log('create', rfilepath);
-      file.conflicter = this.dryRun ? 'skip' : 'create';
-      file.conflicterLog = 'create';
+      setConflicterStatus(file, this.dryRun ? 'skip' : 'create', { log: 'create' });
       return file;
     }
 
@@ -256,7 +268,7 @@ export class Conflicter {
 
     if (isForce()) {
       this._log('force', rfilepath);
-      file.conflicter = 'force';
+      setConflicterStatus(file, 'force');
       return file;
     }
 
@@ -274,13 +286,12 @@ export class Conflicter {
       if (this.dryRun) {
         this._log('conflict', rfilepath);
         await this._printDiff({ file: conflictedFile });
-        file.conflicter = 'skip';
-        file.conflicterLog = 'conflict';
+        setConflicterStatus(file, 'skip', { log: 'conflict' });
         return file;
       }
 
       if (isForce()) {
-        file.conflicter = 'force';
+        setConflicterStatus(file, 'force');
         this.adapter.log.force(rfilepath);
         return file;
       }
@@ -289,7 +300,7 @@ export class Conflicter {
         adapter.log.conflict(rfilepath);
         const action = await this._ask({ file: conflictedFile, counter: 1, adapter });
         adapter.log[action ?? 'force'](rfilepath);
-        file.conflicter = action;
+        setConflicterStatus(file, action);
         return file;
       };
 
@@ -307,12 +318,11 @@ export class Conflicter {
 
     this._log('identical', rfilepath);
     if (!this.regenerate) {
-      file.conflicter = 'skip';
-      file.conflicterLog = 'identical';
+      setConflicterStatus(file, 'skip', { log: 'identical' });
       return file;
     }
 
-    file.conflicter = 'identical';
+    setConflicterStatus(file, 'identical');
     return file;
   }
 
