@@ -203,8 +203,8 @@ export function createLogger<Loggers = never, LoggerCategories extends string | 
     return table(tableData);
   };
 
-  log.colored = (coloredMessages: Array<ColoredMessage<LoggerCategories>>) => {
-    log.write(coloredMessages.map(({ color, message }): string => (color ? colors[color](message) : message)).join(''));
+  log.colored = function (coloredMessages: Array<ColoredMessage<LoggerCategories>>) {
+    this.write(coloredMessages.map(({ color, message }): string => (color ? colors[color](message) : message)).join(''));
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
