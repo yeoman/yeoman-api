@@ -7,6 +7,9 @@ import type { ColoredMessage, InputOutputAdapter, QueuedAdapter } from '@yeoman/
 import { diffWords, diffLines, type Change } from 'diff';
 import type { Store } from 'mem-fs';
 import { create as createMemFsEditor, type MemFsEditor, type MemFsEditorFile } from 'mem-fs-editor';
+// eslint-disable-next-line n/file-extension-in-import
+import { clearFileState } from 'mem-fs-editor/state';
+import { passthrough } from 'p-transform';
 import { binaryDiff, isBinary } from './binary-diff.js';
 
 export type ConflicterStatus = 'create' | 'skip' | 'identical' | 'force';
@@ -14,10 +17,6 @@ export type ConflicterStatus = 'create' | 'skip' | 'identical' | 'force';
 export type ConflicterLog = ConflicterStatus | 'conflict';
 
 export type ConflicterAction = 'write' | 'abort' | 'diff' | 'reload' | 'force' | 'edit';
-
-export type ConflicterStreamStatus = {
-  force: boolean;
-};
 
 export type ConflicterFile = MemFsEditorFile & {
   conflicterLog?: ConflicterLog;
@@ -73,7 +72,10 @@ export class Conflicter {
   fs?: MemFsEditor<ConflicterFile>;
 
   constructor(private readonly adapter: InputOutputAdapter, options?: ConflicterOptions) {
-    this.fs = createMemFsEditor(options?.memFs as Store<ConflicterFile>) as MemFsEditor<ConflicterFile>;
+    if (options?.memFs) {
+      this.fs = createMemFsEditor(options?.memFs as Store<ConflicterFile>) as MemFsEditor<ConflicterFile>;
+    }
+
     this.force = options?.force ?? false;
     this.bail = options?.bail ?? false;
     this.ignoreWhitespace = options?.ignoreWhitespace ?? false;
@@ -127,7 +129,7 @@ export class Conflicter {
             returnValue.push({ message, color: colored.color });
           }
 
-          if (lines.length > idx) {
+          if (idx + 1 < lines.length) {
             returnValue.push({ message: '\n' });
           }
         }
@@ -228,12 +230,10 @@ export class Conflicter {
    *   3. If identical, mark it as is and skip the check
    *   4. If diverged, prepare and show up the file collision menu
    *
-   * @param {import('vinyl')} file - Vinyl file
-   * @param {Object} [conflicterStatus] - Conflicter status
-   * @return  {Promise<Vinyl>} Promise the Vinyl file
+   * @param file - Vinyl file
+   * @return Promise the Vinyl file
    */
-  // eslint-disable-next-line unicorn/no-object-as-default-parameter
-  async checkForCollision(file: ConflicterFile, conflicterStatus: ConflicterStreamStatus = { force: false }): Promise<ConflicterFile> {
+  async checkForCollision(file: ConflicterFile): Promise<ConflicterFile> {
     const rfilepath = path.relative(this.cwd, file.path);
     if (file.conflicter) {
       this._log(file.conflicter, rfilepath);
@@ -252,7 +252,7 @@ export class Conflicter {
       return file;
     }
 
-    const isForce = () => this.force || conflicterStatus?.force;
+    const isForce = () => this.force;
 
     if (isForce()) {
       this._log('force', rfilepath);
@@ -287,7 +287,7 @@ export class Conflicter {
 
       const ask = async (adapter: InputOutputAdapter) => {
         adapter.log.conflict(rfilepath);
-        const action = await this._ask({ file: conflictedFile, counter: 1, conflicterStatus, adapter });
+        const action = await this._ask({ file: conflictedFile, counter: 1, adapter });
         adapter.log[action ?? 'force'](rfilepath);
         file.conflicter = action;
         return file;
@@ -325,12 +325,10 @@ export class Conflicter {
   async _ask({
     file,
     counter,
-    conflicterStatus,
     adapter,
   }: {
     file: ConflictedFile;
     counter: number;
-    conflicterStatus: ConflicterStreamStatus;
     adapter: InputOutputAdapter;
   }): Promise<ConflicterStatus> {
     if (file.conflicter) {
@@ -387,14 +385,15 @@ export class Conflicter {
           value: 'edit',
         },
       );
-      if (this.fs) {
+      const { fs } = this;
+      if (fs) {
         prompt.choices.push({
           key: 'i',
           name: 'ignore, do not overwrite and remember (experimental)',
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-expect-error
           value: ({ relativeFilePath }: { relativeFilePath: string }) => {
-            this.fs!.append(`${this.cwd}/.yo-resolve`, `${relativeFilePath} skip`, { create: true });
+            fs.append(`${this.cwd}/.yo-resolve`, `${relativeFilePath} skip`, { create: true });
             return 'skip';
           },
         });
@@ -421,15 +420,11 @@ export class Conflicter {
         throw new Error(`Recursive error ${prompt.message}`);
       }
 
-      return this._ask({ file, counter, conflicterStatus, adapter });
+      return this._ask({ file, counter, adapter });
     }
 
     if (result.action === 'force') {
-      if (conflicterStatus) {
-        conflicterStatus.force = true;
-      } else {
-        this.force = true;
-      }
+      this.force = true;
     }
 
     if (result.action === 'write') {
@@ -438,7 +433,7 @@ export class Conflicter {
 
     if (result.action === 'reload') {
       if (await this._detectConflict(file)) {
-        return this._ask({ file, counter, conflicterStatus, adapter });
+        return this._ask({ file, counter, adapter });
       }
 
       return 'identical';
@@ -456,12 +451,31 @@ export class Conflicter {
       ]);
       file.contents = Buffer.from(answers.content ?? '', 'utf8');
       if (await this._detectConflict(file)) {
-        return this._ask({ file, counter, conflicterStatus, adapter });
+        return this._ask({ file, counter, adapter });
       }
 
       return 'skip';
     }
 
     return result.action;
+  }
+
+  createTransform() {
+    return passthrough(async file => {
+      const conflicterFile = await this.checkForCollision(file);
+      const action = conflicterFile.conflicter;
+
+      delete conflicterFile.conflicter;
+      delete conflicterFile.conflicterLog;
+      delete conflicterFile.binary;
+      delete conflicterFile.conflicterChanges;
+
+      if (action === 'skip') {
+        clearFileState(conflicterFile);
+        return undefined;
+      }
+
+      return conflicterFile;
+    }, 'conflicter:check');
   }
 }

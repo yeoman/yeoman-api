@@ -147,13 +147,6 @@ describe('Conflicter', () => {
       });
     });
 
-    it('set conflicterStatus.force when user choose "force"', async function () {
-      const conflicter = new Conflicter(new QueuedAdapter(new TestAdapter({ action: 'force' })));
-      const conflicterStatus = { force: false };
-      await conflicter.checkForCollision(conflictingFile, conflicterStatus);
-      assert(conflicterStatus.force);
-    });
-
     it('force conflict status', async function () {
       conflicter.force = true;
       return conflicter.checkForCollision(conflictingFile).then(file => {
