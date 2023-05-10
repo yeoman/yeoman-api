@@ -9,7 +9,7 @@ import { createLogger } from './log.js';
 npmlog.level = 'error';
 
 export type TerminalAdapterOptions = {
-  promptModule: PromptModule;
+  promptModule?: PromptModule;
   stdin?: NodeJS.ReadStream;
   stdout?: NodeJS.WriteStream;
   stderr?: NodeJS.WriteStream;
