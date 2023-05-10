@@ -1,11 +1,11 @@
-# @yeoman/namespace
+# @yeoman/adapter
 
 [![NPM version][npm-image]][npm-url]
 [![NPM Test](https://github.com/yeoman/yeoman-api/workflows/NPM%20Test/badge.svg)](https://github.com/yeoman/yeoman-api/actions?query=workflow%3A%22NPM+Test%22)
 [![Integration Build](https://github.com/yeoman/yeoman-api/workflows/Integration%20Build/badge.svg)](https://github.com/yeoman/yeoman-api/actions?query=workflow%3A%22Integration+Build%22)
 [![Dependency Status][daviddm-image]][daviddm-url]
 
-> Common API for yeoman's generator/environment stack
+> Input/Output adapter for yeoman's generator/environment stack
 
 Intended for internal yeoman generator/environment stack use.
 
