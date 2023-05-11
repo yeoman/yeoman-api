@@ -20,15 +20,13 @@ export type ConflicterAction = 'write' | 'abort' | 'diff' | 'reload' | 'force' |
 
 export function setConflicterStatus<F extends ConflicterFile = ConflicterFile>(
   file: F,
-  status: ConflicterStatus,
+  status?: ConflicterStatus,
   { log }: { log?: ConflicterLog } = {},
 ) {
   file.conflicter = status;
   if (log) {
     file.conflicterLog = log;
   }
-
-  return file;
 }
 
 export type ConflicterFile = MemFsEditorFile & {

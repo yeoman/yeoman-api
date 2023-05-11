@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "@types/node": "^16.18.28",
+    "@yeoman/transform": "^0.1.0",
     "@yeoman/types": "^0.2.0",
     "binary-extensions": "^2.2.0",
     "cli-table": "^0.3.11",
@@ -42,6 +43,7 @@
     "isbinaryfile": "^5.0.0",
     "mem-fs": "^3.0.0",
     "mem-fs-editor": "^10.0.2",
+    "minimatch": "^9.0.0",
     "p-transform": "^2.0.1",
     "pretty-bytes": "^6.1.0",
     "textextensions": "^5.16.0"
