@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@0.2.0...@yeoman/types@0.3.0) (2023-05-11)
+
+### ⚠ BREAKING CHANGES
+
+- **types:** rename GeneratorBaseOptions to BaseGeneratorOptions
+- **types:** store should be of type Store<MemFsEditorFile>
+
+### Bug Fixes
+
+- **types:** fix type typo ([b72f70d](https://github.com/yeoman/yeoman-api/commit/b72f70dcc8bdbff449a0c4776ac3c852819233be))
+- **types:** register is not async ([641b43d](https://github.com/yeoman/yeoman-api/commit/641b43d375378116e5c8b055d212d3de22f1e68a))
+- **types:** rename GeneratorBaseOptions to BaseGeneratorOptions ([ced15cb](https://github.com/yeoman/yeoman-api/commit/ced15cb9799cb84163e449ad45a5a40c7a9d2227))
+- **types:** store should be of type Store<MemFsEditorFile> ([93a8b11](https://github.com/yeoman/yeoman-api/commit/93a8b118f3876e93a61b9dec1b6028abe5761852))
+
 ## [0.2.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@0.1.4...@yeoman/types@0.2.0) (2023-05-10)
 
 ### ⚠ BREAKING CHANGES
