@@ -41,7 +41,7 @@ export type ApplyTransformsOptions = {
   streamOptions: Parameters<Store<MemFsEditorFile>['stream']>[0];
 };
 
-export type BaseEnvironment<A = InputOutputAdapter, S extends Store = Store> = {
+export type BaseEnvironment<A = InputOutputAdapter, S extends Store<MemFsEditorFile> = Store<MemFsEditorFile>> = {
   cwd: string;
   adapter: A;
   sharedFs: S;
