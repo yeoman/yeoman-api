@@ -1,5 +1,5 @@
 import { readFile, stat } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
+import { dirname, resolve } from 'node:path';
 import { Minimatch } from 'minimatch';
 import slash from 'slash';
 import { passthrough } from '@yeoman/transform';
@@ -39,7 +39,16 @@ export class YoResolve {
     return undefined;
   }
 
-  async getMapForFolder(folder: string): Promise<Map<Minimatch, string> | undefined> {
+  createTransform() {
+    return passthrough(
+      async (file: ConflicterFile): Promise<void> => {
+        setConflicterStatus(file, await this.getStatusForFile(file.path));
+      },
+      { filter: file => !file.conflicter },
+    );
+  }
+
+  private async getMapForFolder(folder: string): Promise<Map<Minimatch, string> | undefined> {
     const map = this.groupedYoResolve.get(folder);
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     if (map || map === null) {
@@ -47,7 +56,7 @@ export class YoResolve {
     }
 
     try {
-      const yoResolveFile = join(folder, this.yoResolveFileName);
+      const yoResolveFile = resolve(folder, this.yoResolveFileName);
       const fileStat = await stat(yoResolveFile);
       if (fileStat.isFile()) {
         const contents = await readFile(yoResolveFile);
@@ -63,7 +72,9 @@ export class YoResolve {
             .map(override => override.split(/[\s+=]/));
           for (const [pattern, status = 'skip'] of parsed) {
             const negate = pattern.startsWith('!');
-            map.set(new Minimatch(`${negate ? '!' : ''}${join(folder, negate ? pattern.slice(1) : pattern)}`), status);
+            const minimatchPattern = `${negate ? '!' : ''}${folder}/${negate ? pattern.slice(1) : pattern}`;
+            console.log(minimatchPattern);
+            map.set(new Minimatch(minimatchPattern), status);
           }
         }
 
@@ -72,15 +83,6 @@ export class YoResolve {
     } catch {}
 
     return undefined;
-  }
-
-  createTransform() {
-    return passthrough(
-      async (file: ConflicterFile): Promise<void> => {
-        setConflicterStatus(file, await this.getStatusForFile(file.path));
-      },
-      { filter: file => !file.conflicter },
-    );
   }
 }
 
