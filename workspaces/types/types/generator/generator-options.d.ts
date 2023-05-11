@@ -2,7 +2,7 @@ import type { BaseEnvironment } from '../environment/environment.js';
 
 export type GeneratorCustomOptions = Record<string, unknown>;
 
-export type GeneratorBaseOptions = {
+export type BaseGeneratorOptions = {
   /**
    * Skip package manager install task.
    */
@@ -58,7 +58,7 @@ type GeneratorHelpOptions<H extends boolean | undefined> = {
   help: H;
 };
 
-export type GeneratorOptions = GeneratorBaseOptions &
+export type GeneratorOptions = BaseGeneratorOptions &
   GeneratorNamespace &
   (
     | (GeneratorHelpOptions<false | undefined> & GeneratorEnvironmentOptions)

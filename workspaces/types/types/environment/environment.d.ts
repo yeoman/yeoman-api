@@ -2,7 +2,7 @@ import type { Transform } from 'node:stream';
 import type { Store } from 'mem-fs';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 
-import type { GeneratorBaseOptions } from '../generator/generator-options.js';
+import type { BaseGeneratorOptions } from '../generator/generator-options.js';
 import type { BaseGenerator } from '../generator/generator.js';
 import type { GetGeneratorConstructor, GetGeneratorOptions } from '../generator/utils.js';
 import type { InputOutputAdapter } from './adapter.js';
@@ -12,7 +12,7 @@ export type EnvironmentConstructor<A extends InputOutputAdapter = InputOutputAda
   adapter?: A,
 ) => BaseEnvironment<A>;
 
-export type BaseEnvironmentOptions = GeneratorBaseOptions & {
+export type BaseEnvironmentOptions = BaseGeneratorOptions & {
   /**
    * The working-directory of the environment.
    */
@@ -26,7 +26,7 @@ export type BaseEnvironmentOptions = GeneratorBaseOptions & {
   /**
    * Options to pass to every generator instantiated by this Environment.
    */
-  sharedOptions?: GeneratorBaseOptions;
+  sharedOptions?: BaseGeneratorOptions;
 
   /**
    * `mem-fs` Store.
