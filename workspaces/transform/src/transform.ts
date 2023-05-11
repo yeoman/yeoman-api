@@ -43,9 +43,8 @@ export function passthrough<F extends File = File>(
   }
 
   const passthroughFilter: FilterFile<F> =
-    options?.filter ?? options?.pattern
-      ? (file: F) => new Minimatch(options.pattern!, options?.patternOptions).match(file.path)
-      : () => true;
+    options?.filter ??
+    (options?.pattern ? (file: F) => new Minimatch(options.pattern!, options?.patternOptions).match(file.path) : () => true);
 
   return transform(async (file: F) => {
     if (await passthroughFilter(file)) {
