@@ -53,13 +53,13 @@ export type BaseEnvironment<A = InputOutputAdapter, S extends Store = Store> = {
   create<G extends BaseGenerator = BaseGenerator>(
     namespaceOrPath: string | GetGeneratorConstructor<G>,
     args: string[],
-    options?: Partial<Omit<GetGeneratorOptions<G>, 'env' | 'resolved' | 'resolvec'>>,
+    options?: Partial<Omit<GetGeneratorOptions<G>, 'env' | 'resolved' | 'namespace'>>,
   ): Promise<G>;
 
   instantiate<G extends BaseGenerator = BaseGenerator>(
     generator: GetGeneratorConstructor<G>,
     args: string[],
-    options?: Partial<Omit<GetGeneratorOptions<G>, 'env' | 'resolved' | 'resolvec'>>,
+    options?: Partial<Omit<GetGeneratorOptions<G>, 'env' | 'resolved' | 'namespace'>>,
   ): Promise<G>;
 
   /**
