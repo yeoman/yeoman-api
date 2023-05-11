@@ -97,7 +97,7 @@ export type BaseEnvironment<A = InputOutputAdapter, S extends Store = Store> = {
    * @param namespace The namespace under which the generator should be registered.
    * @param packagePath The path to the npm package of the generator.
    */
-  register(filePath: string, namespace?: string, packagePath?: string): Promise<void>;
+  register(filePath: string, namespace?: string, packagePath?: string): void;
 
   /**
    * Registers a stubbed generator to this environment.
