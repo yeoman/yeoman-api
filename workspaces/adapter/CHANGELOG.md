@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.2](https://github.com/yeoman/yeoman-api/compare/@yeoman/adapter@0.1.1...@yeoman/adapter@0.1.2) (2023-05-11)
+
+### Bug Fixes
+
+- **adapter:** provide a default TerminalAdapter at QueueAdapter ([498ce27](https://github.com/yeoman/yeoman-api/commit/498ce273e392cb81462a99108ad45b2aa73e5e43))
+
 ## [0.1.1](https://github.com/yeoman/yeoman-api/compare/@yeoman/adapter@0.1.0...@yeoman/adapter@0.1.1) (2023-05-10)
 
 ### Bug Fixes
