@@ -3,14 +3,14 @@ import { Minimatch, type MinimatchOptions } from 'minimatch';
 
 type File = { path: string; contents: any };
 
-type TransformFile<F extends File = File> = (file: F) => F | undefined;
+type TransformFile<F extends File = File> = (file: F) => Promise<F> | F | undefined;
 
 export function createTransform<F extends File = File>(transform: TransformFile<F>) {
   return new Transform({
     objectMode: true,
-    transform(chunk: any, _encoding: BufferEncoding, callback: TransformCallback) {
+    async transform(chunk: any, _encoding: BufferEncoding, callback: TransformCallback) {
       try {
-        callback(undefined, transform.apply(this, chunk));
+        callback(undefined, await transform.apply(this, chunk));
       } catch (error: unknown) {
         callback(error as Error);
       }
