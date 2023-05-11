@@ -1,16 +1,29 @@
-import { Transform, type TransformCallback } from 'node:stream';
+import { pipeline as _pipeline, Transform, type TransformCallback } from 'node:stream';
+import { promisify } from 'node:util';
 import { Minimatch, type MinimatchOptions } from 'minimatch';
 
-type File = { path: string; contents: any };
+export type File = { path: string; contents: any };
 
-type TransformFile<F extends File = File> = (file: F) => Promise<F> | F | undefined;
+type TransformFile<F extends File = File> = (this: Transform, file: F) => Promise<F | undefined> | F | undefined;
 
-export function createTransform<F extends File = File>(transform: TransformFile<F>) {
+type PassthroughFile<F extends File = File> = (file: F) => Promise<void> | void;
+
+type FilterFile<F extends File = File> = (file: F) => Promise<boolean> | boolean;
+
+/**
+ * Promisified pipeline
+ */
+export const pipeline = promisify(_pipeline);
+
+/**
+ * The returned file from transform function is passed through if any.
+ */
+export function transform<F extends File = File>(fn: TransformFile<F>) {
   return new Transform({
     objectMode: true,
     async transform(chunk: any, _encoding: BufferEncoding, callback: TransformCallback) {
       try {
-        callback(undefined, await transform.apply(this, chunk));
+        callback(undefined, await fn.call(this, chunk));
       } catch (error: unknown) {
         callback(error as Error);
       }
@@ -18,39 +31,48 @@ export function createTransform<F extends File = File>(transform: TransformFile<
   });
 }
 
-type TransformMinimatchOptions = {
-  /** Minimatch pattern */
-  pattern: string;
-  /** Minimatch options */
-  options?: MinimatchOptions;
-};
-
-type MatchFilePatternOptions<F extends File = File> = TransformMinimatchOptions & {
-  matched: TransformFile<F>;
-  notMatched: TransformFile<F>;
-};
-
-type PickFilePatternOptions<F extends File = File> = TransformMinimatchOptions & { transform: TransformFile<F> };
-
 /**
- * Conditional pick files based on pattern.
+ * Files will always be passed through.
  */
-export function matchFilePattern<F extends File = File>({ matched, notMatched, pattern, options }: MatchFilePatternOptions<F>) {
-  const minimatch = new Minimatch(pattern, options);
-  // eslint-disable-next-line unicorn/prefer-regexp-test
-  return createTransform<F>(file => (minimatch.match(file.path) ? matched(file) : notMatched(file)));
+export function passthrough<F extends File = File>(
+  fn?: PassthroughFile<F>,
+  options?: { filter?: FilterFile<F>; pattern?: string } & TransformMinimatchOptions,
+) {
+  if (!fn) {
+    return transform(f => f);
+  }
+
+  const passthroughFilter: FilterFile<F> =
+    options?.filter ?? options?.pattern
+      ? (file: F) => new Minimatch(options.pattern!, options?.patternOptions).match(file.path)
+      : () => true;
+
+  return transform(async (file: F) => {
+    if (await passthroughFilter(file)) {
+      await fn(file);
+    }
+
+    return file;
+  });
 }
 
+type TransformMinimatchOptions = {
+  /** Minimatch options */
+  patternOptions?: MinimatchOptions;
+};
+
 /**
- * Conditional pick files based on pattern.
+ * Filter file.
+ * Files that doesn't match the filter condition are removed.
  */
-export function pickFilePattern<F extends File = File>({ transform, ...options }: PickFilePatternOptions<F>) {
-  return matchFilePattern<F>({ matched: transform, notMatched: file => file, ...options });
+export function filter<F extends File = File>(filter: FilterFile<F>) {
+  return transform<F>(async file => ((await filter(file)) ? file : undefined));
 }
 
 /**
  * Conditional filter on pattern.
+ * Files that doesn't match the pattern are removed.
  */
-export function filterFilePassthough(options: TransformMinimatchOptions) {
-  return matchFilePattern({ matched: file => file, notMatched: () => undefined, ...options });
+export function filterPattern(pattern: string, options?: TransformMinimatchOptions) {
+  return filter(file => new Minimatch(pattern, options?.patternOptions).match(file.path));
 }
