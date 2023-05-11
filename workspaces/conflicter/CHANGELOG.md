@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@0.3.0...@yeoman/conflicter@0.3.1) (2023-05-11)
+
+### Bug Fixes
+
+- **conflicter:** export yo-resolve ([60460bf](https://github.com/yeoman/yeoman-api/commit/60460bfde97ab6549cc9ca0701f40df49427148e))
+
 ## [0.3.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@0.2.0...@yeoman/conflicter@0.3.0) (2023-05-11)
 
 ### Features
