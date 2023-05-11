@@ -2,6 +2,7 @@ import npmlog from 'npmlog';
 import PQueue from 'p-queue';
 import { TrackerGroup } from 'are-we-there-yet';
 import type { Logger, InputOutputAdapter, PromptAnswers, PromptQuestions, QueuedAdapter as QueuedAdapterApi } from '@yeoman/types';
+import { TerminalAdapter, type TerminalAdapterOptions } from './adapter.js';
 
 /**  */
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -14,6 +15,8 @@ const BLOCKING_PRIORITY = 90;
 type Task<TaskResultType> =
   | ((adapter: InputOutputAdapter) => PromiseLike<TaskResultType>)
   | ((adapter: InputOutputAdapter) => TaskResultType);
+
+type QueuedAdapterOptions = { queue?: PQueue; delta?: number } & TerminalAdapterOptions;
 
 export class QueuedAdapter implements QueuedAdapterApi {
   #queue: PQueue;
@@ -30,9 +33,11 @@ export class QueuedAdapter implements QueuedAdapterApi {
    * @constructor
    * @param {terminalAdapter}          [import('./adapter.js').default]
    */
-  constructor(terminalAdapter: InputOutputAdapter, options?: { queue?: PQueue; delta?: number }) {
-    this.#queue = options?.queue ?? new PQueue({ concurrency: 1 });
-    this.actualAdapter = terminalAdapter;
+  constructor(terminalAdapter: InputOutputAdapter, options?: QueuedAdapterOptions) {
+    const { queue, delta, ...adapterOptions } = options ?? {};
+    this.#queue = queue ?? new PQueue({ concurrency: 1 });
+    this.actualAdapter = terminalAdapter ?? new TerminalAdapter(adapterOptions);
+
     // Deffered logger
     const defferredLogger = (...args: any[]) => {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -51,7 +56,7 @@ export class QueuedAdapter implements QueuedAdapterApi {
     };
 
     this.log = defferredLogger as unknown as Logger;
-    this.delta = (options?.delta ?? 0) * 100;
+    this.delta = (delta ?? 0) * 100;
   }
 
   newAdapter(delta?: number) {
