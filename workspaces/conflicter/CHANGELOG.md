@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@0.2.0...@yeoman/conflicter@0.3.0) (2023-05-11)
+
+### Features
+
+- **conflicter:** add yo-resolve ([7fc8a06](https://github.com/yeoman/yeoman-api/commit/7fc8a063f0a66303a374c35770ab346f9182943c))
+
+### Bug Fixes
+
+- **conflicter:** fix minimatch pattern at windows ([84b673f](https://github.com/yeoman/yeoman-api/commit/84b673f533035039970be92e0027f682e05c639b))
+- **conflicter:** use transform instead of passthrough ([6559573](https://github.com/yeoman/yeoman-api/commit/65595733fba521be24c9b2ecde6d4057fe65f046))
+
 ## [0.2.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@0.1.1...@yeoman/conflicter@0.2.0) (2023-05-10)
 
 ### ⚠ BREAKING CHANGES
