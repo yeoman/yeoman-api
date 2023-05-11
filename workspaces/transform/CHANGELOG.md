@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.1](https://github.com/yeoman/yeoman-api/compare/@yeoman/transform@0.2.0...@yeoman/transform@0.2.1) (2023-05-11)
+
+### Bug Fixes
+
+- **transform:** fix precedence ([39eef16](https://github.com/yeoman/yeoman-api/commit/39eef1612df978e24110a0393dcfc8d98099a537))
+
 ## [0.2.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/transform@0.1.0...@yeoman/transform@0.2.0) (2023-05-11)
 
 ### ⚠ BREAKING CHANGES
