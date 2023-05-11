@@ -9,7 +9,7 @@ import type { Store } from 'mem-fs';
 import { create as createMemFsEditor, type MemFsEditor, type MemFsEditorFile } from 'mem-fs-editor';
 // eslint-disable-next-line n/file-extension-in-import
 import { clearFileState } from 'mem-fs-editor/state';
-import { passthrough } from 'p-transform';
+import { transform } from 'p-transform';
 import { binaryDiff, isBinary } from './binary-diff.js';
 
 export type ConflicterStatus = 'create' | 'skip' | 'identical' | 'force';
@@ -471,7 +471,7 @@ export class Conflicter {
   }
 
   createTransform() {
-    return passthrough(async file => {
+    return transform(async file => {
       const conflicterFile = await this.checkForCollision(file);
       const action = conflicterFile.conflicter;
 
@@ -489,3 +489,5 @@ export class Conflicter {
     }, 'conflicter:check');
   }
 }
+
+export const createConflicterTransform = (...args: ConstructorParameters<typeof Conflicter>) => new Conflicter(...args).createTransform();
