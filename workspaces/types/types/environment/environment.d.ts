@@ -6,7 +6,7 @@ import type { BaseGeneratorOptions } from '../generator/generator-options.js';
 import type { BaseGenerator } from '../generator/generator.js';
 import type { GetGeneratorConstructor, GetGeneratorOptions } from '../generator/utils.js';
 import type { InputOutputAdapter } from './adapter.js';
-import type { GeneratorMeta, LookupGeneratorMeta, LookupOptions } from './methods-options.js';
+import type { GeneratorMeta, LookupGeneratorMeta, LookupOptions, BaseGeneratorMeta } from './methods-options.js';
 
 export type EnvironmentConstructor<A extends InputOutputAdapter = InputOutputAdapter> = new (
   options?: BaseEnvironmentOptions,
@@ -119,20 +119,17 @@ export type BaseEnvironment<A = InputOutputAdapter, S extends Store<MemFsEditorF
    * This generator is stored under the provided `namespace` or, if not specified, a default namespace format.
    *
    * @param filePath The filepath to the generator or an npm package name.
-   * @param namespace The namespace under which the generator should be registered.
-   * @param packagePath The path to the npm package of the generator.
+   * @param meta Generator metadata.
    */
-  register(filePath: string, namespace?: string, packagePath?: string): void;
+  register(filePath: string, meta?: Partial<BaseGeneratorMeta>): void;
 
   /**
    * Registers a stubbed generator to this environment.
    *
    * @param generator The generator constructor.
-   * @param namespace The namespace under which the generator should be registered.
-   * @param resolved The file-path to the generator.
-   * @param packagePath The path to the npm package of the generator.
+   * @param meta Generator metadata.
    */
-  registerStub(generator: GetGeneratorConstructor, namespace: string, resolved?: string, packagePath?: string): void;
+  register(generator: unknown, meta: BaseGeneratorMeta): void;
 
   /**
    * Queue tasks

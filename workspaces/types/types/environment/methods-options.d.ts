@@ -74,6 +74,7 @@ export type BaseGeneratorMeta = {
 };
 
 export type GeneratorMeta = BaseGeneratorMeta & {
+  packageNamespace?: string;
   /** Import and find the Generator Class */
   importGenerator: () => Promise<GetGeneratorConstructor>;
   /** Import the module `import(meta.resolved)` */
