@@ -4,7 +4,8 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "./types",
+    "noEmit": true,
     "types": ["node", "inquirer"]
   }
 }

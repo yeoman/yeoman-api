@@ -23,3 +23,7 @@ export type BaseGenerator<
   // Generator >= v5
   readonly features: F | undefined;
 };
+
+export type BaseGeneratorConstructor<O extends GeneratorOptions = GeneratorOptions, F extends GeneratorFeatures = GeneratorFeatures> =
+  | (new (args?: string[], options?: O, features?: F) => BaseGenerator<O, F>)
+  | (new (options?: O, features?: F) => BaseGenerator<O, F>);

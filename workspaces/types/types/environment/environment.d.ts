@@ -6,6 +6,7 @@ import type { BaseGeneratorOptions } from '../generator/generator-options.js';
 import type { BaseGenerator } from '../generator/generator.js';
 import type { GetGeneratorConstructor, GetGeneratorOptions } from '../generator/utils.js';
 import type { InputOutputAdapter } from './adapter.js';
+import type { GeneratorMeta, LookupGeneratorMeta, LookupOptions } from './methods-options.js';
 
 export type EnvironmentConstructor<A extends InputOutputAdapter = InputOutputAdapter> = new (
   options?: BaseEnvironmentOptions,
@@ -71,6 +72,30 @@ export type BaseEnvironment<A = InputOutputAdapter, S extends Store<MemFsEditorF
   namespace(filePath: string, lookups?: string[]): string;
 
   /**
+   * Creates an alias.
+   *
+   * Alias allows the `get()` and `lookup()` methods to search in alternate filepath for a given namespaces.
+   * It's used for example to map `generator-*` npm package to their namespace equivalent (without the generator- prefix),
+   * or to default a single namespace like `angular` to `angular:app` or `angular:all`.
+   *
+   * If multiple aliases are defined, then the replacement is recursive, replacing each alias in reverse order.
+   *
+   * An alias can be a single String or a Regular Expression.
+   * The finding is done based on .match().
+   *
+   * @param match The name to match.
+   * @param value The replacement for the specified `match`.
+   *
+   * @example
+   * env.alias(/^([a-zA-Z0-9:\*]+)$/, 'generator-$1');
+   * env.alias(/^([^:]+)$/, '$1:app');
+   * env.alias(/^([^:]+)$/, '$1:all');
+   * env.alias('foo');
+   * // => generator-foo:all
+   */
+  alias(match: string | RegExp, value: string): void;
+
+  /**
    * Gets the version of this `Environment` object.
    */
   getVersion(): string;
@@ -123,4 +148,39 @@ export type BaseEnvironment<A = InputOutputAdapter, S extends Store<MemFsEditorF
    * @param before
    */
   addPriority(priority: string, before?: string): void;
+
+  /**
+   * Searches for generators and their sub-generators.
+   *
+   * A generator is a `:lookup/:name/index.js` file placed inside an npm package.
+   *
+   * Default lookups are:
+   *   - `./`
+   *   - `./generators/`
+   *   - `./lib/generators/`
+   *
+   * So the index file `node_modules/generator-dummy/lib/generators/yo/index.js` would be registered as `dummy:yo` generator.
+   *
+   * @param options The options for the lookup.
+   * @returns A list of generators.
+   */
+  lookup(options?: LookupOptions): Promise<LookupGeneratorMeta[]>;
+
+  /**
+   * Checks whether a package with the specified `packageNamespace` has been registered.
+   *
+   * @param packageNamespace The package-namespace to check.
+   * @returns A value indicating whether a package with the specified `packageNamespace` has been registered.
+   */
+  isPackageRegistered(packageNamespace?: string): boolean;
+
+  /**
+   * Gets the namespaces of all registered packages.
+   */
+  getRegisteredPackages(): string[];
+
+  /**
+   * Returns stored generators meta
+   */
+  getGeneratorMeta(namespace: string): GeneratorMeta;
 };

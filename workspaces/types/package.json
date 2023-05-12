@@ -15,7 +15,8 @@
   "main": "",
   "types": "./types/index.d.ts",
   "files": [
-    "types"
+    "types",
+    "!**/*.test.ts"
   ],
   "scripts": {
     "build": "tsc",
