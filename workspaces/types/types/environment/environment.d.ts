@@ -3,7 +3,7 @@ import type { Store } from 'mem-fs';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 
 import type { BaseGeneratorOptions } from '../generator/generator-options.js';
-import type { BaseGenerator } from '../generator/generator.js';
+import type { BaseGenerator, BaseGeneratorConstructor } from '../generator/generator.js';
 import type { GetGeneratorConstructor, GetGeneratorOptions } from '../generator/utils.js';
 import type { InputOutputAdapter } from './adapter.js';
 import type { GeneratorMeta, LookupGeneratorMeta, LookupOptions, BaseGeneratorMeta } from './methods-options.js';
@@ -50,6 +50,18 @@ export type BaseEnvironment<A = InputOutputAdapter, S extends Store<MemFsEditorF
   emit(eventName: string | symbol, ...args: any[]): boolean;
 
   applyTransforms(transformStreams: Transform[], options?: ApplyTransformsOptions): Promise<void>;
+
+  /**
+   * Gets a single constructor of a generator from the registered list of generators.
+   *
+   * The lookup is based on generator's namespace, "walking up" the namespaces until a matching is found.
+   * Eg. if an `angular:common` namespace is registered, and we try to get `angular:common:all`,
+   * then we get `angular:common` as a fallback (unless an `angular:common:all` generator is registered).
+   *
+   * @param namespaceOrPath The namespace of the generator or the path to a generator.
+   * @returns The constructor of the generator registered under the namespace.
+   */
+  get<C extends BaseGeneratorConstructor = BaseGeneratorConstructor>(namespaceOrPath: string): Promise<C | undefined>;
 
   create<G extends BaseGenerator = BaseGenerator>(
     namespaceOrPath: string | GetGeneratorConstructor<G>,
