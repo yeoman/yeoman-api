@@ -31,23 +31,35 @@ export function transform<F extends File = File>(fn: TransformFile<F>) {
   });
 }
 
+type TransformMinimatchOptions = {
+  /** Minimatch options */
+  patternOptions?: MinimatchOptions;
+};
+
+export type PassthroughOptions<F extends File = File> = { filter?: FilterFile<F>; pattern?: string } & TransformMinimatchOptions;
+
 /**
  * Files will always be passed through.
  */
-export function passthrough<F extends File = File>(
-  fn?: PassthroughFile<F>,
-  options?: { filter?: FilterFile<F>; pattern?: string } & TransformMinimatchOptions,
-) {
+export function passthrough<F extends File = File>(fn?: PassthroughFile<F>, options: PassthroughOptions<F> = {}) {
   if (!fn) {
     return transform(f => f);
   }
 
-  const passthroughFilter: FilterFile<F> =
-    options?.filter ??
-    (options?.pattern ? (file: F) => new Minimatch(options.pattern!, options?.patternOptions).match(file.path) : () => true);
+  const { filter, pattern, patternOptions } = options;
+
+  let patternFilter: FilterFile<F> = () => true;
+  if (pattern) {
+    const minimatch = new Minimatch(pattern, patternOptions);
+    patternFilter = (file: F) => minimatch.match(file.path);
+  }
 
   return transform(async (file: F) => {
-    if (await passthroughFilter(file)) {
+    if (filter && !filter(file)) {
+      return file;
+    }
+
+    if (await patternFilter(file)) {
       await fn(file);
     }
 
@@ -55,10 +67,30 @@ export function passthrough<F extends File = File>(
   });
 }
 
-type TransformMinimatchOptions = {
-  /** Minimatch options */
-  patternOptions?: MinimatchOptions;
-};
+export type TransformFileField<K extends keyof F, F extends File = File> = (value: F[K], f: F) => F[K] | Promise<F[K]>;
+
+export function transformFileField<K extends keyof F, F extends File = File>(
+  field: K,
+  fieldValue: F[K] | TransformFileField<K, F>,
+  options?: PassthroughOptions<F>,
+) {
+  if (typeof fieldValue === 'function') {
+    return passthrough(async file => {
+      file[field] = await (fieldValue as TransformFileField<K, F>)(file[field], file);
+    }, options);
+  }
+
+  return passthrough(async file => {
+    file[field] = fieldValue;
+  }, options);
+}
+
+export function transformContents<F extends File = File>(
+  fn: (contents: F['contents']) => F['contents'] | Promise<F['contents']>,
+  options?: PassthroughOptions<F>,
+) {
+  return transformFileField<F['contents'], F>('contents', fn, options);
+}
 
 /**
  * Filter file.
@@ -72,6 +104,7 @@ export function filter<F extends File = File>(filter: FilterFile<F>) {
  * Conditional filter on pattern.
  * Files that doesn't match the pattern are removed.
  */
-export function filterPattern(pattern: string, options?: TransformMinimatchOptions) {
-  return filter(file => new Minimatch(pattern, options?.patternOptions).match(file.path));
+export function filterPattern(pattern: string, options: TransformMinimatchOptions = {}) {
+  const minimatch = new Minimatch(pattern, options.patternOptions);
+  return filter(file => minimatch.match(file.path));
 }
