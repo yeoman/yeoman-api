@@ -100,7 +100,7 @@ export class Conflicter {
     }
   }
 
-  log(file: ConflicterFile, adapter: InputOutputAdapter = this.adapter) {
+  private log(file: ConflicterFile, adapter: InputOutputAdapter = this.adapter) {
     const logStatus = file.conflicter;
     if (logStatus && adapter.log[logStatus]) {
       adapter.log[logStatus](file.relativePath);
@@ -112,7 +112,7 @@ export class Conflicter {
    *
    * @param  {Object}   file File object respecting this interface: { path, contents }
    */
-  async _printDiff({ file, adapter }: { file: ConflictedFile; adapter?: InputOutputAdapter }) {
+  private async _printDiff({ file, adapter }: { file: ConflictedFile; adapter?: InputOutputAdapter }) {
     const destAdapter = adapter ?? this.adapter;
     if (file.binary === undefined) {
       file.binary = isBinary(file.path, file.contents ?? undefined);
@@ -180,7 +180,7 @@ export class Conflicter {
    * @param  {import('vinyl')} file File object respecting this interface: { path, contents }
    * @return {Boolean} `true` if there's a conflict, `false` otherwise.
    */
-  async _detectConflict(file: ConflicterFile): Promise<boolean> {
+  private async _detectConflict(file: ConflicterFile): Promise<boolean> {
     let { contents, stat } = file;
     const filepath = path.resolve(file.path);
 
@@ -253,12 +253,14 @@ export class Conflicter {
           this.log(file, adapter);
           return file;
         });
+        /* c8 ignore next 3 */
         if (!queuedFile) {
           throw new Error('A conflicter file was not returned');
         }
 
         file = queuedFile;
       } else {
+        /* c8 ignore next 3 */
         file = await this.ask(this.adapter, conflictedFile);
         this.log(file);
       }
@@ -292,7 +294,7 @@ export class Conflicter {
     return file;
   }
 
-  async _checkForCollision(file: ConflicterFile): Promise<ConflicterFile> {
+  private async _checkForCollision(file: ConflicterFile): Promise<ConflicterFile> {
     if (!fs.existsSync(file.path)) {
       file.changesDetected = true;
       setConflicterStatus(file, 'create');
@@ -332,7 +334,7 @@ export class Conflicter {
    * @param {import('vinyl')} file vinyl file object
    * @param {Number} counter prompts
    */
-  async _ask({
+  private async _ask({
     file,
     counter,
     adapter,
