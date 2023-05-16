@@ -1,2 +1,3 @@
 export * from './conflicter.js';
 export * from './yo-resolve.js';
+export * from './transform.js';

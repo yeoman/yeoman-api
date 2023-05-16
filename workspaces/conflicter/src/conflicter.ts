@@ -22,11 +22,13 @@ export function setConflicterStatus<F extends ConflicterFile = ConflicterFile>(
   file: F,
   status?: ConflicterStatus,
   { log }: { log?: ConflicterLog } = {},
-) {
+): F {
   file.conflicter = status;
   if (log) {
     file.conflicterLog = log;
   }
+
+  return file;
 }
 
 export type ConflicterFile = MemFsEditorFile & {

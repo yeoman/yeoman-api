@@ -2,8 +2,8 @@ import { readFile, stat } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { Minimatch } from 'minimatch';
 import slash from 'slash';
-import { passthrough } from '@yeoman/transform';
-import { type ConflicterStatus, setConflicterStatus, type ConflicterFile } from './conflicter.js';
+import { transformFileField } from '@yeoman/transform';
+import { type ConflicterStatus, type ConflicterFile } from './conflicter.js';
 
 const eachFolder = function* (folder: string) {
   let last;
@@ -40,11 +40,9 @@ export class YoResolve {
   }
 
   createTransform() {
-    return passthrough(
-      async (file: ConflicterFile): Promise<void> => {
-        setConflicterStatus(file, await this.getStatusForFile(file.path));
-      },
-      { filter: file => !file.conflicter },
+    return transformFileField<'conflicter', ConflicterFile>(
+      'conflicter',
+      async (status: ConflicterStatus | undefined, file: ConflicterFile) => status ?? this.getStatusForFile(file.path),
     );
   }
 
