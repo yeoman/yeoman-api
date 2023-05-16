@@ -108,7 +108,6 @@ describe('Conflicter', () => {
         })
         .then(file => {
           assert.strictEqual(file.conflicter, 'skip');
-          assert.strictEqual(file.conflicterLog, 'identical');
         });
     });
 
@@ -225,7 +224,7 @@ describe('Conflicter', () => {
         })
         .then(file => {
           assert.equal(file.conflicter, 'skip');
-          assert.equal(file.conflicterLog, 'conflict');
+          assert.equal(file.changesDetected, true);
         });
     });
 
@@ -241,7 +240,6 @@ describe('Conflicter', () => {
         })
         .then(file => {
           assert.equal(file.conflicter, 'skip');
-          assert.equal(file.conflicterLog, 'create');
         });
     });
 
@@ -293,7 +291,6 @@ describe('Conflicter', () => {
         })
         .then(file => {
           assert.equal(file.conflicter, 'skip');
-          assert.equal(file.conflicterLog, 'identical');
         });
     });
 
@@ -339,7 +336,6 @@ describe('Conflicter', () => {
         })
         .then(file => {
           assert.equal(file.conflicter, 'skip');
-          assert.equal(file.conflicterLog, 'identical');
         });
     });
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/member-ordering */
 import fs from 'node:fs';
 import { stat as fsStat, readFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -12,34 +13,28 @@ import { clearFileState } from 'mem-fs-editor/state';
 import { transform } from 'p-transform';
 import { binaryDiff, isBinary } from './binary-diff.js';
 
-export type ConflicterStatus = 'create' | 'skip' | 'identical' | 'force';
+export type ConflicterStatus = 'create' | 'skip' | 'identical' | 'force' | 'conflict';
 
 export type ConflicterLog = ConflicterStatus | 'conflict';
 
 export type ConflicterAction = 'write' | 'abort' | 'diff' | 'reload' | 'force' | 'edit';
 
-export function setConflicterStatus<F extends ConflicterFile = ConflicterFile>(
-  file: F,
-  status?: ConflicterStatus,
-  { log }: { log?: ConflicterLog } = {},
-): F {
+export function setConflicterStatus<F extends ConflicterFile = ConflicterFile>(file: F, status?: ConflicterStatus): F {
   file.conflicter = status;
-  if (log) {
-    file.conflicterLog = log;
-  }
-
   return file;
 }
 
 export type ConflicterFile = MemFsEditorFile & {
-  conflicterLog?: ConflicterLog;
+  relativePath: string;
   conflicter?: ConflicterStatus;
+  changesDetected?: boolean;
   binary?: boolean;
   conflicterChanges?: Change[];
 };
 
 export type ConflictedFile = ConflicterFile & {
   conflicterChanges: Change[];
+  changesDetected: true;
 };
 
 export type ConflicterOptions = {
@@ -82,11 +77,11 @@ export class Conflicter {
   dryRun: boolean;
   cwd: string;
   diffOptions?: any;
-  fs?: MemFsEditor<ConflicterFile>;
+  fs?: MemFsEditor<MemFsEditorFile>;
 
   constructor(private readonly adapter: InputOutputAdapter, options?: ConflicterOptions) {
     if (options?.memFs) {
-      this.fs = createMemFsEditor(options?.memFs as Store<ConflicterFile>) as MemFsEditor<ConflicterFile>;
+      this.fs = createMemFsEditor(options?.memFs as Store<MemFsEditorFile>) as MemFsEditor<MemFsEditorFile>;
     }
 
     this.force = options?.force ?? false;
@@ -105,14 +100,10 @@ export class Conflicter {
     }
   }
 
-  log(file: ConflicterFile) {
-    const logStatus = file.conflicterLog ?? file.conflicter;
-    this._log(logStatus, path.relative(this.cwd, file.path));
-  }
-
-  _log(logStatus: ConflicterLog | 'writeln' | undefined, ...args: any[]) {
-    if (logStatus && this.adapter.log[logStatus]) {
-      this.adapter.log[logStatus](...args);
+  log(file: ConflicterFile, adapter: InputOutputAdapter = this.adapter) {
+    const logStatus = file.conflicter;
+    if (logStatus && adapter.log[logStatus]) {
+      adapter.log[logStatus](file.relativePath);
     }
   }
 
@@ -189,7 +180,7 @@ export class Conflicter {
    * @param  {import('vinyl')} file File object respecting this interface: { path, contents }
    * @return {Boolean} `true` if there's a conflict, `false` otherwise.
    */
-  async _detectConflict(file: ConflicterFile) {
+  async _detectConflict(file: ConflicterFile): Promise<boolean> {
     let { contents, stat } = file;
     const filepath = path.resolve(file.path);
 
@@ -247,82 +238,91 @@ export class Conflicter {
    * @return Promise the Vinyl file
    */
   async checkForCollision(file: ConflicterFile): Promise<ConflicterFile> {
-    const rfilepath = path.relative(this.cwd, file.path);
-    if (file.conflicter) {
-      this._log(file.conflicter, rfilepath);
-      return file;
+    file.relativePath = path.relative(this.cwd, file.path);
+
+    if (!file.conflicter) {
+      file = await this._checkForCollision(file);
     }
 
-    if (!fs.existsSync(file.path)) {
-      if (this.bail) {
-        this._log('writeln', 'Aborting ...');
-        throw new Error(`Process aborted by conflict: ${rfilepath}`);
+    if (file.conflicter === 'conflict' && !this.bail && !this.dryRun) {
+      const conflictedFile: ConflictedFile = file as ConflictedFile;
+
+      if ((this.adapter as any).queue) {
+        const queuedFile = await (this.adapter as QueuedAdapter).queue(async adapter => {
+          const file = await this.ask(adapter, conflictedFile);
+          this.log(file, adapter);
+          return file;
+        });
+        if (!queuedFile) {
+          throw new Error('A conflicter file was not returned');
+        }
+
+        file = queuedFile;
+      } else {
+        file = await this.ask(this.adapter, conflictedFile);
+        this.log(file);
+      }
+    } else {
+      this.log(file);
+    }
+
+    if (file.changesDetected && this.bail) {
+      if (file.conflicterChanges) {
+        await this._printDiff({ file: file as ConflictedFile });
       }
 
-      this._log('create', rfilepath);
-      setConflicterStatus(file, this.dryRun ? 'skip' : 'create', { log: 'create' });
+      this.adapter.log.writeln('Aborting ...');
+      const error = new Error(`Process aborted by conflict: ${file.relativePath}`);
+      (error as any).file = file;
+      throw error;
+    }
+
+    if (this.dryRun) {
+      if (file.conflicterChanges) {
+        await this._printDiff({ file: file as ConflictedFile });
+      }
+
+      setConflicterStatus(file, 'skip');
+    }
+
+    if (!this.regenerate && file.conflicter === 'identical') {
+      setConflicterStatus(file, 'skip');
+    }
+
+    return file;
+  }
+
+  async _checkForCollision(file: ConflicterFile): Promise<ConflicterFile> {
+    if (!fs.existsSync(file.path)) {
+      file.changesDetected = true;
+      setConflicterStatus(file, 'create');
       return file;
     }
 
-    const isForce = () => this.force;
-
-    if (isForce()) {
-      this._log('force', rfilepath);
+    if (this.force) {
       setConflicterStatus(file, 'force');
       return file;
     }
 
     if (await this._detectConflict(file)) {
-      const conflictedFile: ConflictedFile = file as ConflictedFile;
-      if (this.bail) {
-        this.adapter.log.conflict(rfilepath);
-        await this._printDiff({ file: conflictedFile });
-        this.adapter.log.writeln('Aborting ...');
-        const error = new Error(`Process aborted by conflict: ${rfilepath}`);
-        (error as any).file = file;
-        throw error;
-      }
-
-      if (this.dryRun) {
-        this._log('conflict', rfilepath);
-        await this._printDiff({ file: conflictedFile });
-        setConflicterStatus(file, 'skip', { log: 'conflict' });
-        return file;
-      }
-
-      if (isForce()) {
-        setConflicterStatus(file, 'force');
-        this.adapter.log.force(rfilepath);
-        return file;
-      }
-
-      const ask = async (adapter: InputOutputAdapter) => {
-        adapter.log.conflict(rfilepath);
-        const action = await this._ask({ file: conflictedFile, counter: 1, adapter });
-        adapter.log[action ?? 'force'](rfilepath);
-        setConflicterStatus(file, action);
-        return file;
-      };
-
-      if ((this.adapter as any).queue) {
-        const file = await (this.adapter as QueuedAdapter).queue(ask);
-        if (!file) {
-          throw new Error('A conflicter file was not returned');
-        }
-
-        return file;
-      }
-
-      return ask(this.adapter);
-    }
-
-    this._log('identical', rfilepath);
-    if (!this.regenerate) {
-      setConflicterStatus(file, 'skip', { log: 'identical' });
+      file.changesDetected = true;
+      setConflicterStatus(file, 'conflict');
       return file;
     }
 
     setConflicterStatus(file, 'identical');
+    return file;
+  }
+
+  private async ask(adapter: InputOutputAdapter, file: ConflictedFile): Promise<ConflictedFile> {
+    if (this.force) {
+      setConflicterStatus(file, 'force');
+      return file;
+    }
+
+    adapter.log.conflict(file.relativePath);
+    const action = await this._ask({ file, counter: 1, adapter });
+    setConflicterStatus(file, action);
     return file;
   }
 
@@ -341,15 +341,10 @@ export class Conflicter {
     counter: number;
     adapter: InputOutputAdapter;
   }): Promise<ConflicterStatus> {
-    if (file.conflicter) {
-      return file.conflicter;
-    }
-
-    const rfilepath = path.relative(this.cwd, file.path);
     const prompt = {
       name: 'action',
       type: 'expand',
-      message: `Overwrite ${rfilepath}?`,
+      message: `Overwrite ${file.relativePath}?`,
       pageSize: 20,
       choices: [
         {
@@ -414,7 +409,7 @@ export class Conflicter {
       prompt,
     ]);
     if (typeof result.action === 'function') {
-      return result.action.call(this, { file, relativeFilePath: rfilepath, adapter });
+      return result.action.call(this, { file, relativeFilePath: file.relativePath, adapter });
     }
 
     if (result.action === 'abort') {
@@ -456,7 +451,7 @@ export class Conflicter {
           type: 'editor',
           default: file.contents?.toString(),
           postfix: `.${path.extname(file.path)}`,
-          message: `Edit ${rfilepath}`,
+          message: `Edit ${file.relativePath}`,
         },
       ]);
       file.contents = Buffer.from(answers.content ?? '', 'utf8');
@@ -471,12 +466,12 @@ export class Conflicter {
   }
 
   createTransform() {
-    return transform(async file => {
+    return transform(async (file: ConflicterFile) => {
       const conflicterFile = await this.checkForCollision(file);
       const action = conflicterFile.conflicter;
 
       delete conflicterFile.conflicter;
-      delete conflicterFile.conflicterLog;
+      delete conflicterFile.changesDetected;
       delete conflicterFile.binary;
       delete conflicterFile.conflicterChanges;
 
