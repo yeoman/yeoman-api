@@ -73,7 +73,6 @@ export class YoResolve {
           for (const [pattern, status = 'skip'] of parsed) {
             const negate = pattern.startsWith('!');
             const minimatchPattern = `${negate ? '!' : ''}${folder}/${negate ? pattern.slice(1) : pattern}`;
-            console.log(minimatchPattern);
             map.set(new Minimatch(minimatchPattern), status);
           }
         }
