@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@types/node": "^16.18.28",
-    "@yeoman/transform": "^0.2.1",
+    "@yeoman/transform": "^1.0.0-beta.0",
     "@yeoman/types": "^0.4.0",
     "binary-extensions": "^2.2.0",
     "cli-table": "^0.3.11",
