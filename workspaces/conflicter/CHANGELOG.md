@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.1](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@0.4.0...@yeoman/conflicter@0.4.1) (2023-05-16)
+
+### Features
+
+- **conflicter:** refactor conflicter logic ([716d891](https://github.com/yeoman/yeoman-api/commit/716d8913a7fe16bdc46a1db2236f8d35ad727668))
+
 ## [0.4.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@0.3.5...@yeoman/conflicter@0.4.0) (2023-05-16)
 
 ### Features
