@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.5](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@0.3.4...@yeoman/conflicter@0.3.5) (2023-05-16)
+
+### Bug Fixes
+
+- **conflicter:** drop console.log leftover ([bc57496](https://github.com/yeoman/yeoman-api/commit/bc57496471265c7493a9450a4c3f05db59dda3fe))
+
 ## [0.3.4](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@0.3.3...@yeoman/conflicter@0.3.4) (2023-05-11)
 
 **Note:** Version bump only for package @yeoman/conflicter

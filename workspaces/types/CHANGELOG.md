@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@0.3.0...@yeoman/types@0.4.0) (2023-05-16)
+
+### ⚠ BREAKING CHANGES
+
+- **types:** rework register api.
+
+### Features
+
+- **type:** add get ([e7584f3](https://github.com/yeoman/yeoman-api/commit/e7584f319e75855fbdb65815873731a0f60c50ec))
+- **types:** add more environment methods ([37c1017](https://github.com/yeoman/yeoman-api/commit/37c1017d3d97c1a419c7df1bf389d934a1a069e5))
+- **types:** rework register api. ([59245c2](https://github.com/yeoman/yeoman-api/commit/59245c2eb562736d1aefefcf8c4bf3dc715e497e))
+
 ## [0.3.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@0.2.0...@yeoman/types@0.3.0) (2023-05-11)
 
 ### ⚠ BREAKING CHANGES
