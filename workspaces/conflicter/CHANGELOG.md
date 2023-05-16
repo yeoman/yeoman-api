@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@0.3.5...@yeoman/conflicter@0.4.0) (2023-05-16)
+
+### Features
+
+- bump namespace and transform to 1.0.0-beta.0. ([adf653d](https://github.com/yeoman/yeoman-api/commit/adf653d7b8a794c93565d66301ed0bd1c1556bc8))
+- **conflicter:** add transforms ([4468110](https://github.com/yeoman/yeoman-api/commit/4468110e27d2eb0e937974d04273f67d641dad53))
+
 ## [0.3.5](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@0.3.4...@yeoman/conflicter@0.3.5) (2023-05-16)
 
 ### Bug Fixes

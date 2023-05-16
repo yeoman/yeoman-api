@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/transform@0.2.1...@yeoman/transform@1.0.0) (2023-05-16)
+
+### Features
+
+- bump namespace and transform to 1.0.0-beta.0. ([adf653d](https://github.com/yeoman/yeoman-api/commit/adf653d7b8a794c93565d66301ed0bd1c1556bc8))
+- **transform:** add more utilities. ([1226353](https://github.com/yeoman/yeoman-api/commit/122635338d8d1401227ca14072fa12e060dab5af))
+
 ## [0.2.1](https://github.com/yeoman/yeoman-api/compare/@yeoman/transform@0.2.0...@yeoman/transform@0.2.1) (2023-05-11)
 
 ### Bug Fixes
