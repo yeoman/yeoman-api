@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@0.4.1...@yeoman/conflicter@0.5.0) (2023-05-17)
+
+### Features
+
+- **adapter:** pass adapter through options. ([bde63df](https://github.com/yeoman/yeoman-api/commit/bde63df0b9d3d45c8cc34534175d839486cfd091))
+
+### Bug Fixes
+
+- **conflicter:** convert methods to private ([c72868f](https://github.com/yeoman/yeoman-api/commit/c72868f6a174899be7c6b7c3eccaf87e4542e638))
+
 ## [0.4.1](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@0.4.0...@yeoman/conflicter@0.4.1) (2023-05-16)
 
 ### Features
