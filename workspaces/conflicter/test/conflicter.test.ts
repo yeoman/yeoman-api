@@ -35,7 +35,7 @@ describe('Conflicter', () => {
     testAdapter = new TestAdapter();
     testAdapter.log.colored = sinon.spy();
 
-    conflicter = new Conflicter(new QueuedAdapter(testAdapter));
+    conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }));
   });
 
   describe('#checkForCollision()', () => {
@@ -60,7 +60,7 @@ describe('Conflicter', () => {
     });
 
     it('identical status', async () => {
-      const conflicter = new Conflicter(new QueuedAdapter(new TestAdapter({ action: 'force' })));
+      const conflicter = new Conflicter(new QueuedAdapter({ adapter: new TestAdapter({ action: 'force' }) }));
       const me = fs.readFileSync(__filename, 'utf8');
 
       return conflicter
@@ -79,8 +79,8 @@ describe('Conflicter', () => {
 
     it('handles custom actions', function (done) {
       const conflicter = new Conflicter(
-        new QueuedAdapter(
-          new TestAdapter({
+        new QueuedAdapter({
+          adapter: new TestAdapter({
             action(data) {
               try {
                 assert(this === conflicter);
@@ -91,7 +91,7 @@ describe('Conflicter', () => {
               }
             },
           }),
-        ),
+        }),
       );
 
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -123,7 +123,7 @@ describe('Conflicter', () => {
     });
 
     it('user choose "yes"', async function () {
-      const conflicter = new Conflicter(new QueuedAdapter(new TestAdapter({ action: 'write' })));
+      const conflicter = new Conflicter(new QueuedAdapter({ adapter: new TestAdapter({ action: 'write' }) }));
 
       return conflicter.checkForCollision(conflictingFile).then(file => {
         assert.equal(file.conflicter, 'force');
@@ -131,7 +131,7 @@ describe('Conflicter', () => {
     });
 
     it('user choose "skip"', async function () {
-      const conflicter = new Conflicter(new QueuedAdapter(new TestAdapter({ action: 'skip' })));
+      const conflicter = new Conflicter(new QueuedAdapter({ adapter: new TestAdapter({ action: 'skip' }) }));
 
       return conflicter.checkForCollision(conflictingFile).then(file => {
         assert.equal(file.conflicter, 'skip');
@@ -139,7 +139,7 @@ describe('Conflicter', () => {
     });
 
     it('user choose "force"', async function () {
-      const conflicter = new Conflicter(new QueuedAdapter(new TestAdapter({ action: 'force' })));
+      const conflicter = new Conflicter(new QueuedAdapter({ adapter: new TestAdapter({ action: 'force' }) }));
 
       return conflicter.checkForCollision(conflictingFile).then(file => {
         assert.equal(file.conflicter, 'force');
@@ -156,14 +156,14 @@ describe('Conflicter', () => {
     describe('with bail option', () => {
       it('abort on first conflict', async function () {
         this.timeout(4000);
-        const conflicter = new Conflicter(new QueuedAdapter(testAdapter), { bail: true });
+        const conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }), { bail: true });
         await expect(conflicter.checkForCollision(conflictingFile)).rejects.toThrowError(
           /Process aborted by conflict: (.*)conflicter.test.ts/s,
         );
       });
 
       it('abort on first conflict with whitespace changes', async function () {
-        const conflicter = new Conflicter(new QueuedAdapter(testAdapter), { bail: true });
+        const conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }), { bail: true });
         return conflicter
           .checkForCollision({
             path: path.join(__dirname, 'fixtures/conflicter/file-conflict.txt'),
@@ -179,7 +179,7 @@ describe('Conflicter', () => {
 
       describe('with ignoreWhitespace option', () => {
         it('should not abort on first conflict with whitespace changes', async () => {
-          const conflicter = new Conflicter(new QueuedAdapter(testAdapter), {
+          const conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }), {
             ignoreWhitespace: true,
             bail: true,
           });
@@ -197,7 +197,7 @@ describe('Conflicter', () => {
       });
 
       it('abort on create new file', async () => {
-        const conflicter = new Conflicter(new QueuedAdapter(testAdapter), { bail: true });
+        const conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }), { bail: true });
         return conflicter
           .checkForCollision({
             path: 'file-who-does-not-exist2.js',
@@ -211,7 +211,7 @@ describe('Conflicter', () => {
     });
 
     it('skip file changes with dryRun', async () => {
-      const conflicter = new Conflicter(new QueuedAdapter(testAdapter), {
+      const conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }), {
         force: false,
         dryRun: true,
       });
@@ -229,7 +229,7 @@ describe('Conflicter', () => {
     });
 
     it('skip new file with dryRun', async () => {
-      const conflicter = new Conflicter(new QueuedAdapter(testAdapter), {
+      const conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }), {
         force: false,
         dryRun: true,
       });
@@ -244,7 +244,7 @@ describe('Conflicter', () => {
     });
 
     it('skip deleted file with dryRun', async () => {
-      const conflicter = new Conflicter(new QueuedAdapter(testAdapter), {
+      const conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }), {
         force: false,
         dryRun: true,
       });
@@ -259,7 +259,7 @@ describe('Conflicter', () => {
     });
 
     it('skip whitespace changes with dryRun', async () => {
-      const conflicter = new Conflicter(new QueuedAdapter(testAdapter), {
+      const conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }), {
         force: false,
         dryRun: true,
         ignoreWhitespace: true,
@@ -277,7 +277,7 @@ describe('Conflicter', () => {
     });
 
     it('does not give a conflict with ignoreWhitespace', async () => {
-      const conflicter = new Conflicter(new QueuedAdapter(testAdapter), {
+      const conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }), {
         force: false,
         ignoreWhitespace: true,
       });
@@ -295,7 +295,7 @@ describe('Conflicter', () => {
     });
 
     it('skip rewrite with ignoreWhitespace and skipRegenerate', async () => {
-      const conflicter = new Conflicter(new QueuedAdapter(testAdapter), {
+      const conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }), {
         force: false,
         ignoreWhitespace: true,
         skipRegenerate: true,
@@ -314,7 +314,7 @@ describe('Conflicter', () => {
     });
 
     it('does give a conflict without ignoreWhitespace', async () => {
-      const conflicter = new Conflicter(new QueuedAdapter(new TestAdapter({ action: 'skip' })));
+      const conflicter = new Conflicter(new QueuedAdapter({ adapter: new TestAdapter({ action: 'skip' }) }));
 
       return conflicter
         .checkForCollision({
@@ -340,7 +340,7 @@ describe('Conflicter', () => {
     });
 
     it('does not provide a diff option for directory', async () => {
-      const queuedAdapter = new QueuedAdapter(new TestAdapter({ action: 'write' }));
+      const queuedAdapter = new QueuedAdapter({ adapter: new TestAdapter({ action: 'write' }) });
       const conflicter = new Conflicter(queuedAdapter);
       const spy = sinon.spy(conflicter.adapter.actualAdapter, 'prompt');
       await conflicter.checkForCollision({ path: __dirname, contents: null });
@@ -351,7 +351,7 @@ describe('Conflicter', () => {
     it('displays default diff for text files', async () => {
       const testAdapter = new TestAdapter(createActions(['diff', 'write']));
       testAdapter.log.colored = sinon.spy();
-      const conflicter = new Conflicter(new QueuedAdapter(testAdapter));
+      const conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }));
 
       return conflicter
         .checkForCollision({
@@ -366,7 +366,7 @@ describe('Conflicter', () => {
     it('shows old content for deleted text files', async () => {
       const testAdapter = new TestAdapter(createActions(['diff', 'write']));
       testAdapter.log.colored = sinon.spy();
-      const conflicter = new Conflicter(new QueuedAdapter(testAdapter));
+      const conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }));
       await conflicter.checkForCollision({
         path: path.join(__dirname, 'fixtures/conflicter/foo.js'),
         contents: null,
@@ -376,7 +376,7 @@ describe('Conflicter', () => {
 
     it('displays custom diff for binary files', async () => {
       const testAdapter = new TestAdapter(createActions(['diff', 'write']));
-      const conflicter = new Conflicter(new QueuedAdapter(testAdapter));
+      const conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }));
 
       return conflicter
         .checkForCollision({
@@ -391,7 +391,7 @@ describe('Conflicter', () => {
 
     it('displays custom diff for deleted binary files', async () => {
       const testAdapter = new TestAdapter(createActions(['diff', 'write']));
-      const conflicter = new Conflicter(new QueuedAdapter(testAdapter));
+      const conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }));
 
       return conflicter
         .checkForCollision({

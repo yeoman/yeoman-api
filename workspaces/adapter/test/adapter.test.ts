@@ -13,7 +13,7 @@ import { QueuedAdapter } from '../src/queued-adapter.js';
 
 describe('QueuedAdapter/TerminalAdapter', () => {
   beforeEach(function () {
-    this.adapter = new QueuedAdapter(new TerminalAdapter());
+    this.adapter = new QueuedAdapter({ adapter: new TerminalAdapter() });
   });
 
   describe('#prompt()', () => {
@@ -22,7 +22,7 @@ describe('QueuedAdapter/TerminalAdapter', () => {
     beforeEach(function () {
       fakeAnswers = { foo: 'bar' };
       this.stub = sinon.stub().resolves(fakeAnswers);
-      this.adapter = new QueuedAdapter(new TerminalAdapter({ promptModule: this.stub }));
+      this.adapter = new QueuedAdapter({ adapter: new TerminalAdapter({ promptModule: this.stub }) });
     });
 
     it('pass its arguments to inquirer', async function () {

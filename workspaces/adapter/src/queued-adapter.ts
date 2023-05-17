@@ -16,7 +16,11 @@ type Task<TaskResultType> =
   | ((adapter: InputOutputAdapter) => PromiseLike<TaskResultType>)
   | ((adapter: InputOutputAdapter) => TaskResultType);
 
-type QueuedAdapterOptions = { queue?: PQueue; delta?: number } & TerminalAdapterOptions;
+type QueuedAdapterOptions = TerminalAdapterOptions & {
+  queue?: PQueue;
+  delta?: number;
+  adapter?: InputOutputAdapter;
+};
 
 export class QueuedAdapter implements QueuedAdapterApi {
   #queue: PQueue;
@@ -33,10 +37,10 @@ export class QueuedAdapter implements QueuedAdapterApi {
    * @constructor
    * @param {terminalAdapter}          [import('./adapter.js').default]
    */
-  constructor(terminalAdapter: InputOutputAdapter, options?: QueuedAdapterOptions) {
-    const { queue, delta, ...adapterOptions } = options ?? {};
+  constructor(options?: QueuedAdapterOptions) {
+    const { adapter, queue, delta, ...adapterOptions } = options ?? {};
     this.#queue = queue ?? new PQueue({ concurrency: 1 });
-    this.actualAdapter = terminalAdapter ?? new TerminalAdapter(adapterOptions);
+    this.actualAdapter = adapter ?? new TerminalAdapter(adapterOptions);
 
     // Deffered logger
     const defferredLogger = (...args: any[]) => {
@@ -60,7 +64,7 @@ export class QueuedAdapter implements QueuedAdapterApi {
   }
 
   newAdapter(delta?: number) {
-    return new QueuedAdapter(this.actualAdapter, { delta: delta ?? this.delta + 1, queue: this.#queue });
+    return new QueuedAdapter({ adapter: this.actualAdapter, delta: delta ?? this.delta + 1, queue: this.#queue });
   }
 
   close() {
