@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@0.5.0...@yeoman/conflicter@0.6.0) (2023-05-18)
+
+**Note:** Version bump only for package @yeoman/conflicter
+
 ## [0.5.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@0.4.1...@yeoman/conflicter@0.5.0) (2023-05-17)
 
 ### Features

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@0.4.0...@yeoman/types@0.5.0) (2023-05-18)
+
+### Bug Fixes
+
+- **types:** aggregate environment methods parameters ([8df298e](https://github.com/yeoman/yeoman-api/commit/8df298e51c92fb1a84801afc81081bc678579f7f))
+
 ## [0.4.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@0.3.0...@yeoman/types@0.4.0) (2023-05-16)
 
 ### ⚠ BREAKING CHANGES
