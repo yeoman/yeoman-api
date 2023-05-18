@@ -4,9 +4,16 @@ import type { MemFsEditorFile } from 'mem-fs-editor';
 
 import type { BaseGeneratorOptions } from '../generator/generator-options.js';
 import type { BaseGenerator, BaseGeneratorConstructor } from '../generator/generator.js';
-import type { GetGeneratorConstructor, GetGeneratorOptions } from '../generator/utils.js';
+import type { GetGeneratorConstructor } from '../generator/utils.js';
 import type { InputOutputAdapter } from './adapter.js';
-import type { GeneratorMeta, LookupGeneratorMeta, LookupOptions, BaseGeneratorMeta } from './methods-options.js';
+import type {
+  GeneratorMeta,
+  LookupGeneratorMeta,
+  LookupOptions,
+  BaseGeneratorMeta,
+  InstantiateOptions,
+  ComposeOptions,
+} from './methods-options.js';
 
 export type EnvironmentConstructor<A extends InputOutputAdapter = InputOutputAdapter> = new (
   options?: BaseEnvironmentOptions,
@@ -39,7 +46,7 @@ export type ApplyTransformsOptions = {
   name?: string;
   log?: boolean;
   stream?: ReturnType<Store<MemFsEditorFile>['stream']>;
-  streamOptions: Parameters<Store<MemFsEditorFile>['stream']>[0];
+  streamOptions?: Parameters<Store<MemFsEditorFile>['stream']>[0];
 };
 
 export type BaseEnvironment<A = InputOutputAdapter, S extends Store<MemFsEditorFile> = Store<MemFsEditorFile>> = {
@@ -65,14 +72,17 @@ export type BaseEnvironment<A = InputOutputAdapter, S extends Store<MemFsEditorF
 
   create<G extends BaseGenerator = BaseGenerator>(
     namespaceOrPath: string | GetGeneratorConstructor<G>,
-    args: string[],
-    options?: Partial<Omit<GetGeneratorOptions<G>, 'env' | 'resolved' | 'namespace'>>,
+    instantiateOptions: InstantiateOptions<G>,
   ): Promise<G>;
 
   instantiate<G extends BaseGenerator = BaseGenerator>(
     generator: GetGeneratorConstructor<G>,
-    args: string[],
-    options?: Partial<Omit<GetGeneratorOptions<G>, 'env' | 'resolved' | 'namespace'>>,
+    instantiateOptions: InstantiateOptions<G>,
+  ): Promise<G>;
+
+  composeWith<G extends BaseGenerator = BaseGenerator>(
+    generator: string | GetGeneratorConstructor<G>,
+    composeOptions?: ComposeOptions<G>,
   ): Promise<G>;
 
   /**
@@ -117,10 +127,9 @@ export type BaseEnvironment<A = InputOutputAdapter, S extends Store<MemFsEditorF
    *
    * @param dependency The name of the dependency.
    */
-  // eslint-disable-next-line @typescript-eslint/unified-signatures
-  getVersion(dependency: string): string;
+  getVersion(dependency: string): string | undefined;
 
-  queueGenerator<G extends BaseGenerator = BaseGenerator>(generator: G, schedule?: boolean): Promise<G>;
+  queueGenerator<G extends BaseGenerator = BaseGenerator>(generator: G, queueOptions?: { schedule?: boolean }): Promise<G>;
 
   rootGenerator<G extends BaseGenerator = BaseGenerator>(): G;
 
@@ -133,7 +142,7 @@ export type BaseEnvironment<A = InputOutputAdapter, S extends Store<MemFsEditorF
    * @param filePath The filepath to the generator or an npm package name.
    * @param meta Generator metadata.
    */
-  register(filePath: string, meta?: Partial<BaseGeneratorMeta>): void;
+  register(filePath: string, meta?: Partial<BaseGeneratorMeta>): GeneratorMeta;
 
   /**
    * Registers a stubbed generator to this environment.
@@ -141,7 +150,7 @@ export type BaseEnvironment<A = InputOutputAdapter, S extends Store<MemFsEditorF
    * @param generator The generator constructor.
    * @param meta Generator metadata.
    */
-  register(generator: unknown, meta: BaseGeneratorMeta): void;
+  register(generator: unknown, meta: BaseGeneratorMeta): GeneratorMeta;
 
   /**
    * Queue tasks
@@ -181,7 +190,7 @@ export type BaseEnvironment<A = InputOutputAdapter, S extends Store<MemFsEditorF
    * @param packageNamespace The package-namespace to check.
    * @returns A value indicating whether a package with the specified `packageNamespace` has been registered.
    */
-  isPackageRegistered(packageNamespace?: string): boolean;
+  isPackageRegistered(packageNamespace: string): boolean;
 
   /**
    * Gets the namespaces of all registered packages.
@@ -191,5 +200,5 @@ export type BaseEnvironment<A = InputOutputAdapter, S extends Store<MemFsEditorF
   /**
    * Returns stored generators meta
    */
-  getGeneratorMeta(namespace: string): GeneratorMeta;
+  getGeneratorMeta(namespace: string): GeneratorMeta | undefined;
 };

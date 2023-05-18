@@ -1,4 +1,4 @@
-import { type BaseGenerator, type GetGeneratorConstructor } from '../index.js';
+import type { GetGeneratorOptions, BaseGenerator, GetGeneratorConstructor } from '../index.js';
 
 /**
  * Provides options for the `lookup` method.
@@ -51,17 +51,17 @@ export type LookupGeneratorMeta = {
   /**
    * The resolved path to the generator.
    */
-  generatorPath: string;
+  generatorPath?: string;
 
   /**
    * The namespace of the generator.
    */
-  namespace: string;
+  namespace?: string;
 
   /**
    * The path to the package containing the generator.
    */
-  packagePath: string;
+  packagePath?: string;
 };
 
 export type BaseGeneratorMeta = {
@@ -80,7 +80,14 @@ export type GeneratorMeta = BaseGeneratorMeta & {
   /** Import the module `import(meta.resolved)` */
   importModule?: () => Promise<unknown>;
   /** Intantiate the Generator `env.instantiate(await meta.importGenerator())` */
-  instantiate: <G extends BaseGenerator = BaseGenerator>(args?: string[], options?: any) => Promise<G>;
+  instantiate: (args?: string[], options?: any) => Promise<BaseGenerator>;
   /** Intantiate the Generator passing help option */
-  instantiateHelp: <G extends BaseGenerator = BaseGenerator>() => Promise<G>;
+  instantiateHelp: () => Promise<BaseGenerator>;
 };
+
+export type InstantiateOptions<G extends BaseGenerator = BaseGenerator> = {
+  generatorArgs?: string[];
+  generatorOptions?: Partial<Omit<GetGeneratorOptions<G>, 'env' | 'resolved' | 'namespace'>> | undefined;
+};
+
+export type ComposeOptions<G extends BaseGenerator = BaseGenerator> = InstantiateOptions<G> & { schedule?: boolean };
