@@ -1,6 +1,15 @@
-import { pipeline as _pipeline, Transform, type TransformCallback } from 'node:stream';
-import { promisify } from 'node:util';
+import {
+  type PipelineSource,
+  type PipelineTransform,
+  type PipelineTransformSource,
+  Transform,
+  type TransformCallback,
+  type PipelineOptions,
+} from 'node:stream';
+import { pipeline } from 'node:stream/promises';
 import { Minimatch, type MinimatchOptions } from 'minimatch';
+
+export { pipeline } from 'node:stream/promises';
 
 export type File = { path: string; contents: any };
 
@@ -10,10 +19,13 @@ type PassthroughFile<F extends File = File> = (file: F) => Promise<void> | void;
 
 type FilterFile<F extends File = File> = (file: F) => Promise<boolean> | boolean;
 
-/**
- * Promisified pipeline
- */
-export const pipeline = promisify(_pipeline);
+export type FilePipelineTransform<F extends File = File> = PipelineTransform<PipelineTransformSource<F>, F>;
+
+export const filePipeline = async <F extends File = File>(
+  source: PipelineSource<F>,
+  transforms: Array<FilePipelineTransform<F>>,
+  options?: PipelineOptions,
+) => (pipeline as (...args: any[]) => Promise<void>)(source, ...transforms, ...(options ? [options] : []));
 
 /**
  * The returned file from transform function is passed through if any.

@@ -2,7 +2,7 @@
 /* eslint-disable max-nested-callbacks */
 import assert from 'node:assert';
 import { describe, it, beforeEach, esmocha, expect } from 'esmocha';
-import { pipeline, passthrough, type File, filterPattern, transformContents } from '../src/transform.js';
+import { filePipeline, passthrough, type File, filterPattern, transformContents } from '../src/transform.js';
 
 describe('Transform stream', () => {
   let unmodifiedFile;
@@ -54,8 +54,7 @@ describe('Transform stream', () => {
           assert.equal(file.conflicter, undefined);
         }
 
-        await pipeline(
-          stream,
+        await filePipeline(stream, [
           passthrough(sinonTransformPre),
           passthrough<File & { conflicter: string }>(
             file => {
@@ -64,7 +63,7 @@ describe('Transform stream', () => {
             { pattern: '**/{.yo-rc.json,.yo-resolve,.yo-rc-global.json}' },
           ),
           passthrough(sinonTransformPost),
-        );
+        ]);
       });
 
       it('should spy files that matches the pattern and pass all files through', () => {
@@ -90,8 +89,7 @@ describe('Transform stream', () => {
 
     describe('using filter', () => {
       beforeEach(async () => {
-        await pipeline(
-          stream,
+        await filePipeline(stream, [
           passthrough(sinonTransformPre),
           passthrough<File & { conflicter: string }>(
             file => {
@@ -100,7 +98,7 @@ describe('Transform stream', () => {
             { filter: file => file.path.endsWith('.yo-rc.json') },
           ),
           passthrough(sinonTransformPost),
-        );
+        ]);
       });
 
       it('should spy files that matches the pattern and pass all files through', () => {
@@ -124,14 +122,13 @@ describe('Transform stream', () => {
           assert.equal(file.conflicter, undefined);
         }
 
-        await pipeline(
-          stream,
+        await filePipeline(stream, [
           passthrough(sinonTransformPre),
           transformContents<File & { conflicter: string }>(() => Buffer.from('foo'), {
             pattern: '**/{.yo-rc.json,.yo-resolve,.yo-rc-global.json}',
           }),
           passthrough(sinonTransformPost),
-        );
+        ]);
       });
 
       it('should edit selected files contents', () => {
@@ -157,12 +154,11 @@ describe('Transform stream', () => {
 
     describe('using filter', () => {
       beforeEach(async () => {
-        await pipeline(
-          stream,
+        await filePipeline(stream, [
           passthrough(sinonTransformPre),
           transformContents<File & { conflicter: string }>(() => Buffer.from('foo'), { filter: file => file.path.endsWith('.yo-rc.json') }),
           passthrough(sinonTransformPost),
-        );
+        ]);
       });
 
       it('should spy files that matches the pattern and pass all files through', () => {
@@ -181,12 +177,11 @@ describe('Transform stream', () => {
 
   describe('filterPattern()', () => {
     beforeEach(async () => {
-      await pipeline(
-        stream,
+      await filePipeline(stream, [
         passthrough(sinonTransformPre),
         filterPattern('**/{.yo-rc.json,.yo-resolve,.yo-rc-global.json}'),
         passthrough(sinonTransformPost),
-      );
+      ]);
     });
 
     it('should pass filtered files through', () => {
@@ -201,12 +196,11 @@ describe('Transform stream', () => {
   describe('with error', () => {
     it('should call the function for every modified file and forward them through', async () => {
       await expect(
-        pipeline(
-          stream,
+        filePipeline(stream, [
           passthrough(() => {
             throw new Error('foo error');
           }),
-        ),
+        ]),
       ).rejects.toThrowError('foo error');
     });
   });
