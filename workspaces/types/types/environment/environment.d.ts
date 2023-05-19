@@ -185,19 +185,6 @@ export type BaseEnvironment<A = InputOutputAdapter, S extends Store<MemFsEditorF
   lookup(options?: LookupOptions): Promise<LookupGeneratorMeta[]>;
 
   /**
-   * Checks whether a package with the specified `packageNamespace` has been registered.
-   *
-   * @param packageNamespace The package-namespace to check.
-   * @returns A value indicating whether a package with the specified `packageNamespace` has been registered.
-   */
-  isPackageRegistered(packageNamespace: string): boolean;
-
-  /**
-   * Gets the namespaces of all registered packages.
-   */
-  getRegisteredPackages(): string[];
-
-  /**
    * Returns stored generators meta
    */
   getGeneratorMeta(namespace: string): GeneratorMeta | undefined;
