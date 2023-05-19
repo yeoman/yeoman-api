@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.1](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.0.0...@yeoman/types@1.0.1) (2023-05-19)
+
+### Bug Fixes
+
+- **types:** move environment adapter to the options. ([050faab](https://github.com/yeoman/yeoman-api/commit/050faabf22c3a36bd0d6147413904402c106a189))
+
 ## [1.0.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@0.5.0...@yeoman/types@1.0.0) (2023-05-19)
 
 ### Features
