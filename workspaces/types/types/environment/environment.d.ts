@@ -16,11 +16,12 @@ import type {
 } from './methods-options.js';
 
 export type EnvironmentConstructor<A extends InputOutputAdapter = InputOutputAdapter> = new (
-  options?: BaseEnvironmentOptions,
+  options?: BaseEnvironmentOptions<A>,
+  /** @deprecated */
   adapter?: A,
 ) => BaseEnvironment<A>;
 
-export type BaseEnvironmentOptions = BaseGeneratorOptions & {
+export type BaseEnvironmentOptions<A extends InputOutputAdapter = InputOutputAdapter> = BaseGeneratorOptions & {
   /**
    * The working-directory of the environment.
    */
@@ -40,6 +41,11 @@ export type BaseEnvironmentOptions = BaseGeneratorOptions & {
    * `mem-fs` Store.
    */
   sharedFs?: Store;
+
+  /**
+   * Input/Output adapter.
+   */
+  adapter?: A;
 };
 
 export type ApplyTransformsOptions = {
