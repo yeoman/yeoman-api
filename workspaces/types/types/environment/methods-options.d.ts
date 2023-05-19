@@ -40,29 +40,20 @@ export type LookupOptions = {
 };
 
 /**
- * Provides information about a generator.
+ * Provides lookup information about a generator.
  */
-export type LookupGeneratorMeta = {
-  /**
-   * A value indicating whether the generator could be registered.
-   */
-  registered: boolean;
+export type LookupGeneratorMeta = NotRegisteredLookupGeneratorMeta | RegisteredLookupGeneratorMeta;
 
-  /**
-   * The resolved path to the generator.
-   */
-  generatorPath?: string;
-
-  /**
-   * The namespace of the generator.
-   */
-  namespace?: string;
-
-  /**
-   * The path to the package containing the generator.
-   */
-  packagePath?: string;
+export type NotRegisteredLookupGeneratorMeta = Required<BaseGeneratorMeta> & {
+  /** Failed to register. */
+  registered: false;
 };
+
+export type RegisteredLookupGeneratorMeta = Required<BaseGeneratorMeta> &
+  GeneratorMeta & {
+    /** Successfully registered package. */
+    registered: true;
+  };
 
 export type BaseGeneratorMeta = {
   /** The key under which the generator can be retrieved */
