@@ -55,6 +55,8 @@ export type BaseEnvironment<A = InputOutputAdapter, S extends Store<MemFsEditorF
   sharedFs: S;
 
   emit(eventName: string | symbol, ...args: any[]): boolean;
+  on(eventName: string | symbol, listener: (...args: any[]) => void): unknown;
+  once(eventName: string | symbol, listener: (...args: any[]) => void): unknown;
 
   applyTransforms(transformStreams: Transform[], options?: ApplyTransformsOptions): Promise<void>;
 

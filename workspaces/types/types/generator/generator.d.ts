@@ -6,6 +6,10 @@ export type EnvironmentGenerator = {
   readonly env: BaseEnvironment;
   readonly features: unknown;
 
+  emit(eventName: string | symbol, ...args: any[]): boolean;
+  on(eventName: string | symbol, listener: (...args: any[]) => void): unknown;
+  once(eventName: string | symbol, listener: (...args: any[]) => void): unknown;
+
   _postConstruct?(): Promise<void>;
 
   destinationRoot(): string;
