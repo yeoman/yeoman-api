@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@0.5.0...@yeoman/types@1.0.0) (2023-05-19)
+
+### Features
+
+- **types:** add more EventEmitter methods. ([818f2dc](https://github.com/yeoman/yeoman-api/commit/818f2dcb035b9859d7e8af5685b49a1ff603839b))
+- **types:** adjusts to LookupGeneratorMeta. ([d4fd571](https://github.com/yeoman/yeoman-api/commit/d4fd571baca2db2af2e061c6b10869c8098b446b))
+- **types:** drop isPackageRegistered and getRegisteredPackages ([e92f288](https://github.com/yeoman/yeoman-api/commit/e92f2885633cfa5c87f95f282623f135a4d06e03))
+
+### Bug Fixes
+
+- **types:** adjust stream type ([177c0dc](https://github.com/yeoman/yeoman-api/commit/177c0dc28cee3fdb6adc9b22e19c4d71c12f3674))
+
 ## [0.5.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@0.4.0...@yeoman/types@0.5.0) (2023-05-18)
 
 ### Bug Fixes

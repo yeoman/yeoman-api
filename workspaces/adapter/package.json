@@ -1,6 +1,6 @@
 {
   "name": "@yeoman/adapter",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "private": false,
   "description": "Input Output adapter for yeoman's generator/environment stack",
   "keywords": [
@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@types/inquirer": "^9.0.3",
-    "@yeoman/types": "^0.5.0",
+    "@yeoman/types": "^1.0.0",
     "are-we-there-yet": "^4.0.0",
     "chalk": "^5.2.0",
     "inquirer": "^9.2.2",
