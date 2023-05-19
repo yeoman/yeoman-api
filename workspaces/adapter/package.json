@@ -34,7 +34,6 @@
   },
   "dependencies": {
     "@types/inquirer": "^9.0.3",
-    "@yeoman/types": "^1.0.0",
     "are-we-there-yet": "^4.0.0",
     "chalk": "^5.2.0",
     "inquirer": "^9.2.2",
@@ -52,6 +51,9 @@
     "sinon": "^15.0.4",
     "strip-ansi": "^7.0.1",
     "yeoman-assert": "^3.1.1"
+  },
+  "peerDependencies": {
+    "@yeoman/types": "^1.0.0"
   },
   "engines": {
     "node": "^16.13.0 || >=18.12.0"
