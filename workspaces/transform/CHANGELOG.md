@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/transform@1.0.0...@yeoman/transform@1.1.0) (2023-05-19)
+
+### Features
+
+- **transform:** implement pipelineFile ([dab0f52](https://github.com/yeoman/yeoman-api/commit/dab0f52e2de61cf889c71e7ccccc3caf51a79e1f))
+
 ## [1.0.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/transform@0.2.1...@yeoman/transform@1.0.0) (2023-05-16)
 
 ### Features
