@@ -1,4 +1,4 @@
-import type { Transform } from 'node:stream';
+import type { PipelineSource, Transform } from 'node:stream';
 import type { Store } from 'mem-fs';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 
@@ -45,10 +45,13 @@ export type BaseEnvironmentOptions = BaseGeneratorOptions & {
 export type ApplyTransformsOptions = {
   name?: string;
   log?: boolean;
-  stream?: ReturnType<Store<MemFsEditorFile>['stream']>;
+  stream?: PipelineSource<any>;
   streamOptions?: Parameters<Store<MemFsEditorFile>['stream']>[0];
 };
 
+/**
+ * BaseEnvironment provides the api used by yeoman-test and yeoman-generator that should remain stable between major yeoman-environment versions.
+ */
 export type BaseEnvironment<A = InputOutputAdapter, S extends Store<MemFsEditorFile> = Store<MemFsEditorFile>> = {
   cwd: string;
   adapter: A;
