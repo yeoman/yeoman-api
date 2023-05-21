@@ -44,7 +44,7 @@ const getDefaultColors = (): Record<DefaultLoggerCategories, ChalkInstance> => (
   removed: chalk.bgRed,
 });
 
-type LoggerOptions<Loggers = never, LoggerCategories extends string | number | symbol = DefaultLoggerCategories> = {
+export type LoggerOptions<Loggers = any, LoggerCategories extends string | number | symbol = DefaultLoggerCategories> = {
   stdin?: NodeJS.ReadStream;
   stdout?: NodeJS.WriteStream;
   stderr?: NodeJS.WriteStream;
@@ -53,7 +53,7 @@ type LoggerOptions<Loggers = never, LoggerCategories extends string | number | s
   loggers?: Loggers;
 };
 
-export function createLogger<Loggers = never, LoggerCategories extends string | number | symbol = DefaultLoggerCategories>(
+export function createLogger<Loggers = any, LoggerCategories extends string | number | symbol = DefaultLoggerCategories>(
   parameters?: LoggerOptions<Loggers, LoggerCategories>,
 ): Logger & Loggers {
   const stdout = parameters?.stdout ?? process.stdout;
