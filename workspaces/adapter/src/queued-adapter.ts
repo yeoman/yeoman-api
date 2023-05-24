@@ -11,6 +11,8 @@ const PROMPT_PRIORITY = 10;
 const LOG_PRIORITY = 20;
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const BLOCKING_PRIORITY = 90;
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const MAIN_ADAPTER_PRIORITY = 1000;
 
 type Task<TaskResultType> =
   | ((adapter: InputOutputAdapter) => PromiseLike<TaskResultType>)
@@ -27,6 +29,7 @@ export class QueuedAdapter implements QueuedAdapterApi {
   actualAdapter: InputOutputAdapter;
   delta: number;
   log: Logger;
+  #nextChildPriority: number;
 
   /**
    * `TerminalAdapter` is the default implementation of `Adapter`, an abstraction
@@ -60,11 +63,12 @@ export class QueuedAdapter implements QueuedAdapterApi {
     };
 
     this.log = defferredLogger as unknown as Logger;
-    this.delta = (delta ?? 0) * 100;
+    this.delta = (delta ?? MAIN_ADAPTER_PRIORITY) * 100;
+    this.#nextChildPriority = MAIN_ADAPTER_PRIORITY - 1;
   }
 
   newAdapter(delta?: number) {
-    return new QueuedAdapter({ adapter: this.actualAdapter, delta: delta ?? this.delta + 1, queue: this.#queue });
+    return new QueuedAdapter({ adapter: this.actualAdapter, delta: delta ?? this.#nextChildPriority--, queue: this.#queue });
   }
 
   close() {
@@ -103,7 +107,7 @@ export class QueuedAdapter implements QueuedAdapterApi {
    * @returns
    */
   async queue<TaskResultType>(fn: Task<TaskResultType>): Promise<TaskResultType | void> {
-    return this.#queue.add(() => fn(this.actualAdapter));
+    return this.#queue.add(() => fn(this.actualAdapter), { priority: BLOCKING_PRIORITY + this.delta });
   }
 
   /**
@@ -142,12 +146,10 @@ export class QueuedAdapter implements QueuedAdapterApi {
       npmlog.info(prefix, message, ...args);
     };
 
-    return this.#queue
-      .add(() => fn({ step }), { priority: BLOCKING_PRIORITY + this.delta })
-      .finally(() => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        log.finish();
-        npmlog.disableProgress();
-      });
+    return this.queue(() => fn({ step })).finally(() => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      log.finish();
+      npmlog.disableProgress();
+    });
   }
 }

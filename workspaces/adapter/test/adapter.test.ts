@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import process from 'node:process';
-import { describe } from 'esmocha';
+import { describe, expect } from 'esmocha';
 import assert from 'yeoman-assert';
 import sinon from 'sinon';
 import logSymbols from 'log-symbols';
@@ -12,8 +12,17 @@ import { createLogger } from '../src/log.js';
 import { QueuedAdapter } from '../src/queued-adapter.js';
 
 describe('QueuedAdapter/TerminalAdapter', () => {
+  let adapter: QueuedAdapter;
+
   beforeEach(function () {
-    this.adapter = new QueuedAdapter({ adapter: new TerminalAdapter() });
+    // eslint-disable-next-line no-multi-assign
+    this.adapter = adapter = new QueuedAdapter({ adapter: new TerminalAdapter() });
+  });
+
+  describe('#newAdapter()', () => {
+    it('returns properly colored diffs', async function () {
+      expect(adapter.newAdapter().delta).toBe(adapter.delta - 100);
+    });
   });
 
   describe('#prompt()', () => {
