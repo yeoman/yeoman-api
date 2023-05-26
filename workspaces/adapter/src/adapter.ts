@@ -14,6 +14,7 @@ export type TerminalAdapterOptions = {
   stdout?: NodeJS.WriteStream;
   stderr?: NodeJS.WriteStream;
   console?: Console;
+  log?: any;
 };
 
 export class TerminalAdapter implements InputOutputAdapter {
@@ -51,7 +52,8 @@ export class TerminalAdapter implements InputOutputAdapter {
         output: this.stdout,
       });
 
-    this.log = createLogger(this);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    this.log = options?.log ?? createLogger(this);
   }
 
   get _colorDiffAdded() {
