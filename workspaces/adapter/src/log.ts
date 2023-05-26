@@ -1,10 +1,12 @@
+// eslint-disable-next-line n/prefer-global/console
+import { Console } from 'node:console';
 import util from 'node:util';
 import EventEmitter from 'node:events';
 import process from 'node:process';
 import table from 'text-table';
 import chalk, { type ChalkInstance, type ForegroundColorName, type ModifierName } from 'chalk';
 import logSymbols from 'log-symbols';
-import type { ColoredMessage, DefaultLoggerCategories, Logger } from '@yeoman/types';
+import type { ColoredMessage, DefaultLoggerCategories, Logger as LoggerApi } from '@yeoman/types';
 
 // Padding step
 const step = '  ';
@@ -55,10 +57,10 @@ export type LoggerOptions<Loggers = any, LoggerCategories extends string | numbe
 
 export function createLogger<Loggers = any, LoggerCategories extends string | number | symbol = DefaultLoggerCategories>(
   parameters?: LoggerOptions<Loggers, LoggerCategories>,
-): Logger & Loggers {
+): LoggerApi & Loggers & { console: Console } {
   const stdout = parameters?.stdout ?? process.stdout;
   const stderr: NodeJS.WriteStream = parameters?.stderr ?? parameters?.stdout ?? process.stderr;
-  const customConsole = parameters?.console ?? new console.Console(stdout, stderr);
+  const customConsole = parameters?.console ?? new Console(stdout, stderr);
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   const colors: Record<LoggerCategories | DefaultLoggerCategories, ChalkInstance> = {
@@ -104,6 +106,7 @@ export function createLogger<Loggers = any, LoggerCategories extends string | nu
   }
 
   Object.assign(log, EventEmitter.prototype);
+  log.console = customConsole;
 
   // A simple write method, with formatted message.
   //
@@ -210,3 +213,5 @@ export function createLogger<Loggers = any, LoggerCategories extends string | nu
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return log as any;
 }
+
+export type Logger = ReturnType<typeof createLogger>;
