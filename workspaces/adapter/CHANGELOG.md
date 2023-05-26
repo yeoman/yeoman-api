@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.3](https://github.com/yeoman/yeoman-api/compare/@yeoman/adapter@1.0.2...@yeoman/adapter@1.0.3) (2023-05-26)
+
+### Bug Fixes
+
+- **adapter:** allow custom log. ([668994f](https://github.com/yeoman/yeoman-api/commit/668994f3d029d9492f1545724b80260d1098bd05))
+- **adapter:** expose console at log and export Logger type ([636707f](https://github.com/yeoman/yeoman-api/commit/636707f2fc881a62793307e6b656ef20ba6ee584))
+
 ## [1.0.2](https://github.com/yeoman/yeoman-api/compare/@yeoman/adapter@1.0.1...@yeoman/adapter@1.0.2) (2023-05-24)
 
 ### Bug Fixes
