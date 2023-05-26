@@ -24,7 +24,14 @@ type QueuedAdapterOptions = TerminalAdapterOptions & {
   adapter?: InputOutputAdapter;
 };
 
-export class QueuedAdapter implements QueuedAdapterApi {
+type ProgressCallback<ReturnType> = (progress: { step: (prefix: string, message: string, ...args: any[]) => void }) => ReturnType;
+type ProgressOptions = { disabled?: boolean; name?: string };
+
+export type AdapterWithProgress = QueuedAdapterApi & {
+  progress<ReturnType>(fn: ProgressCallback<ReturnType>, options?: ProgressOptions): Promise<void | ReturnType>;
+};
+
+export class QueuedAdapter implements AdapterWithProgress {
   #queue: PQueue;
   actualAdapter: InputOutputAdapter;
   delta: number;
@@ -125,10 +132,10 @@ export class QueuedAdapter implements QueuedAdapterApi {
    * @param options
    * @returns
    */
-  progress<ReturnType>(
+  async progress<ReturnType>(
     fn: (progress: { step: (prefix: string, message: string, ...args: any[]) => void }) => ReturnType,
     options?: { disabled?: boolean; name: string },
-  ) {
+  ): Promise<void | ReturnType> {
     if (this.#queue.size > 0 || options?.disabled) {
       // Don't show progress if not empty
       // eslint-disable-next-line @typescript-eslint/no-empty-function
