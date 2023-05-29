@@ -6,10 +6,13 @@ import {
   type TransformCallback,
   type PipelineOptions,
 } from 'node:stream';
-import { pipeline } from 'node:stream/promises';
+import type { pipeline as pipelineType } from 'node:stream/promises';
+import { Stream } from 'readable-stream';
 import { Minimatch, type MinimatchOptions } from 'minimatch';
 
-export { pipeline } from 'node:stream/promises';
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, prefer-destructuring
+const pipeline: typeof pipelineType = Stream.promises.pipeline;
+export { pipeline };
 
 export type File = { path: string; contents: any };
 

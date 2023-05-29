@@ -35,7 +35,8 @@
   },
   "dependencies": {
     "@types/node": "^16.18.28",
-    "minimatch": "^9.0.0"
+    "minimatch": "^9.0.0",
+    "readable-stream": "^4.3.0"
   },
   "devDependencies": {
     "esmocha": "^0.1.4"
