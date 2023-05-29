@@ -136,27 +136,38 @@ export class QueuedAdapter implements AdapterWithProgress {
     fn: (progress: { step: (prefix: string, message: string, ...args: any[]) => void }) => ReturnType,
     options?: { disabled?: boolean; name: string },
   ): Promise<void | ReturnType> {
-    if (this.#queue.size > 0 || options?.disabled) {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    if (this.#queue.size > 0 || this.#queue.pending > 0 || options?.disabled || (npmlog as any).progressEnabled) {
       // Don't show progress if not empty
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       return fn({ step() {} });
     }
 
-    npmlog.tracker = new TrackerGroup();
-    npmlog.enableProgress();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-    const log: any = (npmlog as any).newItem(options?.name);
+    let log: any;
+    try {
+      npmlog.tracker = new TrackerGroup();
+      npmlog.enableProgress();
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+      log = (npmlog as any).newItem(options?.name);
+    } catch {
+      npmlog.disableProgress();
+      log = undefined;
+    }
 
     const step = (prefix: string, message: string, ...args: any[]) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      log.completeWork(10);
-      npmlog.info(prefix, message, ...args);
+      if (log) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        log.completeWork(10);
+        npmlog.info(prefix, message, ...args);
+      }
     };
 
     return this.queue(() => fn({ step })).finally(() => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      log.finish();
-      npmlog.disableProgress();
+      if (log) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        log.finish();
+        npmlog.disableProgress();
+      }
     });
   }
 }
