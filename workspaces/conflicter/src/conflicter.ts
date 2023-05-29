@@ -483,7 +483,7 @@ export class Conflicter {
       }
 
       return conflicterFile;
-    }, 'conflicter:check');
+    });
   }
 }
 

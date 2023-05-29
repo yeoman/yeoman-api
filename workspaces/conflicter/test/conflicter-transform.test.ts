@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable import/no-named-as-default-member */
 import assert from 'node:assert';
+import { Readable } from 'node:stream';
 import { describe, it, beforeEach } from 'esmocha';
 import sinon from 'sinon';
 import { pipeline, passthrough } from '@yeoman/transform';
@@ -42,12 +43,7 @@ describe('Transform stream', () => {
     sinonTransformPre = sinon.stub().callsFake(() => {});
     sinonTransformPost = sinon.stub().callsFake(() => {});
 
-    stream = passthrough();
-    for (const file of files) {
-      stream.write(file);
-    }
-
-    stream.end();
+    stream = Readable.from(files);
   });
 
   describe('Conflicter.createTransform()', () => {
