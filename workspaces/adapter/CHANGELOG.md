@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.5](https://github.com/yeoman/yeoman-api/compare/@yeoman/adapter@1.0.4...@yeoman/adapter@1.0.5) (2023-05-29)
+
+### Bug Fixes
+
+- **adapter:** adjusts to progress ([1113a96](https://github.com/yeoman/yeoman-api/commit/1113a9635be908c30ca85e810443a68d6fd1eb95))
+
 ## [1.0.4](https://github.com/yeoman/yeoman-api/compare/@yeoman/adapter@1.0.3...@yeoman/adapter@1.0.4) (2023-05-26)
 
 ### Bug Fixes

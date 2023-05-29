@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/transform@1.1.0...@yeoman/transform@1.2.0) (2023-05-29)
+
+### Features
+
+- **transform:** switch to readable-stream for more stable pipeline support ([72cc649](https://github.com/yeoman/yeoman-api/commit/72cc649ecce2f18ba7024c37ec77d0f5f38385b4))
+
 ## [1.1.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/transform@1.0.0...@yeoman/transform@1.1.0) (2023-05-19)
 
 ### Features
