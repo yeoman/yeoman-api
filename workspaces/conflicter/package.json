@@ -43,7 +43,7 @@
     "mem-fs": "^3.0.0",
     "mem-fs-editor": "^10.0.2",
     "minimatch": "^9.0.0",
-    "p-transform": "^3.0.3",
+    "p-transform": "^4.0.1",
     "pretty-bytes": "^6.1.0",
     "textextensions": "^5.16.0"
   },
