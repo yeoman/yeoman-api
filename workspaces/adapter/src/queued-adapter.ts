@@ -4,13 +4,12 @@ import { TrackerGroup } from 'are-we-there-yet';
 import type { Logger, InputOutputAdapter, PromptAnswers, PromptQuestions, QueuedAdapter as QueuedAdapterApi } from '@yeoman/types';
 import { TerminalAdapter, type TerminalAdapterOptions } from './adapter.js';
 
-/**  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const BLOCKING_PRIORITY = 10;
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const PROMPT_PRIORITY = 10;
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const LOG_PRIORITY = 20;
-// eslint-disable-next-line @typescript-eslint/naming-convention
-const BLOCKING_PRIORITY = 90;
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const MAIN_ADAPTER_PRIORITY = 1000;
 
