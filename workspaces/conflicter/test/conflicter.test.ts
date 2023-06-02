@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import { Buffer } from 'node:buffer';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { describe, it, beforeEach, expect } from 'esmocha';
+import { describe, it, beforeEach, expect } from 'vitest';
 import { filter } from 'lodash-es';
 import sinon from 'sinon';
 import slash from 'slash';
@@ -48,7 +48,6 @@ describe('Conflicter', () => {
     let conflictingFile: ConflicterFile;
 
     beforeEach(function () {
-      this.timeout(5000);
       conflictingFile = { path: __filename, contents: Buffer.from('') };
     });
 
@@ -73,42 +72,41 @@ describe('Conflicter', () => {
       );
       const me = fs.readFileSync(__filename, 'utf8');
 
-      return conflicter
-        .checkForCollision({
-          path: __filename,
-          contents: me,
-          stat: {
-            mode: 1,
-          },
-        })
-        .then(file => {
-          assert.strictEqual(file.conflicter, 'force');
-          assert.strictEqual(file.conflicterLog, undefined);
-        });
+      const file = await conflicter.checkForCollision({
+        path: __filename,
+        contents: me,
+        stat: {
+          mode: 1,
+        },
+      });
+
+      assert.strictEqual(file.conflicter, 'force');
+      assert.strictEqual(file.conflicterLog, undefined);
     });
 
-    it('handles custom actions', function (done) {
-      const conflicter = new Conflicter(
-        new QueuedAdapter({
-          adapter: new TestAdapter({
-            mockedAnswers: {
-              action(data) {
-                try {
-                  assert(this === conflicter);
-                  assert.strictEqual(slash(data.relativeFilePath), 'test/conflicter.test.ts');
-                  done();
-                } catch (error) {
-                  done(error);
-                }
+    it('handles custom actions', async () =>
+      new Promise((resolve, reject) => {
+        const conflicter = new Conflicter(
+          new QueuedAdapter({
+            adapter: new TestAdapter({
+              mockedAnswers: {
+                action(data) {
+                  try {
+                    assert(this === conflicter);
+                    assert.strictEqual(slash(data.relativeFilePath), 'test/conflicter.test.ts');
+                    resolve();
+                  } catch (error) {
+                    reject(error);
+                  }
+                },
               },
-            },
+            }),
           }),
-        }),
-      );
+        );
 
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      conflicter.checkForCollision(conflictingFile);
-    });
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        conflicter.checkForCollision(conflictingFile);
+      }));
 
     it('identical status', async function () {
       const me = fs.readFileSync(__filename, 'utf8');
@@ -179,7 +177,6 @@ describe('Conflicter', () => {
 
     describe('with bail option', () => {
       it('abort on first conflict', async function () {
-        this.timeout(4000);
         const conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }), { bail: true });
         await expect(conflicter.checkForCollision(conflictingFile)).rejects.toThrowError(
           /Process aborted by conflict: (.*)conflicter.test.ts/s,
@@ -431,15 +428,13 @@ describe('Conflicter', () => {
       });
       const conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }));
 
-      return conflicter
-        .checkForCollision({
-          path: path.join(__dirname, 'fixtures/conflicter/yeoman-logo.png'),
-          contents: null,
-        })
-        .then(() => {
-          sinon.assert.calledWithMatch(testAdapter.log.writeln, /Existing.*Replacement.*Diff/);
-          sinon.assert.notCalled(testAdapter.diff);
-        });
+      await conflicter.checkForCollision({
+        path: path.join(__dirname, 'fixtures/conflicter/yeoman-logo.png'),
+        contents: null,
+      });
+
+      sinon.assert.calledWithMatch(testAdapter.log.writeln, /Existing.*Replacement.*Diff/);
+      sinon.assert.notCalled(testAdapter.diff);
     });
   });
 });

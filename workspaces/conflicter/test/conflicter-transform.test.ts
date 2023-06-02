@@ -3,7 +3,7 @@
 import assert from 'node:assert';
 import { Readable } from 'node:stream';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { describe, it, beforeEach } from 'esmocha';
+import { describe, it, beforeEach } from 'vitest';
 import sinon from 'sinon';
 import { pipeline, passthrough } from '@yeoman/transform';
 // eslint-disable-next-line n/file-extension-in-import
