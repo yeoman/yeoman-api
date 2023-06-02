@@ -10,9 +10,14 @@ import { describe, it, beforeEach, expect } from 'esmocha';
 import { filter } from 'lodash-es';
 import sinon from 'sinon';
 import slash from 'slash';
-import { TestAdapter } from 'yeoman-test';
+// eslint-disable-next-line n/file-extension-in-import
+import { TestAdapter, defineTestAdapterConfig } from '@yeoman/adapter/testing';
 import { QueuedAdapter } from '@yeoman/adapter';
 import { Conflicter, type ConflicterFile } from '../src/conflicter.js';
+
+defineTestAdapterConfig({
+  spyFactory: ({ returns }) => sinon.stub().returns(returns),
+});
 
 const require = createRequire(import.meta.url);
 const __filename = fileURLToPath(import.meta.url);
@@ -61,7 +66,11 @@ describe('Conflicter', () => {
     });
 
     it('identical status', async () => {
-      const conflicter = new Conflicter(new QueuedAdapter({ adapter: new TestAdapter({ action: 'force' }) }));
+      const conflicter = new Conflicter(
+        new QueuedAdapter({
+          adapter: new TestAdapter({ mockedAnswers: { action: 'force' } }),
+        }),
+      );
       const me = fs.readFileSync(__filename, 'utf8');
 
       return conflicter
@@ -82,14 +91,16 @@ describe('Conflicter', () => {
       const conflicter = new Conflicter(
         new QueuedAdapter({
           adapter: new TestAdapter({
-            action(data) {
-              try {
-                assert(this === conflicter);
-                assert.strictEqual(slash(data.relativeFilePath), 'test/conflicter.test.ts');
-                done();
-              } catch (error) {
-                done(error);
-              }
+            mockedAnswers: {
+              action(data) {
+                try {
+                  assert(this === conflicter);
+                  assert.strictEqual(slash(data.relativeFilePath), 'test/conflicter.test.ts');
+                  done();
+                } catch (error) {
+                  done(error);
+                }
+              },
             },
           }),
         }),
@@ -124,7 +135,11 @@ describe('Conflicter', () => {
     });
 
     it('user choose "yes"', async function () {
-      const conflicter = new Conflicter(new QueuedAdapter({ adapter: new TestAdapter({ action: 'write' }) }));
+      const conflicter = new Conflicter(
+        new QueuedAdapter({
+          adapter: new TestAdapter({ mockedAnswers: { action: 'write' } }),
+        }),
+      );
 
       return conflicter.checkForCollision(conflictingFile).then(file => {
         assert.equal(file.conflicter, 'force');
@@ -132,7 +147,11 @@ describe('Conflicter', () => {
     });
 
     it('user choose "skip"', async function () {
-      const conflicter = new Conflicter(new QueuedAdapter({ adapter: new TestAdapter({ action: 'skip' }) }));
+      const conflicter = new Conflicter(
+        new QueuedAdapter({
+          adapter: new TestAdapter({ mockedAnswers: { action: 'skip' } }),
+        }),
+      );
 
       return conflicter.checkForCollision(conflictingFile).then(file => {
         assert.equal(file.conflicter, 'skip');
@@ -140,7 +159,11 @@ describe('Conflicter', () => {
     });
 
     it('user choose "force"', async function () {
-      const conflicter = new Conflicter(new QueuedAdapter({ adapter: new TestAdapter({ action: 'force' }) }));
+      const conflicter = new Conflicter(
+        new QueuedAdapter({
+          adapter: new TestAdapter({ mockedAnswers: { action: 'force' } }),
+        }),
+      );
 
       return conflicter.checkForCollision(conflictingFile).then(file => {
         assert.equal(file.conflicter, 'force');
@@ -315,7 +338,11 @@ describe('Conflicter', () => {
     });
 
     it('does give a conflict without ignoreWhitespace', async () => {
-      const conflicter = new Conflicter(new QueuedAdapter({ adapter: new TestAdapter({ action: 'skip' }) }));
+      const conflicter = new Conflicter(
+        new QueuedAdapter({
+          adapter: new TestAdapter({ mockedAnswers: { action: 'skip' } }),
+        }),
+      );
 
       return conflicter
         .checkForCollision({
@@ -341,7 +368,9 @@ describe('Conflicter', () => {
     });
 
     it('does not provide a diff option for directory', async () => {
-      const queuedAdapter = new QueuedAdapter({ adapter: new TestAdapter({ action: 'write' }) });
+      const queuedAdapter = new QueuedAdapter({
+        adapter: new TestAdapter({ mockedAnswers: { action: 'write' } }),
+      });
       const conflicter = new Conflicter(queuedAdapter);
       const spy = sinon.spy(conflicter.adapter.actualAdapter, 'prompt');
       await conflicter.checkForCollision({ path: __dirname, contents: null });
@@ -350,7 +379,9 @@ describe('Conflicter', () => {
     });
 
     it('displays default diff for text files', async () => {
-      const testAdapter = new TestAdapter(createActions(['diff', 'write']));
+      const testAdapter = new TestAdapter({
+        mockedAnswers: createActions(['diff', 'write']),
+      });
       testAdapter.log.colored = sinon.spy();
       const conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }));
 
@@ -365,7 +396,9 @@ describe('Conflicter', () => {
     });
 
     it('shows old content for deleted text files', async () => {
-      const testAdapter = new TestAdapter(createActions(['diff', 'write']));
+      const testAdapter = new TestAdapter({
+        mockedAnswers: createActions(['diff', 'write']),
+      });
       testAdapter.log.colored = sinon.spy();
       const conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }));
       await conflicter.checkForCollision({
@@ -376,7 +409,9 @@ describe('Conflicter', () => {
     });
 
     it('displays custom diff for binary files', async () => {
-      const testAdapter = new TestAdapter(createActions(['diff', 'write']));
+      const testAdapter = new TestAdapter({
+        mockedAnswers: createActions(['diff', 'write']),
+      });
       const conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }));
 
       return conflicter
@@ -391,7 +426,9 @@ describe('Conflicter', () => {
     });
 
     it('displays custom diff for deleted binary files', async () => {
-      const testAdapter = new TestAdapter(createActions(['diff', 'write']));
+      const testAdapter = new TestAdapter({
+        mockedAnswers: createActions(['diff', 'write']),
+      });
       const conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }));
 
       return conflicter

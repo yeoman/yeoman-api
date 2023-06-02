@@ -6,7 +6,8 @@ import { Readable } from 'node:stream';
 import { describe, it, beforeEach } from 'esmocha';
 import sinon from 'sinon';
 import { pipeline, passthrough } from '@yeoman/transform';
-import { TestAdapter } from 'yeoman-test';
+// eslint-disable-next-line n/file-extension-in-import
+import { TestAdapter } from '@yeoman/adapter/testing';
 import { type ConflictedFile, createConflicterTransform } from '../src/conflicter.js';
 
 describe('Transform stream', () => {
@@ -57,7 +58,7 @@ describe('Transform stream', () => {
             file.conflicter = 'force';
           }
         }),
-        createConflicterTransform(new TestAdapter()),
+        createConflicterTransform(new TestAdapter(({ returns }) => sinon.stub().returns(returns))),
         passthrough(sinonTransformPost),
       );
     });
