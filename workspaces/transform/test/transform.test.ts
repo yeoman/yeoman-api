@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable n/prefer-global/buffer */
 /* eslint-disable max-nested-callbacks */
 import assert from 'node:assert';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { describe, it, beforeEach, esmocha, expect } from 'esmocha';
+import { describe, it, beforeEach, vitest, expect } from 'vitest';
 import { filePipeline, passthrough, type File, filterPattern, transformContents } from '../src/transform.js';
 
 describe('Transform stream', () => {
@@ -37,8 +38,8 @@ describe('Transform stream', () => {
 
     files = [yoRcFile, yoRcGlobalFile, yoResolveFile, unmodifiedFile, newFile, modifiedFile, newDeletedFile, conflicterSkippedFile];
 
-    sinonTransformPre = esmocha.fn();
-    sinonTransformPost = esmocha.fn();
+    sinonTransformPre = vitest.fn();
+    sinonTransformPost = vitest.fn();
 
     stream = passthrough();
     for (const file of files) {
