@@ -15,13 +15,22 @@ export type DummyPromptOptions = {
   throwOnMissingAnswer?: boolean;
 };
 
-export type TestAdapterOptions = DummyPromptOptions & { log?: any };
+type SpyFactory<SpyType = any> = ({ returns }: { returns?: any }) => SpyType;
+
+export type TestAdapterOptions<SpyType = any> = DummyPromptOptions & {
+  log?: any;
+  spyFactory?: SpyFactory<SpyType>;
+};
+
+export type DefineTestAdapterConfig = Pick<TestAdapterOptions, 'log' | 'spyFactory' | 'throwOnMissingAnswer'>;
+
+const defaultConfig: DefineTestAdapterConfig = {};
 
 export class DummyPrompt {
   answers: PromptAnswers;
   question: PromptQuestion;
   callback!: DummyPromptCallback;
-  throwOnMissingAnswer = false;
+  throwOnMissingAnswer = defaultConfig.throwOnMissingAnswer ?? false;
 
   constructor(question: PromptQuestion, _rl: any, answers: PromptAnswers, options: DummyPromptOptions = {}) {
     const { mockedAnswers, callback, throwOnMissingAnswer } = options;
@@ -78,14 +87,26 @@ export class DummyPrompt {
   }
 }
 
+export const defineTestAdapterConfig = (config: DefineTestAdapterConfig) => Object.assign(defaultConfig, config);
+
+export const getTestAdapterConfig = () => ({ ...defaultConfig });
+
 export class TestAdapter<LogType extends Logger = Logger, SpyType = any> implements AdapterWithProgress {
   promptModule: PromptModule;
   diff: any & SpyType;
   log: LogType & SpyType;
   registerDummyPrompt: (promptName: string, customPromptOptions?: DummyPromptOptions) => PromptModule;
+  private readonly spyFactory: SpyFactory<SpyType>;
 
-  constructor(private readonly spyFactory: ({ returns }?: { returns?: any }) => SpyType, options: TestAdapterOptions = {}) {
-    const { log = createLogger(), ...promptOptions } = options;
+  constructor(options: TestAdapterOptions<SpyType> = {}) {
+    const {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      spyFactory = defaultConfig.spyFactory ?? (spyOptions => () => spyOptions.returns),
+      log = defaultConfig.log ?? createLogger(),
+      ...promptOptions
+    } = options;
+
+    this.spyFactory = spyFactory;
     this.promptModule = createPromptModule({
       input: new PassThrough() as any,
       output: new PassThrough() as any,
@@ -111,8 +132,8 @@ export class TestAdapter<LogType extends Logger = Logger, SpyType = any> impleme
       this.promptModule.registerPrompt(promptName, undefined as any);
     }
 
-    this.diff = this.spyFactory();
-    this.log = this.spyFactory() as LogType & SpyType;
+    this.diff = this.spyFactory({});
+    this.log = this.spyFactory({}) as LogType & SpyType;
     Object.assign(this.log, events.EventEmitter.prototype);
 
     const descriptors = Object.getOwnPropertyDescriptors(log);
