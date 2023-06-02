@@ -26,7 +26,7 @@
     "c8": "^7.12.0",
     "conventional-changelog-conventionalcommits": "^5.0.0",
     "cpy-cli": "^4.2.0",
-    "esmocha": "^0.1.4",
+    "esmocha": "^1.0.1",
     "lerna": "^6.3.0",
     "prettier": "^2.8.2",
     "prettier-plugin-packagejson": "^2.3.0",

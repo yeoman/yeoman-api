@@ -16,6 +16,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./testing": {
+      "types": "./dist/testing/index.d.ts",
+      "import": "./dist/testing/index.js"
     }
   },
   "main": "./dist/index.js",
@@ -47,7 +51,6 @@
     "@types/npmlog": "^4.1.4",
     "@types/sinon": "^10.0.14",
     "@types/text-table": "^0.2.2",
-    "esmocha": "^0.1.4",
     "sinon": "^15.0.4",
     "strip-ansi": "^7.0.1",
     "yeoman-assert": "^3.1.1"
