@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { describe, it } from 'esmocha';
+import { describe, it } from 'vitest';
 import { requireNamespace, isNamespaceObject } from '../src/namespace/index.js';
 
 const fields = [
