@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import assert from 'node:assert';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { esmocha, expect } from 'esmocha';
+import { describe, expect, it, vitest } from 'vitest';
 import { TestAdapter } from '../src/testing/test-adapter.js';
 
 describe('TestAdapter', function () {
@@ -52,7 +52,7 @@ describe('TestAdapter', function () {
   describe('#close()', function () {
     it('should restore prompts', async function () {
       const adapter = new TestAdapter();
-      esmocha.spyOn(adapter.promptModule, 'restoreDefaultPrompts');
+      vitest.spyOn(adapter.promptModule, 'restoreDefaultPrompts');
       adapter.close();
       expect(adapter.promptModule.restoreDefaultPrompts).toHaveBeenCalled();
     });

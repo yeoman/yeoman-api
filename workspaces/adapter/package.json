@@ -34,7 +34,7 @@
     "clean-all": "npm run clean && rimraf node_modules",
     "precommit": "lint-staged",
     "pretest": "xo",
-    "test": "c8 esmocha --forbid-only"
+    "test": "vitest run --coverage"
   },
   "dependencies": {
     "@types/inquirer": "^9.0.3",
