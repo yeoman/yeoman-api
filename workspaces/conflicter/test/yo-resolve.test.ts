@@ -1,6 +1,7 @@
 import assert from 'node:assert';
 import path, { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { describe, it } from 'esmocha';
 import { YoResolve } from '../src/yo-resolve.js';
 

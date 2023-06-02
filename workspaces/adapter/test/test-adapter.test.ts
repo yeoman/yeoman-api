@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-return */
 import assert from 'node:assert';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { esmocha, expect } from 'esmocha';
 import { TestAdapter } from '../src/testing/test-adapter.js';
 

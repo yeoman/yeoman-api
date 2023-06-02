@@ -1,6 +1,7 @@
 /* eslint-disable n/prefer-global/buffer */
 /* eslint-disable max-nested-callbacks */
 import assert from 'node:assert';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { describe, it, beforeEach, esmocha, expect } from 'esmocha';
 import { filePipeline, passthrough, type File, filterPattern, transformContents } from '../src/transform.js';
 

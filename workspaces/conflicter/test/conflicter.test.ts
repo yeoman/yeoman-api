@@ -5,6 +5,7 @@ import path, { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import { Buffer } from 'node:buffer';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { describe, it, beforeEach, expect } from 'esmocha';
 import { filter } from 'lodash-es';
 import sinon from 'sinon';

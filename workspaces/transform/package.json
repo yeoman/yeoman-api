@@ -38,9 +38,6 @@
     "minimatch": "^9.0.0",
     "readable-stream": "^4.3.0"
   },
-  "devDependencies": {
-    "esmocha": "^0.1.4"
-  },
   "engines": {
     "node": "^16.13.0 || >=18.12.0"
   },

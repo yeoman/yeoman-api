@@ -2,6 +2,7 @@ import path, { dirname } from 'node:path';
 import assert from 'node:assert';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { describe, it } from 'esmocha';
 import { isBinary } from '../src/binary-diff.js';
 

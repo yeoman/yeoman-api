@@ -1,5 +1,6 @@
 /* eslint-disable import/no-named-as-default-member, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment */
 import process from 'node:process';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { describe, expect } from 'esmocha';
 import assert from 'yeoman-assert';
 import sinon from 'sinon';
