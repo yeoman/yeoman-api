@@ -1,9 +1,8 @@
-/* eslint-disable import/no-named-as-default-member, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment */
 import process from 'node:process';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 import assert from 'yeoman-assert';
-import sinon from 'sinon';
 import logSymbols from 'log-symbols';
 import stripAnsi from 'strip-ansi';
 import { TerminalAdapter } from '../src/adapter.js';
@@ -29,14 +28,14 @@ describe('QueuedAdapter/TerminalAdapter', () => {
 
     beforeEach(() => {
       fakeAnswers = { foo: 'bar' };
-      stub = sinon.stub().resolves(fakeAnswers);
+      stub = vitest.fn().mockResolvedValue(fakeAnswers);
       adapter = new QueuedAdapter({ adapter: new TerminalAdapter({ promptModule: stub }) });
     });
 
     it('pass its arguments to inquirer', async () => {
       const questions = [];
       const returnValue = await adapter.prompt(questions);
-      sinon.assert.calledWith(stub, questions);
+      expect(stub).toHaveBeenCalledWith(questions, undefined);
       assert.equal(returnValue, fakeAnswers);
     });
 
@@ -44,7 +43,7 @@ describe('QueuedAdapter/TerminalAdapter', () => {
       const questions = [];
       const answers = {};
       const returnValue = await adapter.prompt(questions, answers);
-      sinon.assert.calledWith(stub, questions, answers);
+      expect(stub).toHaveBeenCalledWith(questions, answers);
       assert.equal(returnValue, fakeAnswers);
     });
   });
@@ -60,9 +59,9 @@ describe('QueuedAdapter/TerminalAdapter', () => {
 
   describe('#diff()', () => {
     it('returns properly colored diffs', () => {
-      const logSpy = sinon.spy(adapter.actualAdapter.log, 'write');
+      const logSpy = vitest.spyOn(adapter.actualAdapter.log, 'write');
       adapter.log.colored([{ color: 'added', message: 'var' }, { message: ' ' }, { color: 'removed', message: 'let' }]);
-      assert.textEqual(stripAnsi(logSpy.getCall(0).args[0]), 'var let');
+      assert.textEqual(stripAnsi(logSpy.mock.calls[0][0]), 'var let');
     });
   });
 
@@ -72,7 +71,7 @@ describe('QueuedAdapter/TerminalAdapter', () => {
     const stderrWriteBackup = process.stderr.write;
 
     beforeEach(() => {
-      spyerror = sinon.spy(adapter.actualAdapter.console, 'error');
+      spyerror = vitest.spyOn(adapter.actualAdapter.console, 'error');
 
       logMessage = '';
       process.stderr.write = (() => string => {
@@ -81,7 +80,7 @@ describe('QueuedAdapter/TerminalAdapter', () => {
     });
 
     afterEach(() => {
-      adapter.actualAdapter.console.error.restore();
+      adapter.actualAdapter.console.error.mockRestore();
       process.stderr.write = stderrWriteBackup;
     });
 
@@ -92,28 +91,28 @@ describe('QueuedAdapter/TerminalAdapter', () => {
         reps: 'reps',
       });
       await adapter.onIdle();
-      assert(spyerror.withArgs('has many reps').calledOnce);
+      expect(spyerror).toHaveBeenNthCalledWith(1, 'has many reps');
       assert.equal(stripAnsi(logMessage), 'has many reps\n');
     });
 
     it('substitutes strings correctly when context argument is falsey', async () => {
       adapter.log('Zero = %d, One = %s', 0, 1);
       await adapter.onIdle();
-      assert(spyerror.calledOnce);
+      expect(spyerror).toHaveBeenCalledOnce();
       assert.equal(stripAnsi(logMessage), 'Zero = 0, One = 1\n');
     });
 
     it('boolean values', async () => {
       adapter.log(true);
       await adapter.onIdle();
-      assert(spyerror.withArgs(true).calledOnce);
+      expect(spyerror).toHaveBeenNthCalledWith(1, true);
       assert.equal(stripAnsi(logMessage), 'true\n');
     });
 
     it('#write() numbers', async () => {
       adapter.log(42);
       await adapter.onIdle();
-      assert(spyerror.withArgs(42).calledOnce);
+      expect(spyerror).toHaveBeenLastCalledWith(42);
       assert.equal(stripAnsi(logMessage), '42\n');
     });
 
@@ -125,7 +124,7 @@ describe('QueuedAdapter/TerminalAdapter', () => {
 
       adapter.log(outputObject);
       await adapter.onIdle();
-      assert(spyerror.withArgs(outputObject).calledOnce);
+      expect(spyerror).toHaveBeenLastCalledWith(outputObject);
       assert.equal(stripAnsi(logMessage), '{ something: 72, another: 12 }\n');
     });
   });
@@ -134,43 +133,43 @@ describe('QueuedAdapter/TerminalAdapter', () => {
     let spylog;
 
     beforeEach(() => {
-      spylog = sinon.spy(process.stderr, 'write');
+      spylog = vitest.spyOn(process.stderr, 'write');
     });
 
     afterEach(() => {
-      process.stderr.write.restore();
+      process.stderr.write.mockRestore();
     });
 
     it('#write() pass strings as they are', async () => {
       const testString = 'dummy';
       adapter.log.write(testString);
       await adapter.onIdle();
-      assert(spylog.withArgs(testString).calledOnce);
+      expect(spylog).toHaveBeenCalledWith(testString);
     });
 
     it('#write() accepts util#format style arguments', async () => {
       adapter.log.write('A number: %d, a string: %s', 1, 'bla');
       await adapter.onIdle();
-      assert(spylog.withArgs('A number: 1, a string: bla').calledOnce);
+      expect(spylog).toHaveBeenCalledWith('A number: 1, a string: bla');
     });
 
     it('#writeln() adds a \\n at the end', async () => {
       adapter.log.writeln('dummy');
       await adapter.onIdle();
-      assert(spylog.withArgs('dummy').calledOnce);
-      assert(spylog.withArgs('\n').calledOnce);
+      expect(spylog).toHaveBeenCalledWith('dummy');
+      expect(spylog).toHaveBeenCalledWith('\n');
     });
 
     it('#ok() adds a green "✔ " at the beginning and \\n at the end', async () => {
       adapter.log.ok('dummy');
       await adapter.onIdle();
-      assert(spylog.withArgs(`${logSymbols.success} dummy\n`).calledOnce);
+      expect(spylog).toHaveBeenCalledWith(`${logSymbols.success} dummy\n`);
     });
 
     it('#error() adds a green "✗ " at the beginning and \\n at the end', async () => {
       adapter.log.error('dummy');
       await adapter.onIdle();
-      assert(spylog.withArgs(`${logSymbols.error} dummy\n`).calledOnce);
+      expect(spylog).toHaveBeenCalledWith(`${logSymbols.error} dummy\n`);
     });
 
     describe('statuses', () => {

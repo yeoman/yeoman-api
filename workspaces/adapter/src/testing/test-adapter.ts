@@ -87,9 +87,9 @@ export class DummyPrompt {
   }
 }
 
-export const defineTestAdapterConfig = (config: DefineTestAdapterConfig) => Object.assign(defaultConfig, config);
+export const defineConfig = (config: DefineTestAdapterConfig) => Object.assign(defaultConfig, config);
 
-export const getTestAdapterConfig = () => ({ ...defaultConfig });
+export const getConfig = () => ({ ...defaultConfig });
 
 export class TestAdapter<LogType extends Logger = Logger, SpyType = any> implements AdapterWithProgress {
   promptModule: PromptModule;

@@ -49,9 +49,7 @@
   "devDependencies": {
     "@types/are-we-there-yet": "^1.1.0",
     "@types/npmlog": "^4.1.4",
-    "@types/sinon": "^10.0.14",
     "@types/text-table": "^0.2.2",
-    "sinon": "^15.0.4",
     "strip-ansi": "^7.0.1",
     "yeoman-assert": "^3.1.1"
   },

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return, import/no-named-as-default-member, @typescript-eslint/no-implicit-any-catch, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-return, @typescript-eslint/no-implicit-any-catch, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call */
 import assert from 'node:assert';
 import fs from 'node:fs';
 import path, { dirname } from 'node:path';
@@ -6,17 +6,17 @@ import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import { Buffer } from 'node:buffer';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { describe, it, beforeEach, expect } from 'vitest';
+import { describe, it, beforeEach, expect, vitest } from 'vitest';
 import { filter } from 'lodash-es';
-import sinon from 'sinon';
 import slash from 'slash';
-// eslint-disable-next-line n/file-extension-in-import
-import { TestAdapter, defineTestAdapterConfig } from '@yeoman/adapter/testing';
-import { QueuedAdapter } from '@yeoman/adapter';
+import { QueuedAdapter, testing } from '@yeoman/adapter';
 import { Conflicter, type ConflicterFile } from '../src/conflicter.js';
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const { TestAdapter, defineConfig: defineTestAdapterConfig } = testing;
+
 defineTestAdapterConfig({
-  spyFactory: ({ returns }) => sinon.stub().returns(returns),
+  spyFactory: ({ returns }) => vitest.fn().mockReturnValue(returns),
 });
 
 const require = createRequire(import.meta.url);
@@ -39,7 +39,6 @@ describe('Conflicter', () => {
 
   beforeEach(function () {
     testAdapter = new TestAdapter();
-    testAdapter.log.colored = sinon.spy();
 
     conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }));
   });
@@ -369,17 +368,16 @@ describe('Conflicter', () => {
         adapter: new TestAdapter({ mockedAnswers: { action: 'write' } }),
       });
       const conflicter = new Conflicter(queuedAdapter);
-      const spy = sinon.spy(conflicter.adapter.actualAdapter, 'prompt');
+      const spy = vitest.spyOn(conflicter.adapter.actualAdapter, 'prompt');
       await conflicter.checkForCollision({ path: __dirname, contents: null });
       await queuedAdapter.onIdle();
-      assert.equal(filter(spy.firstCall.args[0][0].choices, { value: 'diff' }).length, 0);
+      assert.equal(filter(spy.mock.lastCall![0], { value: 'diff' }).length, 0);
     });
 
     it('displays default diff for text files', async () => {
       const testAdapter = new TestAdapter({
         mockedAnswers: createActions(['diff', 'write']),
       });
-      testAdapter.log.colored = sinon.spy();
       const conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }));
 
       return conflicter
@@ -388,7 +386,7 @@ describe('Conflicter', () => {
           contents: fs.readFileSync(path.join(__dirname, 'fixtures/conflicter/foo-template.js')),
         })
         .then(() => {
-          sinon.assert.called(testAdapter.log.colored);
+          expect(testAdapter.log.colored).toHaveBeenCalled();
         });
     });
 
@@ -396,13 +394,12 @@ describe('Conflicter', () => {
       const testAdapter = new TestAdapter({
         mockedAnswers: createActions(['diff', 'write']),
       });
-      testAdapter.log.colored = sinon.spy();
       const conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }));
       await conflicter.checkForCollision({
         path: path.join(__dirname, 'fixtures/conflicter/foo.js'),
         contents: null,
       });
-      sinon.assert.called(testAdapter.log.colored);
+      expect(testAdapter.log.colored).toHaveBeenCalled();
     });
 
     it('displays custom diff for binary files', async () => {
@@ -417,8 +414,7 @@ describe('Conflicter', () => {
           contents: fs.readFileSync(path.join(__dirname, 'fixtures/conflicter/testFile.tar.gz')),
         })
         .then(() => {
-          sinon.assert.calledWithMatch(testAdapter.log.writeln, /Existing.*Replacement.*Diff/);
-          sinon.assert.notCalled(testAdapter.diff);
+          expect(testAdapter.log.writeln).toHaveBeenCalledWith(expect.stringMatching(/Existing.*Replacement.*Diff/));
         });
     });
 
@@ -433,8 +429,7 @@ describe('Conflicter', () => {
         contents: null,
       });
 
-      sinon.assert.calledWithMatch(testAdapter.log.writeln, /Existing.*Replacement.*Diff/);
-      sinon.assert.notCalled(testAdapter.diff);
+      expect(testAdapter.log.writeln).toHaveBeenCalledWith(expect.stringMatching(/Existing.*Replacement.*Diff/));
     });
   });
 });

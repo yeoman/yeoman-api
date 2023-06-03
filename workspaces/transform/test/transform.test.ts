@@ -19,8 +19,8 @@ describe('Transform stream', () => {
   let stream;
   let files;
 
-  let sinonTransformPre;
-  let sinonTransformPost;
+  let spyTransformPre;
+  let spyTransformPost;
 
   beforeEach(() => {
     yoRcFile = { state: 'modified', path: '.yo-rc.json' };
@@ -38,8 +38,8 @@ describe('Transform stream', () => {
 
     files = [yoRcFile, yoRcGlobalFile, yoResolveFile, unmodifiedFile, newFile, modifiedFile, newDeletedFile, conflicterSkippedFile];
 
-    sinonTransformPre = vitest.fn();
-    sinonTransformPost = vitest.fn();
+    spyTransformPre = vitest.fn();
+    spyTransformPost = vitest.fn();
 
     stream = passthrough();
     for (const file of files) {
@@ -57,34 +57,34 @@ describe('Transform stream', () => {
         }
 
         await filePipeline(stream, [
-          passthrough(sinonTransformPre),
+          passthrough(spyTransformPre),
           passthrough<File & { conflicter: string }>(
             file => {
               file.conflicter = 'force';
             },
             { pattern: '**/{.yo-rc.json,.yo-resolve,.yo-rc-global.json}' },
           ),
-          passthrough(sinonTransformPost),
+          passthrough(spyTransformPost),
         ]);
       });
 
       it('should spy files that matches the pattern and pass all files through', () => {
-        expect(sinonTransformPre).toBeCalledTimes(files.length);
-        expect(sinonTransformPost).toBeCalledTimes(files.length);
-        expect(sinonTransformPost).toHaveBeenNthCalledWith(
+        expect(spyTransformPre).toBeCalledTimes(files.length);
+        expect(spyTransformPost).toBeCalledTimes(files.length);
+        expect(spyTransformPost).toHaveBeenNthCalledWith(
           1,
           expect.objectContaining({ path: expect.stringMatching('.yo-*'), conflicter: 'force' }),
         );
-        expect(sinonTransformPost).toHaveBeenNthCalledWith(
+        expect(spyTransformPost).toHaveBeenNthCalledWith(
           2,
           expect.objectContaining({ path: expect.stringMatching('.yo-*'), conflicter: 'force' }),
         );
-        expect(sinonTransformPost).toHaveBeenNthCalledWith(
+        expect(spyTransformPost).toHaveBeenNthCalledWith(
           3,
           expect.objectContaining({ path: expect.stringMatching('.yo-*'), conflicter: 'force' }),
         );
         for (let i = 4; i <= files.length; i++) {
-          expect(sinonTransformPost).toHaveBeenNthCalledWith(i, expect.not.objectContaining({ conflicter: 'force' }));
+          expect(spyTransformPost).toHaveBeenNthCalledWith(i, expect.not.objectContaining({ conflicter: 'force' }));
         }
       });
     });
@@ -92,26 +92,26 @@ describe('Transform stream', () => {
     describe('using filter', () => {
       beforeEach(async () => {
         await filePipeline(stream, [
-          passthrough(sinonTransformPre),
+          passthrough(spyTransformPre),
           passthrough<File & { conflicter: string }>(
             file => {
               file.conflicter = 'force';
             },
             { filter: file => file.path.endsWith('.yo-rc.json') },
           ),
-          passthrough(sinonTransformPost),
+          passthrough(spyTransformPost),
         ]);
       });
 
       it('should spy files that matches the pattern and pass all files through', () => {
-        expect(sinonTransformPre).toBeCalledTimes(files.length);
-        expect(sinonTransformPost).toBeCalledTimes(files.length);
-        expect(sinonTransformPost).toHaveBeenNthCalledWith(
+        expect(spyTransformPre).toBeCalledTimes(files.length);
+        expect(spyTransformPost).toBeCalledTimes(files.length);
+        expect(spyTransformPost).toHaveBeenNthCalledWith(
           1,
           expect.objectContaining({ path: expect.stringMatching('.yo-rc.json'), conflicter: 'force' }),
         );
         for (let i = 2; i <= files.length; i++) {
-          expect(sinonTransformPost).toHaveBeenNthCalledWith(i, expect.not.objectContaining({ conflicter: 'force' }));
+          expect(spyTransformPost).toHaveBeenNthCalledWith(i, expect.not.objectContaining({ conflicter: 'force' }));
         }
       });
     });
@@ -125,31 +125,31 @@ describe('Transform stream', () => {
         }
 
         await filePipeline(stream, [
-          passthrough(sinonTransformPre),
+          passthrough(spyTransformPre),
           transformContents<File & { conflicter: string }>(() => Buffer.from('foo'), {
             pattern: '**/{.yo-rc.json,.yo-resolve,.yo-rc-global.json}',
           }),
-          passthrough(sinonTransformPost),
+          passthrough(spyTransformPost),
         ]);
       });
 
       it('should edit selected files contents', () => {
-        expect(sinonTransformPre).toBeCalledTimes(files.length);
-        expect(sinonTransformPost).toBeCalledTimes(files.length);
-        expect(sinonTransformPost).toHaveBeenNthCalledWith(
+        expect(spyTransformPre).toBeCalledTimes(files.length);
+        expect(spyTransformPost).toBeCalledTimes(files.length);
+        expect(spyTransformPost).toHaveBeenNthCalledWith(
           1,
           expect.objectContaining({ path: expect.stringMatching('.yo-*'), contents: Buffer.from('foo') }),
         );
-        expect(sinonTransformPost).toHaveBeenNthCalledWith(
+        expect(spyTransformPost).toHaveBeenNthCalledWith(
           2,
           expect.objectContaining({ path: expect.stringMatching('.yo-*'), contents: Buffer.from('foo') }),
         );
-        expect(sinonTransformPost).toHaveBeenNthCalledWith(
+        expect(spyTransformPost).toHaveBeenNthCalledWith(
           3,
           expect.objectContaining({ path: expect.stringMatching('.yo-*'), contents: Buffer.from('foo') }),
         );
         for (let i = 4; i <= files.length; i++) {
-          expect(sinonTransformPost).toHaveBeenNthCalledWith(i, expect.not.objectContaining({ contents: Buffer.from('foo') }));
+          expect(spyTransformPost).toHaveBeenNthCalledWith(i, expect.not.objectContaining({ contents: Buffer.from('foo') }));
         }
       });
     });
@@ -157,21 +157,21 @@ describe('Transform stream', () => {
     describe('using filter', () => {
       beforeEach(async () => {
         await filePipeline(stream, [
-          passthrough(sinonTransformPre),
+          passthrough(spyTransformPre),
           transformContents<File & { conflicter: string }>(() => Buffer.from('foo'), { filter: file => file.path.endsWith('.yo-rc.json') }),
-          passthrough(sinonTransformPost),
+          passthrough(spyTransformPost),
         ]);
       });
 
       it('should spy files that matches the pattern and pass all files through', () => {
-        expect(sinonTransformPre).toBeCalledTimes(files.length);
-        expect(sinonTransformPost).toBeCalledTimes(files.length);
-        expect(sinonTransformPost).toHaveBeenNthCalledWith(
+        expect(spyTransformPre).toBeCalledTimes(files.length);
+        expect(spyTransformPost).toBeCalledTimes(files.length);
+        expect(spyTransformPost).toHaveBeenNthCalledWith(
           1,
           expect.objectContaining({ path: expect.stringMatching('.yo-rc.json'), contents: Buffer.from('foo') }),
         );
         for (let i = 2; i <= files.length; i++) {
-          expect(sinonTransformPost).toHaveBeenNthCalledWith(i, expect.not.objectContaining({ contents: Buffer.from('foo') }));
+          expect(spyTransformPost).toHaveBeenNthCalledWith(i, expect.not.objectContaining({ contents: Buffer.from('foo') }));
         }
       });
     });
@@ -180,18 +180,18 @@ describe('Transform stream', () => {
   describe('filterPattern()', () => {
     beforeEach(async () => {
       await filePipeline(stream, [
-        passthrough(sinonTransformPre),
+        passthrough(spyTransformPre),
         filterPattern('**/{.yo-rc.json,.yo-resolve,.yo-rc-global.json}'),
-        passthrough(sinonTransformPost),
+        passthrough(spyTransformPost),
       ]);
     });
 
     it('should pass filtered files through', () => {
-      expect(sinonTransformPre).toBeCalledTimes(files.length);
-      expect(sinonTransformPost).toBeCalledTimes(3);
-      expect(sinonTransformPost).toHaveBeenCalledWith(expect.objectContaining({ path: expect.stringMatching('.yo-rc.json') }));
-      expect(sinonTransformPost).toHaveBeenCalledWith(expect.objectContaining({ path: expect.stringMatching('.yo-resolve') }));
-      expect(sinonTransformPost).toHaveBeenCalledWith(expect.objectContaining({ path: expect.stringMatching('.yo-rc-global.json') }));
+      expect(spyTransformPre).toBeCalledTimes(files.length);
+      expect(spyTransformPost).toBeCalledTimes(3);
+      expect(spyTransformPost).toHaveBeenCalledWith(expect.objectContaining({ path: expect.stringMatching('.yo-rc.json') }));
+      expect(spyTransformPost).toHaveBeenCalledWith(expect.objectContaining({ path: expect.stringMatching('.yo-resolve') }));
+      expect(spyTransformPost).toHaveBeenCalledWith(expect.objectContaining({ path: expect.stringMatching('.yo-rc-global.json') }));
     });
   });
 

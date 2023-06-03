@@ -1,10 +1,7 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable import/no-named-as-default-member */
 import assert from 'node:assert';
 import { Readable } from 'node:stream';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { describe, it, beforeEach } from 'vitest';
-import sinon from 'sinon';
+import { describe, it, beforeEach, vitest, expect } from 'vitest';
 import { pipeline, passthrough } from '@yeoman/transform';
 // eslint-disable-next-line n/file-extension-in-import
 import { TestAdapter } from '@yeoman/adapter/testing';
@@ -23,8 +20,8 @@ describe('Transform stream', () => {
   let stream;
   let files;
 
-  let sinonTransformPre;
-  let sinonTransformPost;
+  let spyTransformPre;
+  let spyTransformPost;
 
   beforeEach(() => {
     unmodifiedFile = { path: 'unmodifiedFile' };
@@ -42,8 +39,8 @@ describe('Transform stream', () => {
 
     files = [unmodifiedFile, newFile, modifiedFile, newDeletedFile, yoRcFile, yoRcGlobalFile, yoResolveFile, conflicterSkippedFile];
 
-    sinonTransformPre = sinon.stub().callsFake(() => {});
-    sinonTransformPost = sinon.stub().callsFake(() => {});
+    spyTransformPre = vitest.fn();
+    spyTransformPost = vitest.fn();
 
     stream = Readable.from(files);
   });
@@ -52,20 +49,20 @@ describe('Transform stream', () => {
     beforeEach(async () => {
       await pipeline(
         stream,
-        passthrough(sinonTransformPre),
+        passthrough(spyTransformPre),
         passthrough((file: ConflictedFile) => {
           if (!file.conflicter) {
             file.conflicter = 'force';
           }
         }),
-        createConflicterTransform(new TestAdapter(({ returns }) => sinon.stub().returns(returns))),
-        passthrough(sinonTransformPost),
+        createConflicterTransform(new TestAdapter()),
+        passthrough(spyTransformPost),
       );
     });
 
     it('should forward modified and not skipped files', () => {
-      assert.equal(sinonTransformPre.callCount, files.length);
-      assert.equal(sinonTransformPost.callCount, files.length - 1);
+      expect(spyTransformPre).toHaveBeenCalledTimes(files.length);
+      expect(spyTransformPost).toHaveBeenCalledTimes(files.length - 1);
       for (const file of files) {
         assert.equal(file.conflicter, undefined);
         assert.equal(file.binary, undefined);
