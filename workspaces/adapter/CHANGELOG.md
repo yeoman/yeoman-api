@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/adapter@1.0.5...@yeoman/adapter@1.1.0) (2023-06-07)
+
+### Features
+
+- **adapter:** add defineTestAdapterConfig ([469ff22](https://github.com/yeoman/yeoman-api/commit/469ff2268f9cf942c2880dc53c099c59a419bbcf))
+- **adapter:** add TestAdapter ([2d63361](https://github.com/yeoman/yeoman-api/commit/2d63361e2b8dbb612edaeac3b63b8f5a142ca83a))
+
+### Bug Fixes
+
+- **adapter:** log should have greater priority than blocking ([1b341af](https://github.com/yeoman/yeoman-api/commit/1b341af3f641610d1255206315c48d5263a0009b))
+
 ## [1.0.5](https://github.com/yeoman/yeoman-api/compare/@yeoman/adapter@1.0.4...@yeoman/adapter@1.0.5) (2023-05-29)
 
 ### Bug Fixes
