@@ -91,6 +91,9 @@ export const defineConfig = (config: DefineTestAdapterConfig) => Object.assign(d
 
 export const getConfig = () => ({ ...defaultConfig });
 
+/**
+ * @experimental
+ */
 export class TestAdapter<LogType extends Logger = Logger, SpyType = any> implements AdapterWithProgress {
   promptModule: PromptModule;
   diff: any & SpyType;
