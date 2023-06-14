@@ -1,6 +1,7 @@
-import npmlog from 'npmlog';
+import process from 'node:process';
+import { format } from 'node:util';
+import ora, { type Ora } from 'ora';
 import PQueue from 'p-queue';
-import { TrackerGroup } from 'are-we-there-yet';
 import type { Logger, InputOutputAdapter, PromptAnswers, PromptQuestions, QueuedAdapter as QueuedAdapterApi } from '@yeoman/types';
 import { TerminalAdapter, type TerminalAdapterOptions } from './adapter.js';
 
@@ -36,6 +37,7 @@ export class QueuedAdapter implements AdapterWithProgress {
   delta: number;
   log: Logger;
   #nextChildPriority: number;
+  #ora: Ora;
 
   /**
    * `TerminalAdapter` is the default implementation of `Adapter`, an abstraction
@@ -71,6 +73,10 @@ export class QueuedAdapter implements AdapterWithProgress {
     this.log = defferredLogger as unknown as Logger;
     this.delta = (delta ?? MAIN_ADAPTER_PRIORITY) * 100;
     this.#nextChildPriority = MAIN_ADAPTER_PRIORITY - 1;
+
+    this.#ora = ora({
+      stream: options?.stdout ?? options?.stderr ?? process.stderr,
+    });
   }
 
   newAdapter(delta?: number) {
@@ -136,36 +142,28 @@ export class QueuedAdapter implements AdapterWithProgress {
     options?: { disabled?: boolean; name: string },
   ): Promise<void | ReturnType> {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    if (this.#queue.size > 0 || this.#queue.pending > 0 || options?.disabled || (npmlog as any).progressEnabled) {
-      // Don't show progress if not empty
+    if (this.#queue.size > 0 || this.#queue.pending > 0 || options?.disabled || this.#ora.isSpinning) {
+      // Don't show progress if queue is not empty or already spinning.
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       return fn({ step() {} });
     }
 
-    let log: any;
     try {
-      npmlog.tracker = new TrackerGroup();
-      npmlog.enableProgress();
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-      log = (npmlog as any).newItem(options?.name);
+      this.#ora.start(options?.name);
     } catch {
-      npmlog.disableProgress();
-      log = undefined;
+      this.#ora.stop();
     }
 
     const step = (prefix: string, message: string, ...args: any[]) => {
-      if (log) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        log.completeWork(10);
-        npmlog.info(prefix, message, ...args);
+      if (this.#ora.isSpinning) {
+        this.#ora.suffixText = `: ${prefix} ${format(message, ...args)}`;
       }
     };
 
     return this.queue(() => fn({ step })).finally(() => {
-      if (log) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        log.finish();
-        npmlog.disableProgress();
+      if (this.#ora.isSpinning) {
+        this.#ora.suffixText = '';
+        this.#ora.succeed(options?.name);
       }
     });
   }

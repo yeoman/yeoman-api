@@ -38,17 +38,14 @@
   },
   "dependencies": {
     "@types/inquirer": "^9.0.3",
-    "are-we-there-yet": "^4.0.0",
     "chalk": "^5.2.0",
     "inquirer": "^9.2.2",
     "log-symbols": "^5.1.0",
-    "npmlog": "^7.0.1",
+    "ora": "^6.3.1",
     "p-queue": "^7.3.4",
     "text-table": "^0.2.0"
   },
   "devDependencies": {
-    "@types/are-we-there-yet": "^1.1.0",
-    "@types/npmlog": "^4.1.4",
     "@types/text-table": "^0.2.2",
     "strip-ansi": "^7.0.1",
     "yeoman-assert": "^3.1.1"

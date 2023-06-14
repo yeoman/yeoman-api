@@ -3,10 +3,7 @@ import type inquirer from 'inquirer';
 import { createPromptModule, type PromptModule } from 'inquirer';
 import chalk from 'chalk';
 import type { PromptAnswers, Logger, PromptQuestions, InputOutputAdapter } from '@yeoman/types';
-import npmlog from 'npmlog';
 import { createLogger } from './log.js';
-
-npmlog.level = 'error';
 
 export type TerminalAdapterOptions = {
   promptModule?: PromptModule;
@@ -41,7 +38,6 @@ export class TerminalAdapter implements InputOutputAdapter {
     this.stdout = options?.stdout ?? process.stdout;
     this.stderr = options?.stderr ?? options?.stdout ?? process.stderr;
     this.console = options?.console ?? new console.Console(this.stdout, this.stderr);
-    npmlog.stream = this?.stderr;
 
     this.promptModule =
       options?.promptModule ??
