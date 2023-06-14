@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/adapter@1.1.0...@yeoman/adapter@1.2.0) (2023-06-14)
+
+### Features
+
+- replace npmlog with ora. ([9b36f99](https://github.com/yeoman/yeoman-api/commit/9b36f997d5760aa070756fba4653fed35c0fad80))
+
 ## [1.1.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/adapter@1.0.5...@yeoman/adapter@1.1.0) (2023-06-07)
 
 ### Features
