@@ -169,15 +169,17 @@ export class Conflicter {
       ]);
     }
 
-    destAdapter.log.colored([
-      { message: '\n' },
-      { message: 'removed', color: 'removed' },
-      { message: '' },
-      { message: 'added', color: 'added' },
-      { message: '\n\n' },
-      ...messages.flat(),
-      { message: '\n\n' },
-    ]);
+    if (messages) {
+      destAdapter.log.colored([
+        { message: '\n' },
+        { message: 'removed', color: 'removed' },
+        { message: '' },
+        { message: 'added', color: 'added' },
+        { message: '\n\n' },
+        ...messages.flat(),
+        { message: '\n\n' },
+      ]);
+    }
   }
 
   /**
@@ -202,7 +204,7 @@ export class Conflicter {
     }
 
     if (stat?.mode && diskStat.mode !== stat.mode) {
-      file.fileModeChanges = [Number.parseInt(stat.mode.toString(8), 10), Number.parseInt(diskStat.mode.toString(8), 10)];
+      file.fileModeChanges = [Number.parseInt(diskStat.mode.toString(8), 10), Number.parseInt(stat.mode.toString(8), 10)];
     }
 
     if (file.binary === undefined) {
@@ -231,7 +233,10 @@ export class Conflicter {
       modified = (changes.length > 1 || changes[0].added || changes[0].removed) ?? false;
     }
 
-    file.conflicterChanges = changes;
+    if (modified) {
+      file.conflicterChanges = changes;
+    }
+
     return Boolean(file.fileModeChanges) || modified;
   }
 
