@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.9](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@1.0.8...@yeoman/conflicter@1.0.9) (2023-09-14)
+
+### Bug Fixes
+
+- parse file diff on file mode changes ([0cbf162](https://github.com/yeoman/yeoman-api/commit/0cbf1623eeea8a4c2cf62c51760df72776480039))
+
 ## [1.0.8](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@1.0.7...@yeoman/conflicter@1.0.8) (2023-06-14)
 
 **Note:** Version bump only for package @yeoman/conflicter
