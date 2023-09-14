@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.10](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@1.0.9...@yeoman/conflicter@1.0.10) (2023-09-14)
+
+### Bug Fixes
+
+- **conflicter:** adjust diff message. ([82a9e67](https://github.com/yeoman/yeoman-api/commit/82a9e6756f35294825f2fde9e289e5aedbd3bade))
+
 ## [1.0.9](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@1.0.8...@yeoman/conflicter@1.0.9) (2023-09-14)
 
 ### Bug Fixes
