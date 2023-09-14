@@ -27,6 +27,7 @@ export function setConflicterStatus<F extends ConflicterFile = ConflicterFile>(f
 export type ConflicterFile = MemFsEditorFile & {
   relativePath: string;
   conflicter?: ConflicterStatus;
+  fileModeChanges?: [number, number];
   changesDetected?: boolean;
   binary?: boolean;
   conflicterChanges?: Change[];
@@ -158,6 +159,16 @@ export class Conflicter {
       })
       .map((colored: ColoredMessage): ColoredMessage[] => colorLines(colored));
 
+    if (file.fileModeChanges) {
+      destAdapter.log.colored([
+        { message: '\npermission change ' },
+        { message: `${file.fileModeChanges[0]}`, color: 'removed' },
+        { message: '' },
+        { message: `${file.fileModeChanges[1]}`, color: 'added' },
+        { message: '\n' },
+      ]);
+    }
+
     destAdapter.log.colored([
       { message: '\n' },
       { message: 'removed', color: 'removed' },
@@ -191,7 +202,7 @@ export class Conflicter {
     }
 
     if (stat?.mode && diskStat.mode !== stat.mode) {
-      return true;
+      file.fileModeChanges = [Number.parseInt(stat.mode.toString(8), 10), Number.parseInt(diskStat.mode.toString(8), 10)];
     }
 
     if (file.binary === undefined) {
@@ -205,7 +216,7 @@ export class Conflicter {
     }
 
     if (file.binary) {
-      return actual.toString('hex') !== contents.toString('hex');
+      return Boolean(file.fileModeChanges) || actual.toString('hex') !== contents.toString('hex');
     }
 
     let modified: boolean;
@@ -221,7 +232,7 @@ export class Conflicter {
     }
 
     file.conflicterChanges = changes;
-    return modified;
+    return Boolean(file.fileModeChanges) || modified;
   }
 
   /**
@@ -476,6 +487,7 @@ export class Conflicter {
       delete conflicterFile.changesDetected;
       delete conflicterFile.binary;
       delete conflicterFile.conflicterChanges;
+      delete conflicterFile.fileModeChanges;
 
       if (action === 'skip') {
         clearFileState(conflicterFile);
