@@ -42,6 +42,10 @@ type Task<TaskResultType> =
   | ((adapter: InputOutputAdapter) => PromiseLike<TaskResultType>)
   | ((adapter: InputOutputAdapter) => TaskResultType);
 
+export type ProgressCallback<ReturnType> = (progress: { step: (prefix: string, message: string, ...args: any[]) => void }) => ReturnType;
+export type ProgressOptions = { disabled?: boolean; name?: string };
+
 export type QueuedAdapter = InputOutputAdapter & {
   queue<TaskResultType>(fn: Task<TaskResultType>): Promise<void | TaskResultType>;
+  progress<ResultType>(fn: ProgressCallback<ResultType>, options?: ProgressOptions): Promise<void | ResultType>;
 };
