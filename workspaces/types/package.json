@@ -55,5 +55,9 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
+  },
+  "acceptDependencies": {
+    "mem-fs": ">=3.0.0",
+    "mem-fs-editor": ">=10.0.2"
   }
 }
