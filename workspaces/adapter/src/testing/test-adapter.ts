@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-redundant-type-constituents */
 import events from 'node:events';
 import { PassThrough } from 'node:stream';
-import type { PromptAnswers, PromptQuestion, Logger, PromptQuestions, Task } from '@yeoman/types';
+import type { PromptAnswers, PromptQuestion, Logger, PromptQuestions, Task, QueuedAdapter } from '@yeoman/types';
 import { createPromptModule, type PromptModule } from 'inquirer';
 
 import { createLogger } from '../log.js';
-import { type AdapterWithProgress } from '../queued-adapter.js';
 
 export type DummyPromptCallback = (answer: any, { question, answers }: { question: PromptQuestion; answers: PromptAnswers }) => any;
 
@@ -94,7 +93,7 @@ export const getConfig = () => ({ ...defaultConfig });
 /**
  * @experimental
  */
-export class TestAdapter<LogType extends Logger = Logger, SpyType = any> implements AdapterWithProgress {
+export class TestAdapter<LogType extends Logger = Logger, SpyType = any> implements QueuedAdapter {
   promptModule: PromptModule;
   diff: any & SpyType;
   log: LogType & SpyType;

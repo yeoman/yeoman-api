@@ -2,8 +2,18 @@ import process from 'node:process';
 import { format } from 'node:util';
 import ora, { type Ora } from 'ora';
 import PQueue from 'p-queue';
-import type { Logger, InputOutputAdapter, PromptAnswers, PromptQuestions, QueuedAdapter as QueuedAdapterApi } from '@yeoman/types';
+import type {
+  Logger,
+  InputOutputAdapter,
+  PromptAnswers,
+  PromptQuestions,
+  ProgressCallback,
+  ProgressOptions,
+  QueuedAdapter as QueuedAdapterApi,
+} from '@yeoman/types';
 import { TerminalAdapter, type TerminalAdapterOptions } from './adapter.js';
+
+export type AdapterWithProgress = QueuedAdapterApi;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const BLOCKING_PRIORITY = 10;
@@ -24,14 +34,7 @@ type QueuedAdapterOptions = TerminalAdapterOptions & {
   adapter?: InputOutputAdapter;
 };
 
-type ProgressCallback<ReturnType> = (progress: { step: (prefix: string, message: string, ...args: any[]) => void }) => ReturnType;
-type ProgressOptions = { disabled?: boolean; name?: string };
-
-export type AdapterWithProgress = QueuedAdapterApi & {
-  progress<ReturnType>(fn: ProgressCallback<ReturnType>, options?: ProgressOptions): Promise<void | ReturnType>;
-};
-
-export class QueuedAdapter implements AdapterWithProgress {
+export class QueuedAdapter implements QueuedAdapterApi {
   #queue: PQueue;
   actualAdapter: InputOutputAdapter;
   delta: number;
@@ -137,15 +140,16 @@ export class QueuedAdapter implements AdapterWithProgress {
    * @param options
    * @returns
    */
-  async progress<ReturnType>(
-    fn: (progress: { step: (prefix: string, message: string, ...args: any[]) => void }) => ReturnType,
-    options?: { disabled?: boolean; name: string },
-  ): Promise<void | ReturnType> {
+  async progress<ReturnType>(fn: ProgressCallback<ReturnType>, options?: ProgressOptions): Promise<void | ReturnType> {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     if (this.#queue.size > 0 || this.#queue.pending > 0 || options?.disabled || this.#ora.isSpinning) {
       // Don't show progress if queue is not empty or already spinning.
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      return fn({ step() {} });
+      return Promise.resolve(fn({ step() {} })).finally(() => {
+        if (options?.name) {
+          this.log.ok(options.name);
+        }
+      });
     }
 
     try {
