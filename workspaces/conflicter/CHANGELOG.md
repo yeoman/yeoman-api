@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@1.0.12...@yeoman/conflicter@1.1.0) (2023-10-11)
+
+### Features
+
+- **conflicter:** move mem-fs to peer dependencies. ([ca73310](https://github.com/yeoman/yeoman-api/commit/ca733105ee8fa96d2ac3b5e711f33232416ad690))
+
 ## [1.0.12](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@1.0.11...@yeoman/conflicter@1.0.12) (2023-10-11)
 
 **Note:** Version bump only for package @yeoman/conflicter
