@@ -28,6 +28,11 @@ export type BaseEnvironmentOptions<A extends InputOutputAdapter = InputOutputAda
   cwd?: string | undefined;
 
   /**
+   * The working-directory for logs.
+   */
+  logCwd?: string | undefined;
+
+  /**
    * A value indicating whether the experimental features should be enabled.
    */
   experimental?: boolean;
@@ -62,6 +67,10 @@ export type BaseEnvironment<A = InputOutputAdapter, S extends Store<MemFsEditorF
   cwd: string;
   adapter: A;
   sharedFs: S;
+  /**
+   * The working-directory for logs.
+   */
+  logCwd: string;
 
   emit(eventName: string | symbol, ...args: any[]): boolean;
   on(eventName: string | symbol, listener: (...args: any[]) => void): unknown;
