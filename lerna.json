@@ -7,6 +7,9 @@
       "changelogPreset": "conventionalcommits"
     }
   },
+  "packages": [
+    "workspaces/*"
+  ],
   "ignoreChanges": ["**/*.test.ts", "**/test/fixtures/**", "**/.*"],
   "version": "independent"
 }
