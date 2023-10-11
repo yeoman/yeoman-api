@@ -3,6 +3,8 @@ import { dirname, resolve } from 'node:path';
 import { Minimatch } from 'minimatch';
 import slash from 'slash';
 import { transformFileField } from '@yeoman/transform';
+import { type FileTransform } from 'mem-fs';
+import { type MemFsEditorFile } from 'mem-fs-editor';
 import { type ConflicterStatus, type ConflicterFile } from './conflicter.js';
 
 const eachFolder = function* (folder: string) {
@@ -39,7 +41,7 @@ export class YoResolve {
     return undefined;
   }
 
-  createTransform() {
+  createTransform(): FileTransform<MemFsEditorFile> {
     return transformFileField<'conflicter', ConflicterFile>(
       'conflicter',
       async (status: ConflicterStatus | undefined, file: ConflicterFile) => status ?? this.getStatusForFile(file.path),
@@ -83,4 +85,5 @@ export class YoResolve {
   }
 }
 
-export const createYoResolveTransform = (...args: ConstructorParameters<typeof YoResolve>) => new YoResolve(...args).createTransform();
+export const createYoResolveTransform = (...args: ConstructorParameters<typeof YoResolve>): FileTransform<MemFsEditorFile> =>
+  new YoResolve(...args).createTransform();

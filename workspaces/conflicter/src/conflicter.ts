@@ -6,14 +6,14 @@ import process from 'node:process';
 import { Buffer } from 'node:buffer';
 import type { ColoredMessage, InputOutputAdapter, QueuedAdapter } from '@yeoman/types';
 import { diffWords, diffLines, type Change } from 'diff';
-import type { Store } from 'mem-fs';
-import { create as createMemFsEditor, type MemFsEditor, type MemFsEditorFile } from 'mem-fs-editor';
+import { loadFile, type FileTransform } from 'mem-fs';
+import type { MemFsEditorFile } from 'mem-fs-editor';
 // eslint-disable-next-line n/file-extension-in-import
-import { clearFileState } from 'mem-fs-editor/state';
+import { clearFileState, setModifiedFileState } from 'mem-fs-editor/state';
 import { transform } from 'p-transform';
 import { binaryDiff, isBinary } from './binary-diff.js';
 
-export type ConflicterStatus = 'create' | 'skip' | 'identical' | 'force' | 'conflict';
+export type ConflicterStatus = 'create' | 'skip' | 'identical' | 'force' | 'conflict' | 'ignore';
 
 export type ConflicterLog = ConflicterStatus | 'conflict';
 
@@ -38,8 +38,7 @@ export type ConflictedFile = ConflicterFile & {
   changesDetected: true;
 };
 
-export type ConflicterOptions<File extends { path: string } = MemFsEditorFile> = {
-  memFs?: Store<File>;
+export type ConflicterOptions = {
   force?: boolean;
   bail?: boolean;
   ignoreWhitespace?: boolean;
@@ -48,6 +47,8 @@ export type ConflicterOptions<File extends { path: string } = MemFsEditorFile> =
   cwd?: string;
   diffOptions?: any;
 };
+
+type ConflicterTransformOptions = { yoResolveFileName?: string };
 
 /**
  * The Conflicter is a module that can be used to detect conflict between files. Each
@@ -78,13 +79,8 @@ export class Conflicter {
   dryRun: boolean;
   cwd: string;
   diffOptions?: any;
-  fs?: MemFsEditor<MemFsEditorFile>;
 
   constructor(private readonly adapter: InputOutputAdapter, options?: ConflicterOptions) {
-    if (options?.memFs) {
-      this.fs = createMemFsEditor(options?.memFs);
-    }
-
     this.force = options?.force ?? false;
     this.bail = options?.bail ?? false;
     this.ignoreWhitespace = options?.ignoreWhitespace ?? false;
@@ -103,8 +99,9 @@ export class Conflicter {
 
   private log(file: ConflicterFile, adapter: InputOutputAdapter = this.adapter) {
     const logStatus = file.conflicter;
-    if (logStatus && adapter.log[logStatus]) {
-      adapter.log[logStatus](file.relativePath);
+    const logLevel = logStatus === 'ignore' ? 'skip' : logStatus;
+    if (logLevel && adapter.log[logLevel]) {
+      adapter.log[logLevel](file.relativePath);
     }
   }
 
@@ -407,20 +404,12 @@ export class Conflicter {
           name: 'edit file (experimental)',
           value: 'edit',
         },
-      );
-      const { fs } = this;
-      if (fs) {
-        prompt.choices.push({
+        {
           key: 'i',
           name: 'ignore, do not overwrite and remember (experimental)',
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-expect-error
-          value: ({ relativeFilePath }: { relativeFilePath: string }) => {
-            fs.append(`${this.cwd}/.yo-resolve`, `${relativeFilePath} skip`, { create: true });
-            return 'skip';
-          },
-        });
-      }
+          value: 'ignore',
+        },
+      );
     }
 
     const result = await adapter.prompt<{ action: ConflicterAction | (({ file }: { file: ConflicterFile }) => ConflicterStatus) }>([
@@ -483,25 +472,54 @@ export class Conflicter {
     return result.action;
   }
 
-  createTransform() {
-    return transform(async (file: ConflicterFile) => {
-      const conflicterFile = await this.checkForCollision(file);
-      const action = conflicterFile.conflicter;
+  createTransform({ yoResolveFileName }: ConflicterTransformOptions = {}): FileTransform<ConflicterFile> {
+    const yoResolveFilePath = path.resolve(this.cwd, yoResolveFileName ?? '.yo-resolve');
+    let yoResolveFile: ConflicterFile;
+    let yoResolveContents = '';
 
-      delete conflicterFile.conflicter;
-      delete conflicterFile.changesDetected;
-      delete conflicterFile.binary;
-      delete conflicterFile.conflicterChanges;
-      delete conflicterFile.fileModeChanges;
+    return transform<ConflicterFile>(
+      async (file: ConflicterFile) => {
+        const conflicterFile = await this.checkForCollision(file);
+        const action = conflicterFile.conflicter;
 
-      if (action === 'skip') {
-        clearFileState(conflicterFile);
-        return undefined;
-      }
+        delete conflicterFile.conflicter;
+        delete conflicterFile.changesDetected;
+        delete conflicterFile.binary;
+        delete conflicterFile.conflicterChanges;
+        delete conflicterFile.fileModeChanges;
 
-      return conflicterFile;
-    });
+        if (action === 'skip') {
+          clearFileState(conflicterFile);
+        }
+
+        if (action === 'ignore') {
+          yoResolveContents += `${file.relativePath} skip\n`;
+          clearFileState(conflicterFile);
+        }
+
+        if (file.path === yoResolveFilePath) {
+          yoResolveFile = file;
+          return undefined;
+        }
+
+        return conflicterFile;
+      },
+      function () {
+        if (yoResolveContents) {
+          yoResolveFile = yoResolveFile ?? (loadFile(yoResolveFilePath) as unknown as ConflicterFile);
+          setModifiedFileState(yoResolveFile);
+          const oldContents = yoResolveFile.contents?.toString() ?? '';
+          yoResolveFile.contents = Buffer.from(oldContents + yoResolveContents);
+          this.push(yoResolveFile);
+        } else if (yoResolveFile) {
+          this.push(yoResolveFile);
+        }
+      },
+    );
   }
 }
 
-export const createConflicterTransform = (...args: ConstructorParameters<typeof Conflicter>) => new Conflicter(...args).createTransform();
+export const createConflicterTransform = (
+  adapter: InputOutputAdapter,
+  { yoResolveFileName, ...conflicterOptions }: ConflicterOptions & ConflicterTransformOptions = {},
+): FileTransform<ConflicterFile> => new Conflicter(adapter, conflicterOptions).createTransform({ yoResolveFileName });

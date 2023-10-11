@@ -16,9 +16,10 @@ describe('Transform stream', () => {
   let yoRcGlobalFile;
   let yoResolveFile;
   let conflicterSkippedFile;
+  let conflicterIgnoreFile;
 
   let stream;
-  let files;
+  let files: any[];
 
   let spyTransformPre;
   let spyTransformPost;
@@ -36,8 +37,23 @@ describe('Transform stream', () => {
       path: 'conflicterSkippedFile',
       conflicter: 'skip',
     };
+    conflicterIgnoreFile = {
+      state: 'modified',
+      path: 'conflicterIgnoreFile',
+      conflicter: 'ignore',
+    };
 
-    files = [unmodifiedFile, newFile, modifiedFile, newDeletedFile, yoRcFile, yoRcGlobalFile, yoResolveFile, conflicterSkippedFile];
+    files = [
+      unmodifiedFile,
+      newFile,
+      modifiedFile,
+      newDeletedFile,
+      yoRcFile,
+      yoRcGlobalFile,
+      yoResolveFile,
+      conflicterSkippedFile,
+      conflicterIgnoreFile,
+    ];
 
     spyTransformPre = vitest.fn();
     spyTransformPost = vitest.fn();
@@ -46,6 +62,8 @@ describe('Transform stream', () => {
   });
 
   describe('Conflicter.createTransform()', () => {
+    let yoResolveFile;
+
     beforeEach(async () => {
       await pipeline(
         stream,
@@ -57,18 +75,27 @@ describe('Transform stream', () => {
         }),
         createConflicterTransform(new TestAdapter()),
         passthrough(spyTransformPost),
+        passthrough(file => {
+          if (file.path.endsWith('.yo-resolve')) {
+            yoResolveFile = file;
+          }
+        }),
       );
     });
 
-    it('should forward modified and not skipped files', () => {
+    it('should forward every file', () => {
       expect(spyTransformPre).toHaveBeenCalledTimes(files.length);
-      expect(spyTransformPost).toHaveBeenCalledTimes(files.length - 1);
-      for (const file of files) {
-        assert.equal(file.conflicter, undefined);
-        assert.equal(file.binary, undefined);
-        assert.equal(file.conflicterChanges, undefined);
-        assert.equal(file.conflicterLog, undefined);
-      }
+      expect(spyTransformPost).toHaveBeenCalledTimes(files.length + 1);
+    });
+
+    it('should forward every file', () => {
+      expect(spyTransformPost).toHaveBeenCalledTimes(files.length + 1);
+    });
+
+    it('should write .yo-resolve file', () => {
+      expect(yoResolveFile).toBeTruthy();
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      expect(yoResolveFile.contents.toString()).toBe('conflicterIgnoreFile skip\n');
     });
 
     it('should clear the state of skipped file', () => {
