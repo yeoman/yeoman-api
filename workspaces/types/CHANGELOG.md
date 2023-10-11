@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.0.1...@yeoman/types@1.1.0) (2023-10-11)
+
+### Features
+
+- **types:** add logCwd to Environment ([cf3f8f5](https://github.com/yeoman/yeoman-api/commit/cf3f8f5a328a8910ee155e43a5e94c6c0fc0ca4b))
+- **types:** add mem-fs acceptDependencies ([fb77e17](https://github.com/yeoman/yeoman-api/commit/fb77e17c65f155d282910ca1b6469d8ebc00ae94))
+- **types:** add progress to QueuedAdapter ([8db7fc6](https://github.com/yeoman/yeoman-api/commit/8db7fc60b7211d0a73ca1254fe5357f57b321d44))
+
 ## [1.0.1](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.0.0...@yeoman/types@1.0.1) (2023-05-19)
 
 ### Bug Fixes
