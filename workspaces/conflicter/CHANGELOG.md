@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0-alpha.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@1.1.0...@yeoman/conflicter@2.0.0-alpha.0) (2023-10-11)
+
+### ⚠ BREAKING CHANGES
+
+- **conflicter:** update dependencies and bump node version
+
+### Features
+
+- **conflicter:** emit .yo-resolve file instead of editing ([202bbde](https://github.com/yeoman/yeoman-api/commit/202bbde4b392084d349443dd9d4d3ab2972c9810))
+- **conflicter:** update dependencies and bump node version ([bebd6d4](https://github.com/yeoman/yeoman-api/commit/bebd6d4746471dcb4781b26c43e72f7ca43fe40a))
+
 ## [1.1.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@1.0.12...@yeoman/conflicter@1.1.0) (2023-10-11)
 
 ### Features
