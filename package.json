@@ -26,7 +26,7 @@
     "@vitest/coverage-c8": "^0.31.4",
     "conventional-changelog-conventionalcommits": "^5.0.0",
     "cpy-cli": "^4.2.0",
-    "lerna": "^6.3.0",
+    "lerna": "^7.3.1",
     "prettier": "^2.8.2",
     "prettier-plugin-packagejson": "^2.3.0",
     "rimraf": "^3.0.2",
