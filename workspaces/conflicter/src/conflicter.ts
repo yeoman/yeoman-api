@@ -38,8 +38,8 @@ export type ConflictedFile = ConflicterFile & {
   changesDetected: true;
 };
 
-export type ConflicterOptions = {
-  memFs?: Store;
+export type ConflicterOptions<File extends { path: string } = MemFsEditorFile> = {
+  memFs?: Store<File>;
   force?: boolean;
   bail?: boolean;
   ignoreWhitespace?: boolean;
@@ -82,7 +82,7 @@ export class Conflicter {
 
   constructor(private readonly adapter: InputOutputAdapter, options?: ConflicterOptions) {
     if (options?.memFs) {
-      this.fs = createMemFsEditor(options?.memFs as Store<MemFsEditorFile>) as MemFsEditor<MemFsEditorFile>;
+      this.fs = createMemFsEditor(options?.memFs);
     }
 
     this.force = options?.force ?? false;
