@@ -3,5 +3,5 @@ This projects uses [Conventional Commits](https://www.conventionalcommits.org/en
 Releasing:
 
 ```
-GH_TOKEN=foo npx publish
+GH_TOKEN=foo npx lerna publish
 ```
