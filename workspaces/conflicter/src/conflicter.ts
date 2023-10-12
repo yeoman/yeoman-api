@@ -472,7 +472,7 @@ export class Conflicter {
     return result.action;
   }
 
-  createTransform({ yoResolveFileName }: ConflicterTransformOptions = {}): FileTransform<ConflicterFile> {
+  createTransform({ yoResolveFileName }: ConflicterTransformOptions = {}): FileTransform<MemFsEditorFile> {
     const yoResolveFilePath = path.resolve(this.cwd, yoResolveFileName ?? '.yo-resolve');
     let yoResolveFile: ConflicterFile;
     let yoResolveContents = '';
@@ -522,4 +522,4 @@ export class Conflicter {
 export const createConflicterTransform = (
   adapter: InputOutputAdapter,
   { yoResolveFileName, ...conflicterOptions }: ConflicterOptions & ConflicterTransformOptions = {},
-): FileTransform<ConflicterFile> => new Conflicter(adapter, conflicterOptions).createTransform({ yoResolveFileName });
+): FileTransform<MemFsEditorFile> => new Conflicter(adapter, conflicterOptions).createTransform({ yoResolveFileName });
