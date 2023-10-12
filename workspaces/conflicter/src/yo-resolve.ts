@@ -5,6 +5,8 @@ import slash from 'slash';
 import { transformFileField } from '@yeoman/transform';
 import { type FileTransform } from 'mem-fs';
 import { type MemFsEditorFile } from 'mem-fs-editor';
+// eslint-disable-next-line n/file-extension-in-import
+import { isFilePending } from 'mem-fs-editor/state';
 import { type ConflicterStatus, type ConflicterFile } from './conflicter.js';
 
 const eachFolder = function* (folder: string) {
@@ -45,6 +47,7 @@ export class YoResolve {
     return transformFileField<'conflicter', ConflicterFile>(
       'conflicter',
       async (status: ConflicterStatus | undefined, file: ConflicterFile) => status ?? this.getStatusForFile(file.path),
+      { filter: isFilePending },
     );
   }
 
