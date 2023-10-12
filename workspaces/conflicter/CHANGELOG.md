@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0-alpha.1](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@2.0.0-alpha.0...@yeoman/conflicter@2.0.0-alpha.1) (2023-10-12)
+
+### Bug Fixes
+
+- **conflicter:** adjust createConflicterTransform type ([83012fb](https://github.com/yeoman/yeoman-api/commit/83012fb595752c55cc2ba9107264f27060825c07))
+
 ## [2.0.0-alpha.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@1.1.0...@yeoman/conflicter@2.0.0-alpha.0) (2023-10-11)
 
 ### ⚠ BREAKING CHANGES
