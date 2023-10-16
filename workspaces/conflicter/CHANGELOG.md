@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0-alpha.2](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@2.0.0-alpha.1...@yeoman/conflicter@2.0.0-alpha.2) (2023-10-16)
+
+### Bug Fixes
+
+- **conflicter:** filter files at transforms ([be768f7](https://github.com/yeoman/yeoman-api/commit/be768f7dcd72db58ed4c3c3532386d27a19b8ae3))
+
 ## [2.0.0-alpha.1](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@2.0.0-alpha.0...@yeoman/conflicter@2.0.0-alpha.1) (2023-10-12)
 
 ### Bug Fixes
