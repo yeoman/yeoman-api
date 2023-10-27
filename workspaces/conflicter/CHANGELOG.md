@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@2.0.0-alpha.2...@yeoman/conflicter@2.0.0) (2023-10-27)
+
+### Features
+
+- **conflicter:** improve diff output ([aedf3a6](https://github.com/yeoman/yeoman-api/commit/aedf3a6177b1c0eec365bad6ccb3501253d50f61))
+
 ## [2.0.0-alpha.2](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@2.0.0-alpha.1...@yeoman/conflicter@2.0.0-alpha.2) (2023-10-16)
 
 ### Bug Fixes
