@@ -142,26 +142,30 @@ export class Conflicter {
       return [colored];
     };
 
+    const prepareChange = (changes: string, prefix: string) =>
+      changes
+        .split('\n')
+        .map((line, index, array) => (array.length - 1 === index ? line : `${prefix}${line}`))
+        .join('\n');
+
     const messages: ColoredMessage[][] = file.conflicterChanges
       ?.map((change: Change): ColoredMessage => {
         if (change.added) {
-          return { color: 'added', message: change.value };
+          return { color: 'added', message: prepareChange(change.value, '+') };
         }
 
         if (change.removed) {
-          return { color: 'removed', message: change.value };
+          return { color: 'removed', message: prepareChange(change.value, '-') };
         }
 
-        return { message: change.value };
+        return { message: prepareChange(change.value, ' ') };
       })
       .map((colored: ColoredMessage): ColoredMessage[] => colorLines(colored));
 
     if (file.fileModeChanges) {
       destAdapter.log.colored([
-        { message: '\npermission change ' },
-        { message: `${file.fileModeChanges[0]}`, color: 'removed' },
-        { message: '' },
-        { message: `${file.fileModeChanges[1]}`, color: 'added' },
+        { message: `\nold mode ${file.fileModeChanges[0]}`, color: 'removed' },
+        { message: `\nnew mode ${file.fileModeChanges[1]}`, color: 'added' },
         { message: '\n' },
       ]);
     }
