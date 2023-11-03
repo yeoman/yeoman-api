@@ -12,7 +12,7 @@ export type EnvironmentGenerator = {
 
   _postConstruct?(): Promise<void>;
 
-  destinationRoot(): string;
+  destinationRoot(rootPath: string): string;
 
   // Generator >= v5
   queueTasks?(): Promise<void>;
