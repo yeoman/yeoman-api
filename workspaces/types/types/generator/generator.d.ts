@@ -15,12 +15,13 @@ export type EnvironmentGenerator = {
   /**
    * Get the generator destination root directory.
    */
+  // eslint-disable-next-line @typescript-eslint/unified-signatures
   destinationRoot(): string;
   /**
    * Set the generator destination root directory.
    */
+  // eslint-disable-next-line @typescript-eslint/unified-signatures
   destinationRoot(rootPath: string): string;
-  destinationRoot(rootPath: string | undefined): string;
 
   // Generator >= v5
   queueTasks?(): Promise<void>;
