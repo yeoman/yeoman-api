@@ -12,7 +12,15 @@ export type EnvironmentGenerator = {
 
   _postConstruct?(): Promise<void>;
 
+  /**
+   * Get the generator destination root directory.
+   */
   destinationRoot(): string;
+  /**
+   * Set the generator destination root directory.
+   */
+  // eslint-disable-next-line @typescript-eslint/unified-signatures
+  destinationRoot(rootPath: string): string;
 
   // Generator >= v5
   queueTasks?(): Promise<void>;
