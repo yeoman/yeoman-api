@@ -20,7 +20,7 @@ export type EnvironmentGenerator = {
    * Set the generator destination root directory.
    */
   destinationRoot(rootPath: string): string;
-  destinationRoot(rootPath: string | undefinde): string;
+  destinationRoot(rootPath: string | undefined): string;
 
   // Generator >= v5
   queueTasks?(): Promise<void>;
