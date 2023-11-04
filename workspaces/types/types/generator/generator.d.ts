@@ -12,7 +12,14 @@ export type EnvironmentGenerator = {
 
   _postConstruct?(): Promise<void>;
 
-  destinationRoot(rootPath: string | undefined): string;
+  /**
+   * Get the generator destination root directory.
+   */
+  destinationRoot(): string;
+  /**
+   * Set the generator destination root directory.
+   */
+  destinationRoot(rootPath: string): string;
 
   // Generator >= v5
   queueTasks?(): Promise<void>;
