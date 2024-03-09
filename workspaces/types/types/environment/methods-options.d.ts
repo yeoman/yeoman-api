@@ -81,4 +81,13 @@ export type InstantiateOptions<G extends BaseGenerator = BaseGenerator> = {
   generatorOptions?: Partial<Omit<GetGeneratorOptions<G>, 'env' | 'resolved' | 'namespace'>> | undefined;
 };
 
-export type ComposeOptions<G extends BaseGenerator = BaseGenerator> = InstantiateOptions<G> & { schedule?: boolean };
+export type ComposeOptions<G extends BaseGenerator = BaseGenerator> = InstantiateOptions<G> & SchedulingOptions<G>;
+
+export type SchedulingOptions<G extends BaseGenerator = BaseGenerator> = {
+  /**
+   * Creates a new task to queue the composed generator tasks instead of queueing immediately.
+   * The task is queued in an Environment’s internal priority which is executed before any generator task.
+   * Function is accepted starting from Environment 4.4.0.
+   */
+  schedule?: boolean | ((generator: G) => boolean);
+};
