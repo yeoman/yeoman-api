@@ -13,6 +13,7 @@ import type {
   BaseGeneratorMeta,
   InstantiateOptions,
   ComposeOptions,
+  SchedulingOptions,
 } from './methods-options.js';
 
 export type EnvironmentConstructor<A extends InputOutputAdapter = InputOutputAdapter> = new (
@@ -149,7 +150,7 @@ export type BaseEnvironment<A = InputOutputAdapter, S extends Store<MemFsEditorF
    */
   getVersion(dependency: string): string | undefined;
 
-  queueGenerator<G extends BaseGenerator = BaseGenerator>(generator: G, queueOptions?: { schedule?: boolean }): Promise<G>;
+  queueGenerator<G extends BaseGenerator = BaseGenerator>(generator: G, queueOptions?: SchedulingOptions): Promise<G>;
 
   rootGenerator<G extends BaseGenerator = BaseGenerator>(): G;
 

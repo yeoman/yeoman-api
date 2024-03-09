@@ -81,4 +81,9 @@ export type InstantiateOptions<G extends BaseGenerator = BaseGenerator> = {
   generatorOptions?: Partial<Omit<GetGeneratorOptions<G>, 'env' | 'resolved' | 'namespace'>> | undefined;
 };
 
-export type ComposeOptions<G extends BaseGenerator = BaseGenerator> = InstantiateOptions<G> & { schedule?: boolean };
+export type ComposeOptions<G extends BaseGenerator = BaseGenerator> = InstantiateOptions<G> & SchedulingOptions;
+
+export type SchedulingOptions<G extends BaseGenerator = BaseGenerator> = {
+  /** Schedule can be a simple boolean or a function defined in the generator that returns a boolean */
+  schedule?: boolean | ((generator: G) => boolean);
+};
