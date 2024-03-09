@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.1.2...@yeoman/types@1.2.0) (2024-03-09)
+
+### Features
+
+- **types:** add call back function support to decide generator scheduling ([#6](https://github.com/yeoman/yeoman-api/issues/6)) ([dca1eee](https://github.com/yeoman/yeoman-api/commit/dca1eee04d6344cb0b2e61f949c293b1d4a5d233)), closes [jhipster/generator-jhipster#25445](https://github.com/jhipster/generator-jhipster/issues/25445)
+
 ## [1.1.2](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.1.1...@yeoman/types@1.1.2) (2023-11-14)
 
 ### Bug Fixes
