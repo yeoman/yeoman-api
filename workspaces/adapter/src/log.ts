@@ -191,7 +191,7 @@ export function createLogger<Loggers = any, LoggerCategories extends string | nu
   log.table = (options: any[] | { rows: any[] }) => {
     const tableData = [];
 
-    options = Array.isArray(options) ? { rows: options } : options ?? {};
+    options = Array.isArray(options) ? { rows: options } : (options ?? {});
     options.rows = options.rows || [];
 
     for (const row of options.rows) {
