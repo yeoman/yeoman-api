@@ -1,7 +1,6 @@
 import { transformFileField } from '@yeoman/transform';
 import { type FileTransform } from 'mem-fs';
 import { type MemFsEditorFile } from 'mem-fs-editor';
-// eslint-disable-next-line n/file-extension-in-import
 import { isFilePending } from 'mem-fs-editor/state';
 import { type ConflicterFile } from './conflicter.js';
 

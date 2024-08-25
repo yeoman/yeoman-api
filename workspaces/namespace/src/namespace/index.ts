@@ -1,5 +1,5 @@
 // ===================== | == @ ======== scope ======== | ===== unscoped ===== | = : ========== generator ======== | = @ ===== semver ===== @  | = # ========= instanceId ======== | == + ======== method ======= |= flags = |
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
 const NAMESPACE_REGEX =
   /^(?:(@[a-z\d-~][a-z\d-._~]*)\/)?([a-z\d-~][a-z\d-._~]*)(?::((?:[a-z\d-~][a-z\d-._~]*:?)*))?(?:@([a-z\d-.~><+=^* ]*)@?)?(?:#((?:[a-z\d-~][a-z\d-._~]*|\*)))?(?:\+((?:[a-zA-Z\d]\w*\+?)*))?(\?)?$/;
 
@@ -25,7 +25,6 @@ function parseNamespace(complete: string): YeomanNamespace | undefined {
     return;
   }
 
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   const parsed = { complete } as ParsedNamespace;
   // Populate fields
   for (const [name, value] of Object.entries(groups)) {
@@ -67,7 +66,6 @@ export class YeomanNamespace {
     this.instanceId = parsed.instanceId;
     this.semver = parsed.semver;
     this.methods = parsed.method?.split('+');
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     this.flags = parsed.flags;
 
     // Populate flags
@@ -76,7 +74,6 @@ export class YeomanNamespace {
         if (this.flags === value) {
           (this as any)[name] = true;
         } else {
-          // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
           delete (this as any)[name];
         }
       }
@@ -101,7 +98,6 @@ export class YeomanNamespace {
       methods = '+' + this.methods.join('+');
     }
 
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     const postSemver = `${this.instanceName}${methods}${this.flags ?? ''}`;
     return `${this.namespace}${this._semverAddition(postSemver)}`;
   }
@@ -167,9 +163,7 @@ export class YeomanNamespace {
     this.unscoped = parsed.unscoped ?? this.unscoped;
     this.generator = parsed.generator ?? this.generator;
     this.instanceId = parsed.instanceId ?? this.instanceId;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     this.command = parsed.command ?? this.command;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     this.flags = parsed.flags ?? this.flags;
   }
 }

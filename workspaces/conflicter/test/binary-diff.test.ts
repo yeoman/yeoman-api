@@ -2,7 +2,6 @@ import path, { dirname } from 'node:path';
 import assert from 'node:assert';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { describe, it } from 'vitest';
 import { isBinary } from '../src/binary-diff.js';
 

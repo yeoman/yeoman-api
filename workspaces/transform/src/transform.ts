@@ -10,7 +10,6 @@ import type { pipeline as pipelineType } from 'node:stream/promises';
 import { Stream } from 'readable-stream';
 import { Minimatch, type MinimatchOptions } from 'minimatch';
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, prefer-destructuring
 const pipeline: typeof pipelineType = Stream.promises.pipeline;
 export { pipeline };
 

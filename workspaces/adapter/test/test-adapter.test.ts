@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import assert from 'node:assert';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { describe, expect, it, vitest } from 'vitest';
 import { TestAdapter } from '../src/testing/test-adapter.js';
 

@@ -42,13 +42,10 @@ export class TerminalAdapter implements InputOutputAdapter {
     this.promptModule =
       options?.promptModule ??
       createPromptModule({
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         skipTTYChecks: true,
         input: this.stdin,
         output: this.stdout,
       });
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     this.log = options?.log ?? createLogger(this);
   }
 
@@ -88,7 +85,6 @@ export class TerminalAdapter implements InputOutputAdapter {
    */
   async prompt<A extends PromptAnswers = PromptAnswers>(questions: PromptQuestions<A>, initialAnswers?: Partial<A>): Promise<A> {
     const promptPromise = this.promptModule(questions, initialAnswers);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     this.promptUi = promptPromise.ui as any;
     const result = await promptPromise;
     delete this.promptUi;

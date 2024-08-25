@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-redundant-type-constituents */
 import events from 'node:events';
 import { PassThrough } from 'node:stream';
 import type { PromptAnswers, PromptQuestion, Logger, PromptQuestions, Task, QueuedAdapter } from '@yeoman/types';
@@ -36,7 +35,6 @@ export class DummyPrompt {
     this.answers = { ...answers, ...mockedAnswers };
     this.question = question;
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     this.callback = callback ?? (answers => answers);
     this.throwOnMissingAnswer = throwOnMissingAnswer ?? false;
   }
@@ -81,7 +79,6 @@ export class DummyPrompt {
       }
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.callback(answer, { question: this.question, answers: this.answers });
   }
 }
@@ -102,7 +99,6 @@ export class TestAdapter<LogType extends Logger = Logger, SpyType = any> impleme
 
   constructor(options: TestAdapterOptions<SpyType> = {}) {
     const {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       spyFactory = defaultConfig.spyFactory ?? (spyOptions => () => spyOptions.returns),
       log = defaultConfig.log ?? createLogger(),
       ...promptOptions
@@ -112,7 +108,7 @@ export class TestAdapter<LogType extends Logger = Logger, SpyType = any> impleme
     this.promptModule = createPromptModule({
       input: new PassThrough() as any,
       output: new PassThrough() as any,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
+
       skipTTYChecks: true,
     });
 
@@ -154,9 +150,9 @@ export class TestAdapter<LogType extends Logger = Logger, SpyType = any> impleme
 
   async progress<ReturnType>(
     fn: (progress: { step: (prefix: string, message: string, ...args: any[]) => void }) => ReturnType,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _options?: { disabled?: boolean | undefined; name?: string | undefined } | undefined,
   ): Promise<void | ReturnType> {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     return fn({ step() {} });
   }
 

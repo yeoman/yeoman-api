@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/member-ordering */
 import fs from 'node:fs';
 import { stat as fsStat, readFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -8,7 +7,6 @@ import type { ColoredMessage, InputOutputAdapter, QueuedAdapter } from '@yeoman/
 import { diffWords, diffLines, type Change } from 'diff';
 import { loadFile, type FileTransform } from 'mem-fs';
 import type { MemFsEditorFile } from 'mem-fs-editor';
-// eslint-disable-next-line n/file-extension-in-import
 import { clearFileState, setModifiedFileState } from 'mem-fs-editor/state';
 import { transform } from 'p-transform';
 import { binaryDiff, isBinary } from './binary-diff.js';
@@ -87,8 +85,6 @@ export class Conflicter {
     this.regenerate = options?.regenerate ?? false;
     this.dryRun = options?.dryRun ?? false;
     this.cwd = path.resolve(options?.cwd ?? process.cwd());
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     this.diffOptions = options?.diffOptions;
 
     if (this.bail) {
@@ -195,7 +191,8 @@ export class Conflicter {
    * @return {Boolean} `true` if there's a conflict, `false` otherwise.
    */
   private async _detectConflict(file: ConflicterFile): Promise<boolean> {
-    let { contents, stat } = file;
+    let { contents } = file;
+    const { stat } = file;
     const filepath = path.resolve(file.path);
 
     // If file path point to a directory, then it's not safe to write
@@ -226,11 +223,9 @@ export class Conflicter {
     let changes;
     if (this.ignoreWhitespace) {
       changes = diffWords(actual.toString(), contents.toString(), this.diffOptions);
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       modified = changes.some(change => change.value?.trim() && (change.added || change.removed));
     } else {
       changes = diffLines(actual.toString(), contents.toString(), this.diffOptions);
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       modified = (changes.length > 1 || changes[0].added || changes[0].removed) ?? false;
     }
 

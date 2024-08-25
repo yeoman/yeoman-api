@@ -1,5 +1,4 @@
 import assert from 'node:assert';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { describe, it } from 'vitest';
 import { requireNamespace, isNamespaceObject } from '../src/namespace/index.js';
 
@@ -21,7 +20,6 @@ const fields = [
 
 const equalsNamespace = function (namespace, expected) {
   for (const field of fields) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     assert.deepStrictEqual(namespace[field], expected[field], `Field ${field} differs: ${namespace[field]} === ${expected[field]}`);
   }
 
