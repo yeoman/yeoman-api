@@ -31,12 +31,12 @@
   "devDependencies": {
     "@types/inquirer": "^9.0.3",
     "mem-fs": "^3.0.0",
-    "mem-fs-editor": "^10.0.2"
+    "mem-fs-editor": "^11.1.1"
   },
   "peerDependencies": {
     "@types/inquirer": "^9.0.3",
     "mem-fs": "^3.0.0",
-    "mem-fs-editor": "^10.0.2"
+    "mem-fs-editor": "^11.1.1"
   },
   "peerDependenciesMeta": {
     "inquirer": {
