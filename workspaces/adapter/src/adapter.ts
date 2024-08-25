@@ -1,8 +1,8 @@
 import process from 'node:process';
 import type inquirer from 'inquirer';
-import { createPromptModule, type PromptModule } from 'inquirer';
+import { type PromptModule, createPromptModule } from 'inquirer';
 import chalk from 'chalk';
-import type { PromptAnswers, Logger, PromptQuestions, InputOutputAdapter } from '@yeoman/types';
+import type { InputOutputAdapter, Logger, PromptAnswers, PromptQuestions } from '@yeoman/types';
 import { createLogger } from './log.js';
 
 export type TerminalAdapterOptions = {

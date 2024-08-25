@@ -32,9 +32,7 @@ const binaryDiff = (existingFilePath: string, newFileContents?: Buffer) => {
 
   let sizeDiff;
 
-  if (!newFileContents) {
-    newFileContents = Buffer.from([]);
-  }
+  newFileContents ||= Buffer.from([]);
 
   sizeDiff = existingStat.size > newFileContents.length ? '-' : '+';
 

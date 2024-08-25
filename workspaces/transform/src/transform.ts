@@ -1,15 +1,16 @@
 import {
+  type PipelineOptions,
   type PipelineSource,
   type PipelineTransform,
   type PipelineTransformSource,
   Transform,
   type TransformCallback,
-  type PipelineOptions,
 } from 'node:stream';
 import type { pipeline as pipelineType } from 'node:stream/promises';
 import { Stream } from 'readable-stream';
 import { Minimatch, type MinimatchOptions } from 'minimatch';
 
+// eslint-disable-next-line prefer-destructuring
 const pipeline: typeof pipelineType = Stream.promises.pipeline;
 export { pipeline };
 

@@ -1,4 +1,4 @@
-import type { GetGeneratorOptions, BaseGenerator, GetGeneratorConstructor } from '../index.js';
+import type { BaseGenerator, GetGeneratorConstructor, GetGeneratorOptions } from '../index.js';
 
 /**
  * Provides options for the `lookup` method.

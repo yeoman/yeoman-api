@@ -4,8 +4,8 @@ import path from 'node:path';
 import process from 'node:process';
 import { Buffer } from 'node:buffer';
 import type { ColoredMessage, InputOutputAdapter, QueuedAdapter } from '@yeoman/types';
-import { diffWords, diffLines, type Change } from 'diff';
-import { loadFile, type FileTransform } from 'mem-fs';
+import { type Change, diffLines, diffWords } from 'diff';
+import { type FileTransform, loadFile } from 'mem-fs';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import { clearFileState, setModifiedFileState } from 'mem-fs-editor/state';
 import { transform } from 'p-transform';
@@ -508,7 +508,7 @@ export class Conflicter {
       },
       function () {
         if (yoResolveContents) {
-          yoResolveFile = yoResolveFile ?? (loadFile(yoResolveFilePath) as unknown as ConflicterFile);
+          yoResolveFile ??= loadFile(yoResolveFilePath) as unknown as ConflicterFile;
           setModifiedFileState(yoResolveFile);
           const oldContents = yoResolveFile.contents?.toString() ?? '';
           yoResolveFile.contents = Buffer.from(oldContents + yoResolveContents);

@@ -1,7 +1,7 @@
 import assert from 'node:assert';
 import { Readable } from 'node:stream';
-import { describe, it, beforeEach, vitest, expect } from 'vitest';
-import { pipeline, passthrough } from '@yeoman/transform';
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { passthrough, pipeline } from '@yeoman/transform';
 import { TestAdapter } from '@yeoman/adapter/testing';
 import { type ConflictedFile, createConflicterTransform } from '../src/conflicter.js';
 
@@ -67,9 +67,7 @@ describe('Transform stream', () => {
         stream,
         passthrough(spyTransformPre),
         passthrough((file: ConflictedFile) => {
-          if (!file.conflicter) {
-            file.conflicter = 'force';
-          }
+          file.conflicter ||= 'force';
         }),
         createConflicterTransform(new TestAdapter()),
         passthrough(spyTransformPost),

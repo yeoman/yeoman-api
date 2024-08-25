@@ -7,12 +7,12 @@ import type { BaseGenerator, BaseGeneratorConstructor } from '../generator/gener
 import type { GetGeneratorConstructor } from '../generator/utils.js';
 import type { InputOutputAdapter } from './adapter.js';
 import type {
+  BaseGeneratorMeta,
+  ComposeOptions,
   GeneratorMeta,
+  InstantiateOptions,
   LookupGeneratorMeta,
   LookupOptions,
-  BaseGeneratorMeta,
-  InstantiateOptions,
-  ComposeOptions,
 } from './methods-options.js';
 
 export type EnvironmentConstructor<A extends InputOutputAdapter = InputOutputAdapter> = new (

@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path, { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Buffer } from 'node:buffer';
-import { describe, it, beforeEach, expect, vitest } from 'vitest';
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { filter } from 'lodash-es';
 import slash from 'slash';
 import { QueuedAdapter } from '@yeoman/adapter';
@@ -31,7 +31,7 @@ describe('Conflicter', () => {
   let conflicter: Conflicter;
   let testAdapter: TestAdapter;
 
-  beforeEach(function () {
+  beforeEach(() => {
     testAdapter = new TestAdapter();
 
     conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }));
@@ -40,11 +40,11 @@ describe('Conflicter', () => {
   describe('#checkForCollision()', () => {
     let conflictingFile: ConflicterFile;
 
-    beforeEach(function () {
+    beforeEach(() => {
       conflictingFile = { path: __filename, contents: Buffer.from('') };
     });
 
-    it('handles predefined status', async function () {
+    it('handles predefined status', async () => {
       const contents = fs.readFileSync(__filename, 'utf8');
       return conflicter
         .checkForCollision({
@@ -100,7 +100,7 @@ describe('Conflicter', () => {
         conflicter.checkForCollision(conflictingFile);
       }));
 
-    it('identical status', async function () {
+    it('identical status', async () => {
       const me = fs.readFileSync(__filename, 'utf8');
 
       return conflicter
@@ -113,18 +113,17 @@ describe('Conflicter', () => {
         });
     });
 
-    it('create status', async function () {
-      return conflicter
+    it('create status', async () =>
+      conflicter
         .checkForCollision({
           path: 'file-who-does-not-exist.js',
           contents: '',
         })
         .then(file => {
           assert.equal(file.conflicter, 'create');
-        });
-    });
+        }));
 
-    it('user choose "yes"', async function () {
+    it('user choose "yes"', async () => {
       const conflicter = new Conflicter(
         new QueuedAdapter({
           adapter: new TestAdapter({ mockedAnswers: { action: 'write' } }),
@@ -136,7 +135,7 @@ describe('Conflicter', () => {
       });
     });
 
-    it('user choose "skip"', async function () {
+    it('user choose "skip"', async () => {
       const conflicter = new Conflicter(
         new QueuedAdapter({
           adapter: new TestAdapter({ mockedAnswers: { action: 'skip' } }),
@@ -148,7 +147,7 @@ describe('Conflicter', () => {
       });
     });
 
-    it('user choose "force"', async function () {
+    it('user choose "force"', async () => {
       const conflicter = new Conflicter(
         new QueuedAdapter({
           adapter: new TestAdapter({ mockedAnswers: { action: 'force' } }),
@@ -160,7 +159,7 @@ describe('Conflicter', () => {
       });
     });
 
-    it('force conflict status', async function () {
+    it('force conflict status', async () => {
       conflicter.force = true;
       return conflicter.checkForCollision(conflictingFile).then(file => {
         assert.equal(file.conflicter, 'force');
@@ -168,14 +167,14 @@ describe('Conflicter', () => {
     });
 
     describe('with bail option', () => {
-      it('abort on first conflict', async function () {
+      it('abort on first conflict', async () => {
         const conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }), { bail: true });
         await expect(conflicter.checkForCollision(conflictingFile)).rejects.toThrowError(
           /Process aborted by conflict: (.*)conflicter.test.ts/s,
         );
       });
 
-      it('abort on first conflict with whitespace changes', async function () {
+      it('abort on first conflict with whitespace changes', async () => {
         const conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }), { bail: true });
         return conflicter
           .checkForCollision({
@@ -345,16 +344,15 @@ describe('Conflicter', () => {
         });
     });
 
-    it('does not give a conflict on same binary files', async function () {
-      return conflicter
+    it('does not give a conflict on same binary files', async () =>
+      conflicter
         .checkForCollision({
           path: path.join(__dirname, 'fixtures/conflicter/yeoman-logo.png'),
           contents: fs.readFileSync(path.join(__dirname, 'fixtures/conflicter/yeoman-logo.png')),
         })
         .then(file => {
           assert.equal(file.conflicter, 'skip');
-        });
-    });
+        }));
 
     it('does not provide a diff option for directory', async () => {
       const queuedAdapter = new QueuedAdapter({

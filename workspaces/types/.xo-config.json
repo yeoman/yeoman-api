@@ -1,6 +1,0 @@
-{
-  "space": true,
-  "envs": ["es2022", "node"],
-  "prettier": true,
-  "printWidth": 120
-}
