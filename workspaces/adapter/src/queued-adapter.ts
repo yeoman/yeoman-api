@@ -3,12 +3,12 @@ import { format } from 'node:util';
 import ora, { type Ora } from 'ora';
 import PQueue from 'p-queue';
 import type {
-  Logger,
   InputOutputAdapter,
-  PromptAnswers,
-  PromptQuestions,
+  Logger,
   ProgressCallback,
   ProgressOptions,
+  PromptAnswers,
+  PromptQuestions,
   QueuedAdapter as QueuedAdapterApi,
 } from '@yeoman/types';
 import { TerminalAdapter, type TerminalAdapterOptions } from './adapter.js';

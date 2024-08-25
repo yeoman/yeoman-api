@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 import { describe, it } from 'vitest';
-import { requireNamespace, isNamespaceObject } from '../src/namespace/index.js';
+import { isNamespaceObject, requireNamespace } from '../src/namespace/index.js';
 
 const fields = [
   'complete',

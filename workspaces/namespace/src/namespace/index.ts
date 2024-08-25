@@ -95,7 +95,7 @@ export class YeomanNamespace {
   get complete() {
     let methods = '';
     if (this.methods && this.methods.length > 0) {
-      methods = '+' + this.methods.join('+');
+      methods = `+${this.methods.join('+')}`;
     }
 
     const postSemver = `${this.instanceName}${methods}${this.flags ?? ''}`;

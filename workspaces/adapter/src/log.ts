@@ -92,7 +92,7 @@ export function createLogger<Loggers = any, LoggerCategories extends string | nu
   //
   // Returns the logger
   function log(message: string, ctx?: Record<string, string | number>) {
-    message = message ?? '';
+    message ??= '';
 
     if (typeof ctx === 'object' && !Array.isArray(ctx)) {
       customConsole.error(formatter(message, ctx));
@@ -126,12 +126,12 @@ export function createLogger<Loggers = any, LoggerCategories extends string | nu
   // Convenience helper to write sucess status, this simply prepends the
   // message with a gren `✔`.
   log.ok = function (...args: Parameters<typeof util.format>) {
-    this.write(logSymbols.success + ' ' + util.format(...args) + '\n');
+    this.write(`${logSymbols.success} ${util.format(...args)}\n`);
     return this;
   };
 
   log.error = function (...args: Parameters<typeof util.format>) {
-    this.write(logSymbols.error + ' ' + util.format(...args) + '\n');
+    this.write(`${logSymbols.error} ${util.format(...args)}\n`);
     return this;
   };
 
@@ -171,7 +171,7 @@ export function createLogger<Loggers = any, LoggerCategories extends string | nu
     // @ts-expect-error
     log[status] = function (...args: Parameters<typeof util.format>) {
       this.write(color(pad(status))).write(padding);
-      this.write(util.format(...args) + '\n');
+      this.write(`${util.format(...args)}\n`);
       return this;
     };
   }
@@ -192,7 +192,7 @@ export function createLogger<Loggers = any, LoggerCategories extends string | nu
     const tableData = [];
 
     options = Array.isArray(options) ? { rows: options } : (options ?? {});
-    options.rows = options.rows || [];
+    options.rows ||= [];
 
     for (const row of options.rows) {
       tableData.push(row);
@@ -204,6 +204,7 @@ export function createLogger<Loggers = any, LoggerCategories extends string | nu
   log.colored = function (coloredMessages: Array<ColoredMessage<LoggerCategories>>) {
     this.write(coloredMessages.map(({ color, message }): string => (color ? colors[color](message) : message)).join(''));
   };
+
   return log as any;
 }
 

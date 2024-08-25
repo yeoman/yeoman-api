@@ -6,7 +6,7 @@ import { transformFileField } from '@yeoman/transform';
 import { type FileTransform } from 'mem-fs';
 import { type MemFsEditorFile } from 'mem-fs-editor';
 import { isFilePending } from 'mem-fs-editor/state';
-import { type ConflicterStatus, type ConflicterFile } from './conflicter.js';
+import { type ConflicterFile, type ConflicterStatus } from './conflicter.js';
 
 const eachFolder = function* (folder: string) {
   let last;

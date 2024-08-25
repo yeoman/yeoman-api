@@ -1,6 +1,6 @@
 import assert from 'node:assert';
-import { describe, it, beforeEach, vitest, expect } from 'vitest';
-import { filePipeline, passthrough, type File, filterPattern, transformContents } from '../src/transform.js';
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { type File, filePipeline, filterPattern, passthrough, transformContents } from '../src/transform.js';
 
 describe('Transform stream', () => {
   let unmodifiedFile;

@@ -1,7 +1,7 @@
 import events from 'node:events';
 import { PassThrough } from 'node:stream';
-import type { PromptAnswers, PromptQuestion, Logger, PromptQuestions, Task, QueuedAdapter } from '@yeoman/types';
-import { createPromptModule, type PromptModule } from 'inquirer';
+import type { Logger, PromptAnswers, PromptQuestion, PromptQuestions, QueuedAdapter, Task } from '@yeoman/types';
+import { type PromptModule, createPromptModule } from 'inquirer';
 
 import { createLogger } from '../log.js';
 
