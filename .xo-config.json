@@ -1,7 +1,0 @@
-{
-  "space": true,
-  "envs": ["es2020", "node"],
-  "prettier": true,
-  "ignores": ["workspaces"],
-  "printWidth": 120
-}
