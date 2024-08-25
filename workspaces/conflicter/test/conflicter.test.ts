@@ -6,10 +6,9 @@ import { Buffer } from 'node:buffer';
 import { describe, it, beforeEach, expect, vitest } from 'vitest';
 import { filter } from 'lodash-es';
 import slash from 'slash';
-import { QueuedAdapter, testing } from '@yeoman/adapter';
+import { QueuedAdapter } from '@yeoman/adapter';
+import { TestAdapter, defineConfig as defineTestAdapterConfig } from '@yeoman/adapter/testing';
 import { Conflicter, type ConflicterFile } from '../src/conflicter.js';
-
-const { TestAdapter, defineConfig: defineTestAdapterConfig } = testing;
 
 defineTestAdapterConfig({
   spyFactory: ({ returns }) => vitest.fn().mockReturnValue(returns),

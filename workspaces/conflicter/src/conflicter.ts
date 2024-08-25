@@ -78,7 +78,10 @@ export class Conflicter {
   cwd: string;
   diffOptions?: any;
 
-  constructor(private readonly adapter: InputOutputAdapter, options?: ConflicterOptions) {
+  constructor(
+    private readonly adapter: InputOutputAdapter,
+    options?: ConflicterOptions,
+  ) {
     this.force = options?.force ?? false;
     this.bail = options?.bail ?? false;
     this.ignoreWhitespace = options?.ignoreWhitespace ?? false;
