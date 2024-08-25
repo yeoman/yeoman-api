@@ -14,10 +14,6 @@ updates:
         versions: ['>=17']
       - dependency-name: rimraf
         versions: ['>=6']
-      - dependency-name: ora
-        versions: ['>=8']
-      - dependency-name: p-queue
-        versions: ['>=8']
       - dependency-name: '*'
         update-types: ['version-update:semver-minor', 'version-update:semver-patch']
 
