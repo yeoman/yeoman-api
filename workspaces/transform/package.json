@@ -30,7 +30,6 @@
     "clean-all": "npm run clean && rimraf node_modules",
     "precommit": "lint-staged",
     "prepare": "npm run build",
-    "pretest": "xo",
     "test": "vitest run --coverage"
   },
   "dependencies": {

@@ -29,7 +29,6 @@
     "clean": "rimraf dist",
     "clean-all": "npm run clean && rimraf node_modules",
     "precommit": "lint-staged",
-    "pretest": "xo",
     "test": "vitest run --coverage"
   },
   "dependencies": {

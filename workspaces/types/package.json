@@ -22,7 +22,6 @@
     "build": "tsc",
     "clean": "",
     "clean-all": "rimraf node_modules",
-    "pretest": "xo",
     "test": ""
   },
   "dependencies": {

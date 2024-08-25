@@ -18,6 +18,7 @@
     "fix": "npm run fix --workspaces",
     "prepare": "npm run build",
     "prettier": "prettier --write .",
+    "pretest": "eslint .",
     "test": "npm run test --workspaces",
     "test-coverage": "npm run test-coverage --workspaces"
   },
