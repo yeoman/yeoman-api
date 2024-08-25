@@ -1,9 +1,7 @@
 import assert from 'node:assert';
 import { Readable } from 'node:stream';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { describe, it, beforeEach, vitest, expect } from 'vitest';
 import { pipeline, passthrough } from '@yeoman/transform';
-// eslint-disable-next-line n/file-extension-in-import
 import { TestAdapter } from '@yeoman/adapter/testing';
 import { type ConflictedFile, createConflicterTransform } from '../src/conflicter.js';
 
@@ -94,7 +92,6 @@ describe('Transform stream', () => {
 
     it('should write .yo-resolve file', () => {
       expect(yoResolveFile).toBeTruthy();
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       expect(yoResolveFile.contents.toString()).toBe('conflicterIgnoreFile skip\n');
     });
 

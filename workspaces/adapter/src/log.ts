@@ -1,4 +1,3 @@
-// eslint-disable-next-line n/prefer-global/console
 import { Console } from 'node:console';
 import util from 'node:util';
 import EventEmitter from 'node:events';
@@ -136,12 +135,9 @@ export function createLogger<Loggers = any, LoggerCategories extends string | nu
     return this;
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   (log as any).on('up', () => {
     padding += step;
   });
-
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   (log as any).on('down', () => {
     padding = padding.replace(step, '');
   });
@@ -173,7 +169,6 @@ export function createLogger<Loggers = any, LoggerCategories extends string | nu
     // Returns the logger
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
-    // eslint-disable-next-line @typescript-eslint/no-loop-func
     log[status] = function (...args: Parameters<typeof util.format>) {
       this.write(color(pad(status))).write(padding);
       this.write(util.format(...args) + '\n');
@@ -209,8 +204,6 @@ export function createLogger<Loggers = any, LoggerCategories extends string | nu
   log.colored = function (coloredMessages: Array<ColoredMessage<LoggerCategories>>) {
     this.write(coloredMessages.map(({ color, message }): string => (color ? colors[color](message) : message)).join(''));
   };
-
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return log as any;
 }
 

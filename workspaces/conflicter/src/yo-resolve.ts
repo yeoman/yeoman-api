@@ -5,7 +5,6 @@ import slash from 'slash';
 import { transformFileField } from '@yeoman/transform';
 import { type FileTransform } from 'mem-fs';
 import { type MemFsEditorFile } from 'mem-fs-editor';
-// eslint-disable-next-line n/file-extension-in-import
 import { isFilePending } from 'mem-fs-editor/state';
 import { type ConflicterStatus, type ConflicterFile } from './conflicter.js';
 
@@ -28,11 +27,9 @@ export class YoResolve {
 
   async getStatusForFile(filePath: string): Promise<ConflicterStatus | undefined> {
     for (const folder of eachFolder(slash(filePath))) {
-      // eslint-disable-next-line no-await-in-loop
       const map = await this.getMapForFolder(folder);
       if (map) {
         for (const [pattern, value] of map) {
-          // eslint-disable-next-line unicorn/prefer-regexp-test
           if (pattern.match(filePath)) {
             return value as ConflicterStatus;
           }
@@ -53,7 +50,6 @@ export class YoResolve {
 
   private async getMapForFolder(folder: string): Promise<Map<Minimatch, string> | undefined> {
     const map = this.groupedYoResolve.get(folder);
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     if (map || map === null) {
       return map ?? undefined;
     }
@@ -82,7 +78,9 @@ export class YoResolve {
 
         return map;
       }
-    } catch {}
+    } catch {
+      // Ignore errors
+    }
 
     return undefined;
   }

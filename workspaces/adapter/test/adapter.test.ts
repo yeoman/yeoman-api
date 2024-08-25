@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment */
 import process from 'node:process';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 import assert from 'yeoman-assert';
 import logSymbols from 'log-symbols';

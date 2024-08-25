@@ -1,25 +1,20 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return, @typescript-eslint/no-implicit-any-catch, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call */
 import assert from 'node:assert';
 import fs from 'node:fs';
 import path, { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createRequire } from 'node:module';
 import { Buffer } from 'node:buffer';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { describe, it, beforeEach, expect, vitest } from 'vitest';
 import { filter } from 'lodash-es';
 import slash from 'slash';
 import { QueuedAdapter, testing } from '@yeoman/adapter';
 import { Conflicter, type ConflicterFile } from '../src/conflicter.js';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 const { TestAdapter, defineConfig: defineTestAdapterConfig } = testing;
 
 defineTestAdapterConfig({
   spyFactory: ({ returns }) => vitest.fn().mockReturnValue(returns),
 });
 
-const require = createRequire(import.meta.url);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -103,7 +98,6 @@ describe('Conflicter', () => {
           }),
         );
 
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         conflicter.checkForCollision(conflictingFile);
       }));
 

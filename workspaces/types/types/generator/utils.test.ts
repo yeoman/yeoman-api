@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import type { BaseGenerator, BaseGeneratorConstructor } from './generator.js';
 import type { GetGeneratorConstructor } from './utils.js';
@@ -7,6 +6,7 @@ declare let Constructor1: BaseGeneratorConstructor;
 declare let Constructor2: GetGeneratorConstructor;
 declare let generator1: BaseGenerator;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const testTypes = () => {
   // @ts-expect-error
   constructor1 = generator1;

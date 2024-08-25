@@ -19,7 +19,6 @@ export type EnvironmentGenerator = {
   /**
    * Set the generator destination root directory.
    */
-  // eslint-disable-next-line @typescript-eslint/unified-signatures
   destinationRoot(rootPath: string): string;
 
   // Generator >= v5

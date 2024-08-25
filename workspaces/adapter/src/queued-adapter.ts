@@ -15,13 +15,9 @@ import { TerminalAdapter, type TerminalAdapterOptions } from './adapter.js';
 
 export type AdapterWithProgress = QueuedAdapterApi;
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 const BLOCKING_PRIORITY = 10;
-// eslint-disable-next-line @typescript-eslint/naming-convention
 const PROMPT_PRIORITY = 10;
-// eslint-disable-next-line @typescript-eslint/naming-convention
 const LOG_PRIORITY = 20;
-// eslint-disable-next-line @typescript-eslint/naming-convention
 const MAIN_ADAPTER_PRIORITY = 1000;
 
 type Task<TaskResultType> =
@@ -58,7 +54,6 @@ export class QueuedAdapter implements QueuedAdapterApi {
 
     // Deffered logger
     const defferredLogger = (...args: any[]) => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.queueLog(() => {
         this.actualAdapter.log(...args);
       });
@@ -106,7 +101,6 @@ export class QueuedAdapter implements QueuedAdapterApi {
    */
 
   async prompt<A extends PromptAnswers = PromptAnswers>(questions: PromptQuestions<A>, initialAnswers?: Partial<A>): Promise<A> {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.#queue.add(async () => this.actualAdapter.prompt(questions, initialAnswers), {
       priority: PROMPT_PRIORITY + this.delta,
     }) as any;
@@ -141,10 +135,8 @@ export class QueuedAdapter implements QueuedAdapterApi {
    * @returns
    */
   async progress<ReturnType>(fn: ProgressCallback<ReturnType>, options?: ProgressOptions): Promise<void | ReturnType> {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     if (this.#queue.size > 0 || this.#queue.pending > 0 || options?.disabled || this.#ora.isSpinning) {
       // Don't show progress if queue is not empty or already spinning.
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
       return Promise.resolve(fn({ step() {} })).finally(() => {
         if (options?.name) {
           this.log.ok(options.name);

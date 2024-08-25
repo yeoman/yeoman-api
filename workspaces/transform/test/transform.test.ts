@@ -1,8 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable n/prefer-global/buffer */
-/* eslint-disable max-nested-callbacks */
 import assert from 'node:assert';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { describe, it, beforeEach, vitest, expect } from 'vitest';
 import { filePipeline, passthrough, type File, filterPattern, transformContents } from '../src/transform.js';
 

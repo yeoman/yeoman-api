@@ -42,7 +42,6 @@ const binaryDiff = (existingFilePath: string, newFileContents?: Buffer) => {
 
   table.push(
     ['Size', prettyBytes(existingStat.size), prettyBytes(newFileContents.length), sizeDiff],
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     ['Last modified', (dateFormat as any)(existingStat.mtime), '', ''],
   );
 
