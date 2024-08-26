@@ -4,6 +4,7 @@
     "version": {
       "conventionalCommits": true,
       "createRelease": "github",
+      "graphType": "dependencies",
       "changelogPreset": "conventionalcommits"
     }
   },
