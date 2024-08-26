@@ -10,6 +10,6 @@
     }
   },
   "packages": ["workspaces/*"],
-  "ignoreChanges": ["**/*.test.ts", "**/test/fixtures/**", "**/.*"],
+  "ignoreChanges": ["**/*.test.ts", "**/*.md", "**/test/fixtures/**", "**/.*"],
   "version": "independent"
 }
