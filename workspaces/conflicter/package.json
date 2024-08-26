@@ -1,6 +1,6 @@
 {
   "name": "@yeoman/conflicter",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": false,
   "description": "Conflict resolution for yeoman's generator/environment stack",
   "keywords": [
@@ -53,6 +53,9 @@
     "@types/textextensions": "^2.4.0",
     "@yeoman/adapter": "*",
     "lodash-es": "^4.17.21"
+  },
+  "acceptDependencies": {
+    "@yeoman/transform": "^2.0.0"
   },
   "peerDependencies": {
     "@yeoman/types": "^1.0.0",
