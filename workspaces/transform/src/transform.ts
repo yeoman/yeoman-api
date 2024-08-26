@@ -6,12 +6,9 @@ import {
   Transform,
   type TransformCallback,
 } from 'node:stream';
-import type { pipeline as pipelineType } from 'node:stream/promises';
-import { Stream } from 'readable-stream';
+import { pipeline } from 'node:stream/promises';
 import { Minimatch, type MinimatchOptions } from 'minimatch';
 
-// eslint-disable-next-line prefer-destructuring
-const pipeline: typeof pipelineType = Stream.promises.pipeline;
 export { pipeline };
 
 export type File = { path: string; contents: any };
