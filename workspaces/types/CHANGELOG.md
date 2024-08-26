@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.3.0 (2024-08-26)
+
+* feat(types): add inquirer to peerDependencies ([443cb05](https://github.com/yeoman/yeoman-api/commit/443cb05))
+* chore: bump versions ([e0b4188](https://github.com/yeoman/yeoman-api/commit/e0b4188))
+* chore: eslint adjusts (#33) ([c1740ae](https://github.com/yeoman/yeoman-api/commit/c1740ae)), closes [#33](https://github.com/yeoman/yeoman-api/issues/33)
+* drop xo ([a92f48f](https://github.com/yeoman/yeoman-api/commit/a92f48f))
+* update eslint to v9 ([ad86730](https://github.com/yeoman/yeoman-api/commit/ad86730))
+
 ## [1.2.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.1.2...@yeoman/types@1.2.0) (2024-03-09)
 
 ### Features
