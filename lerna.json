@@ -5,6 +5,7 @@
       "conventionalCommits": true,
       "createRelease": "github",
       "graphType": "dependencies",
+      "message": "chore: publish",
       "changelogPreset": "conventionalcommits"
     }
   },
