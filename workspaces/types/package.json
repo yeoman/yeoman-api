@@ -29,11 +29,13 @@
   },
   "devDependencies": {
     "@types/inquirer": "^9.0.3",
+    "inquirer": "^9.3.6",
     "mem-fs": "^3.0.0",
     "mem-fs-editor": "^10.0.2"
   },
   "peerDependencies": {
     "@types/inquirer": "^9.0.3",
+    "inquirer": "^9.2.2",
     "mem-fs": "^3.0.0",
     "mem-fs-editor": "^10.0.2"
   },
