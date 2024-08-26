@@ -1,0 +1,36 @@
+{
+  "name": "@yeoman/eslint",
+  "version": "0.0.0",
+  "private": false,
+  "description": "ESLint configuration for Yeoman projects",
+  "keywords": [
+    "yeoman",
+    "eslint"
+  ],
+  "homepage": "https://github.com/yeoman/yeoman-api/tree/main/workspaces/eslint",
+  "repository": "yeoman/yeoman-api",
+  "license": "MIT",
+  "author": "The Yeoman Team",
+  "type": "module",
+  "main": "",
+  "files": [],
+  "scripts": {
+    "build": "",
+    "clean": "",
+    "clean-all": "rimraf node_modules",
+    "test": ""
+  },
+  "peerDependencies": {
+    "@eslint/js": "^9.9.1",
+    "eslint": "^9.9.1",
+    "globals": "^15.9.0",
+    "typescript-eslint": "^8.2.0"
+  },
+  "engines": {
+    "node": ">=18.20.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}
