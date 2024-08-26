@@ -150,7 +150,7 @@ export class TestAdapter<LogType extends Logger = Logger, SpyType = any> impleme
 
   async progress<ReturnType>(
     fn: (progress: { step: (prefix: string, message: string, ...args: any[]) => void }) => ReturnType,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     _options?: { disabled?: boolean | undefined; name?: string | undefined } | undefined,
   ): Promise<void | ReturnType> {
     return fn({ step() {} });

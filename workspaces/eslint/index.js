@@ -20,16 +20,27 @@ export default [
       reportUnusedDisableDirectives: 'error',
     },
   },
+  {
+    files: ['*.cjs'],
+    languageOptions: {
+      globals: {
+        ...globals.es2022,
+        ...globals.node,
+      },
+      sourceType: 'commonjs',
+    },
+  },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   { ignores: ['**/dist/**', '**/fixtures/**'] },
   {
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       'no-await-in-loop': 'off',
-      'sort-imports': ['error', { ignoreDeclarationSort: true }],
       'prefer-destructuring': 'error',
       'prefer-template': 'error',
+      'sort-imports': ['error', { ignoreDeclarationSort: true }],
     },
   },
   prettier,
