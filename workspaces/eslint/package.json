@@ -12,7 +12,7 @@
   "license": "MIT",
   "author": "The Yeoman Team",
   "type": "module",
-  "main": "",
+  "main": "index.js",
   "files": [],
   "scripts": {
     "build": "",
