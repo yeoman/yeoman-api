@@ -18,7 +18,7 @@ function pad(status: string) {
 }
 
 // Borrowed from https://github.com/mikeal/logref/blob/master/main.js#L6-15
-function formatter(message: string, ctx: Record<string, string | number>) {
+function formatter(message: string, context: Record<string, string | number>) {
   while (message.includes('%')) {
     const start = message.indexOf('%');
     let end = message.indexOf(' ', start);
@@ -27,7 +27,7 @@ function formatter(message: string, ctx: Record<string, string | number>) {
       end = message.length;
     }
 
-    message = `${message.slice(0, start)}${ctx[message.slice(start + 1, end)]}${message.slice(end)}`;
+    message = `${message.slice(0, start)}${context[message.slice(start + 1, end)]}${message.slice(end)}`;
   }
 
   return message;
@@ -91,11 +91,11 @@ export function createLogger<Loggers = any, LoggerCategories extends string | nu
   // @param {Object} params.colors status mappings
   //
   // Returns the logger
-  function log(message: string, ctx?: Record<string, string | number>) {
+  function log(message: string, context?: Record<string, string | number>) {
     message ??= '';
 
-    if (typeof ctx === 'object' && !Array.isArray(ctx)) {
-      customConsole.error(formatter(message, ctx));
+    if (typeof context === 'object' && !Array.isArray(context)) {
+      customConsole.error(formatter(message, context));
     } else {
       // eslint-disable-next-line prefer-rest-params
       customConsole.error(...arguments);
@@ -110,28 +110,28 @@ export function createLogger<Loggers = any, LoggerCategories extends string | nu
   // A simple write method, with formatted message.
   //
   // Returns the logger
-  log.write = function (...args: Parameters<typeof util.format>) {
-    stderr.write(util.format(...args));
+  log.write = function (...arguments_: Parameters<typeof util.format>) {
+    stderr.write(util.format(...arguments_));
     return this;
   };
 
   // Same as `log.write()` but automatically appends a `\n` at the end
   // of the message.
-  log.writeln = function (...args: Parameters<typeof util.format>) {
-    this.write(...args);
+  log.writeln = function (...arguments_: Parameters<typeof util.format>) {
+    this.write(...arguments_);
     this.write('\n');
     return this;
   };
 
   // Convenience helper to write sucess status, this simply prepends the
   // message with a gren `✔`.
-  log.ok = function (...args: Parameters<typeof util.format>) {
-    this.write(`${logSymbols.success} ${util.format(...args)}\n`);
+  log.ok = function (...arguments_: Parameters<typeof util.format>) {
+    this.write(`${logSymbols.success} ${util.format(...arguments_)}\n`);
     return this;
   };
 
-  log.error = function (...args: Parameters<typeof util.format>) {
-    this.write(`${logSymbols.error} ${util.format(...args)}\n`);
+  log.error = function (...arguments_: Parameters<typeof util.format>) {
+    this.write(`${logSymbols.error} ${util.format(...arguments_)}\n`);
     return this;
   };
 
@@ -169,9 +169,9 @@ export function createLogger<Loggers = any, LoggerCategories extends string | nu
     // Returns the logger
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
-    log[status] = function (...args: Parameters<typeof util.format>) {
+    log[status] = function (...arguments_: Parameters<typeof util.format>) {
       this.write(color(pad(status))).write(padding);
-      this.write(`${util.format(...args)}\n`);
+      this.write(`${util.format(...arguments_)}\n`);
       return this;
     };
   }

@@ -79,8 +79,8 @@ describe('Transform stream', () => {
           3,
           expect.objectContaining({ path: expect.stringMatching('.yo-*'), conflicter: 'force' }),
         );
-        for (let i = 4; i <= files.length; i++) {
-          expect(spyTransformPost).toHaveBeenNthCalledWith(i, expect.not.objectContaining({ conflicter: 'force' }));
+        for (let index = 4; index <= files.length; index++) {
+          expect(spyTransformPost).toHaveBeenNthCalledWith(index, expect.not.objectContaining({ conflicter: 'force' }));
         }
       });
     });
@@ -106,8 +106,8 @@ describe('Transform stream', () => {
           1,
           expect.objectContaining({ path: expect.stringMatching('.yo-rc.json'), conflicter: 'force' }),
         );
-        for (let i = 2; i <= files.length; i++) {
-          expect(spyTransformPost).toHaveBeenNthCalledWith(i, expect.not.objectContaining({ conflicter: 'force' }));
+        for (let index = 2; index <= files.length; index++) {
+          expect(spyTransformPost).toHaveBeenNthCalledWith(index, expect.not.objectContaining({ conflicter: 'force' }));
         }
       });
     });
@@ -144,8 +144,8 @@ describe('Transform stream', () => {
           3,
           expect.objectContaining({ path: expect.stringMatching('.yo-*'), contents: Buffer.from('foo') }),
         );
-        for (let i = 4; i <= files.length; i++) {
-          expect(spyTransformPost).toHaveBeenNthCalledWith(i, expect.not.objectContaining({ contents: Buffer.from('foo') }));
+        for (let index = 4; index <= files.length; index++) {
+          expect(spyTransformPost).toHaveBeenNthCalledWith(index, expect.not.objectContaining({ contents: Buffer.from('foo') }));
         }
       });
     });
@@ -166,8 +166,8 @@ describe('Transform stream', () => {
           1,
           expect.objectContaining({ path: expect.stringMatching('.yo-rc.json'), contents: Buffer.from('foo') }),
         );
-        for (let i = 2; i <= files.length; i++) {
-          expect(spyTransformPost).toHaveBeenNthCalledWith(i, expect.not.objectContaining({ contents: Buffer.from('foo') }));
+        for (let index = 2; index <= files.length; index++) {
+          expect(spyTransformPost).toHaveBeenNthCalledWith(index, expect.not.objectContaining({ contents: Buffer.from('foo') }));
         }
       });
     });

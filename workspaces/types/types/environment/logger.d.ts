@@ -23,7 +23,7 @@ export type Logger<LoggerCategories extends string | number | symbol = DefaultLo
   /**
    * Logs a message of the specified category.
    */
-  [P in LoggerCategories]: (...args: Parameters<typeof format>) => Logger<LoggerCategories>;
+  [P in LoggerCategories]: (...arguments_: Parameters<typeof format>) => Logger<LoggerCategories>;
 } & {
   /**
    * Writes a log-message.
@@ -45,22 +45,22 @@ export type Logger<LoggerCategories extends string | number | symbol = DefaultLo
   /**
    * Writes a log-message.
    */
-  write(...args: Parameters<typeof format>): Logger<LoggerCategories>;
+  write(...arguments_: Parameters<typeof format>): Logger<LoggerCategories>;
 
   /**
    * Writes a log-message with an appended newline character.
    */
-  writeln(...args: Parameters<typeof format>): Logger<LoggerCategories>;
+  writeln(...arguments_: Parameters<typeof format>): Logger<LoggerCategories>;
 
   /**
    * Writes a success status with a check mark `✔`.
    */
-  ok(...args: Parameters<typeof format>): Logger<LoggerCategories>;
+  ok(...arguments_: Parameters<typeof format>): Logger<LoggerCategories>;
 
   /**
    * Writes an error-message with a prepended cross mark.
    */
-  error(...args: Parameters<typeof format>): Logger<LoggerCategories>;
+  error(...arguments_: Parameters<typeof format>): Logger<LoggerCategories>;
 
   /**
    * @since `yeoman-environment` version 3.17.0

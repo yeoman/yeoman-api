@@ -48,6 +48,12 @@ export type ConflicterOptions = {
 
 type ConflicterTransformOptions = { yoResolveFileName?: string };
 
+const prepareChange = (changes: string, prefix: string) =>
+  changes
+    .split('\n')
+    .map((line, index, array) => (array.length - 1 === index ? line : `${prefix}${line}`))
+    .join('\n');
+
 /**
  * The Conflicter is a module that can be used to detect conflict between files. Each
  * Generator file system helpers pass files through this module to make sure they don't
@@ -110,13 +116,13 @@ export class Conflicter {
    * @param  {Object}   file File object respecting this interface: { path, contents }
    */
   private async _printDiff({ file, adapter }: { file: ConflictedFile; adapter?: InputOutputAdapter }) {
-    const destAdapter = adapter ?? this.adapter;
+    const destinationAdapter = adapter ?? this.adapter;
     if (file.binary === undefined) {
       file.binary = isBinary(file.path, file.contents ?? undefined);
     }
 
     if (file.binary) {
-      destAdapter.log.writeln(binaryDiff(file.path, file.contents ?? undefined));
+      destinationAdapter.log.writeln(binaryDiff(file.path, file.contents ?? undefined));
       return;
     }
 
@@ -124,13 +130,13 @@ export class Conflicter {
       if (colored.color) {
         const lines = colored.message.split('\n');
         const returnValue: ColoredMessage[] = [];
-        for (const [idx, message] of lines.entries()) {
+        for (const [index, message] of lines.entries()) {
           // Empty message can be ignored
           if (message) {
             returnValue.push({ message, color: colored.color });
           }
 
-          if (idx + 1 < lines.length) {
+          if (index + 1 < lines.length) {
             returnValue.push({ message: '\n' });
           }
         }
@@ -140,12 +146,6 @@ export class Conflicter {
 
       return [colored];
     };
-
-    const prepareChange = (changes: string, prefix: string) =>
-      changes
-        .split('\n')
-        .map((line, index, array) => (array.length - 1 === index ? line : `${prefix}${line}`))
-        .join('\n');
 
     const messages: ColoredMessage[][] = file.conflicterChanges
       ?.map((change: Change): ColoredMessage => {
@@ -162,7 +162,7 @@ export class Conflicter {
       .map((colored: ColoredMessage): ColoredMessage[] => colorLines(colored));
 
     if (file.fileModeChanges) {
-      destAdapter.log.colored([
+      destinationAdapter.log.colored([
         { message: `\nold mode ${file.fileModeChanges[0]}`, color: 'removed' },
         { message: `\nnew mode ${file.fileModeChanges[1]}`, color: 'added' },
         { message: '\n' },
@@ -170,7 +170,7 @@ export class Conflicter {
     }
 
     if (messages) {
-      destAdapter.log.colored([
+      destinationAdapter.log.colored([
         { message: '\n' },
         { message: 'removed', color: 'removed' },
         { message: '' },
@@ -501,7 +501,7 @@ export class Conflicter {
 
         if (file.path === yoResolveFilePath) {
           yoResolveFile = file;
-          return undefined;
+          return;
         }
 
         return conflicterFile;

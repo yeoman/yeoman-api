@@ -72,9 +72,9 @@ export type BaseEnvironment<A = InputOutputAdapter, S extends Store<MemFsEditorF
    */
   logCwd: string;
 
-  emit(eventName: string | symbol, ...args: any[]): boolean;
-  on(eventName: string | symbol, listener: (...args: any[]) => void): unknown;
-  once(eventName: string | symbol, listener: (...args: any[]) => void): unknown;
+  emit(eventName: string | symbol, ...arguments_: any[]): boolean;
+  on(eventName: string | symbol, listener: (...arguments_: any[]) => void): unknown;
+  once(eventName: string | symbol, listener: (...arguments_: any[]) => void): unknown;
 
   applyTransforms(transformStreams: Transform[], options?: ApplyTransformsOptions): Promise<void>;
 
@@ -178,7 +178,11 @@ export type BaseEnvironment<A = InputOutputAdapter, S extends Store<MemFsEditorF
    * @param task
    * @param options
    */
-  queueTask(priority: string, task: (...args: any[]) => void | Promise<void>, options?: { once?: string; startQueue?: boolean }): void;
+  queueTask(
+    priority: string,
+    task: (...arguments_: any[]) => void | Promise<void>,
+    options?: { once?: string; startQueue?: boolean },
+  ): void;
 
   /**
    * Add priority

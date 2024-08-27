@@ -9,7 +9,7 @@ import {
 import { pipeline } from 'node:stream/promises';
 import { Minimatch, type MinimatchOptions } from 'minimatch';
 
-export { pipeline };
+export { pipeline } from 'node:stream/promises';
 
 export type File = { path: string; contents: any };
 
@@ -25,17 +25,17 @@ export const filePipeline = async <F extends File = File>(
   source: PipelineSource<F>,
   transforms: Array<FilePipelineTransform<F>>,
   options?: PipelineOptions,
-) => (pipeline as (...args: any[]) => Promise<void>)(source, ...transforms, ...(options ? [options] : []));
+) => (pipeline as (...arguments_: any[]) => Promise<void>)(source, ...transforms, ...(options ? [options] : []));
 
 /**
  * The returned file from transform function is passed through if any.
  */
-export function transform<F extends File = File>(fn: TransformFile<F>) {
+export function transform<F extends File = File>(function_: TransformFile<F>) {
   return new Transform({
     objectMode: true,
     async transform(chunk: any, _encoding: BufferEncoding, callback: TransformCallback) {
       try {
-        callback(undefined, await fn.call(this, chunk));
+        callback(undefined, await function_.call(this, chunk));
       } catch (error: unknown) {
         callback(error as Error);
       }
@@ -53,8 +53,8 @@ export type PassthroughOptions<F extends File = File> = { filter?: FilterFile<F>
 /**
  * Files will always be passed through.
  */
-export function passthrough<F extends File = File>(fn?: PassthroughFile<F>, options: PassthroughOptions<F> = {}) {
-  if (!fn) {
+export function passthrough<F extends File = File>(function_?: PassthroughFile<F>, options: PassthroughOptions<F> = {}) {
+  if (!function_) {
     return transform(f => f);
   }
 
@@ -72,7 +72,7 @@ export function passthrough<F extends File = File>(fn?: PassthroughFile<F>, opti
     }
 
     if (await patternFilter(file)) {
-      await fn(file);
+      await function_(file);
     }
 
     return file;
@@ -98,10 +98,10 @@ export function transformFileField<K extends keyof F, F extends File = File>(
 }
 
 export function transformContents<F extends File = File>(
-  fn: (contents: F['contents']) => F['contents'] | Promise<F['contents']>,
+  function_: (contents: F['contents']) => F['contents'] | Promise<F['contents']>,
   options?: PassthroughOptions<F>,
 ) {
-  return transformFileField<F['contents'], F>('contents', fn, options);
+  return transformFileField<F['contents'], F>('contents', function_, options);
 }
 
 /**

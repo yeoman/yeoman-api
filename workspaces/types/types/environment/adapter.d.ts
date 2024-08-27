@@ -42,10 +42,12 @@ type Task<TaskResultType> =
   | ((adapter: InputOutputAdapter) => PromiseLike<TaskResultType>)
   | ((adapter: InputOutputAdapter) => TaskResultType);
 
-export type ProgressCallback<ReturnType> = (progress: { step: (prefix: string, message: string, ...args: any[]) => void }) => ReturnType;
+export type ProgressCallback<ReturnType> = (progress: {
+  step: (prefix: string, message: string, ...arguments_: any[]) => void;
+}) => ReturnType;
 export type ProgressOptions = { disabled?: boolean; name?: string };
 
 export type QueuedAdapter = InputOutputAdapter & {
-  queue<TaskResultType>(fn: Task<TaskResultType>): Promise<void | TaskResultType>;
-  progress<ResultType>(fn: ProgressCallback<ResultType>, options?: ProgressOptions): Promise<void | ResultType>;
+  queue<TaskResultType>(function_: Task<TaskResultType>): Promise<void | TaskResultType>;
+  progress<ResultType>(function_: ProgressCallback<ResultType>, options?: ProgressOptions): Promise<void | ResultType>;
 };

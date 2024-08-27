@@ -71,7 +71,7 @@ export type GeneratorMeta = BaseGeneratorMeta & {
   /** Import the module `import(meta.resolved)` */
   importModule?: () => Promise<unknown>;
   /** Intantiate the Generator `env.instantiate(await meta.importGenerator())` */
-  instantiate: (args?: string[], options?: any) => Promise<BaseGenerator>;
+  instantiate: (arguments_?: string[], options?: any) => Promise<BaseGenerator>;
   /** Intantiate the Generator passing help option */
   instantiateHelp: () => Promise<BaseGenerator>;
 };

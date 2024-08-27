@@ -6,9 +6,9 @@ export type EnvironmentGenerator = {
   readonly env: BaseEnvironment;
   readonly features: unknown;
 
-  emit(eventName: string | symbol, ...args: any[]): boolean;
-  on(eventName: string | symbol, listener: (...args: any[]) => void): unknown;
-  once(eventName: string | symbol, listener: (...args: any[]) => void): unknown;
+  emit(eventName: string | symbol, ...arguments_: any[]): boolean;
+  on(eventName: string | symbol, listener: (...arguments_: any[]) => void): unknown;
+  once(eventName: string | symbol, listener: (...arguments_: any[]) => void): unknown;
 
   _postConstruct?(): Promise<void>;
 
@@ -38,4 +38,5 @@ export type BaseGenerator<
 export type BaseGeneratorConstructor<
   O extends GeneratorOptions = GeneratorOptions,
   F extends GeneratorFeatures = GeneratorFeatures,
-> = (new (args?: string[], options?: O, features?: F) => BaseGenerator<O, F>) & (new (options?: O, features?: F) => BaseGenerator<O, F>);
+> = (new (arguments_?: string[], options?: O, features?: F) => BaseGenerator<O, F>) &
+  (new (options?: O, features?: F) => BaseGenerator<O, F>);

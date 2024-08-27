@@ -53,17 +53,17 @@ export class QueuedAdapter implements QueuedAdapterApi {
     this.actualAdapter = adapter ?? new TerminalAdapter(adapterOptions);
 
     // Deffered logger
-    const defferredLogger = (...args: any[]) => {
+    const defferredLogger = (...arguments_: any[]) => {
       this.queueLog(() => {
-        this.actualAdapter.log(...args);
+        this.actualAdapter.log(...arguments_);
       });
       return defferredLogger;
     };
 
     Object.assign(defferredLogger, this.actualAdapter.log);
-    defferredLogger.write = (...args: any[]) => {
+    defferredLogger.write = (...arguments_: any[]) => {
       this.queueLog(() => {
-        this.actualAdapter.log.write(...args);
+        this.actualAdapter.log.write(...arguments_);
       }).catch(console.error);
       return defferredLogger;
     };
@@ -115,8 +115,8 @@ export class QueuedAdapter implements QueuedAdapterApi {
    * @param fn
    * @returns
    */
-  async queue<TaskResultType>(fn: Task<TaskResultType>): Promise<TaskResultType | void> {
-    return this.#queue.add(() => fn(this.actualAdapter), { priority: BLOCKING_PRIORITY + this.delta });
+  async queue<TaskResultType>(function_: Task<TaskResultType>): Promise<TaskResultType | void> {
+    return this.#queue.add(() => function_(this.actualAdapter), { priority: BLOCKING_PRIORITY + this.delta });
   }
 
   /**
@@ -124,8 +124,8 @@ export class QueuedAdapter implements QueuedAdapterApi {
    * @param fn
    * @returns
    */
-  async queueLog<TaskResultType>(fn: Task<TaskResultType>): Promise<TaskResultType | void> {
-    return this.#queue.add(() => fn(this.actualAdapter), { priority: LOG_PRIORITY + this.delta });
+  async queueLog<TaskResultType>(function_: Task<TaskResultType>): Promise<TaskResultType | void> {
+    return this.#queue.add(() => function_(this.actualAdapter), { priority: LOG_PRIORITY + this.delta });
   }
 
   /**
@@ -134,10 +134,10 @@ export class QueuedAdapter implements QueuedAdapterApi {
    * @param options
    * @returns
    */
-  async progress<ReturnType>(fn: ProgressCallback<ReturnType>, options?: ProgressOptions): Promise<void | ReturnType> {
+  async progress<ReturnType>(function_: ProgressCallback<ReturnType>, options?: ProgressOptions): Promise<void | ReturnType> {
     if (this.#queue.size > 0 || this.#queue.pending > 0 || options?.disabled || this.#ora.isSpinning) {
       // Don't show progress if queue is not empty or already spinning.
-      return Promise.resolve(fn({ step() {} })).finally(() => {
+      return Promise.resolve(function_({ step() {} })).finally(() => {
         if (options?.name) {
           this.log.ok(options.name);
         }
@@ -150,13 +150,13 @@ export class QueuedAdapter implements QueuedAdapterApi {
       this.#ora.stop();
     }
 
-    const step = (prefix: string, message: string, ...args: any[]) => {
+    const step = (prefix: string, message: string, ...arguments_: any[]) => {
       if (this.#ora.isSpinning) {
-        this.#ora.suffixText = `: ${prefix} ${format(message, ...args)}`;
+        this.#ora.suffixText = `: ${prefix} ${format(message, ...arguments_)}`;
       }
     };
 
-    return this.queue(() => fn({ step })).finally(() => {
+    return this.queue(() => function_({ step })).finally(() => {
       if (this.#ora.isSpinning) {
         this.#ora.suffixText = '';
         this.#ora.succeed(options?.name);

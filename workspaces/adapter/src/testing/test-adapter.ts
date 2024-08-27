@@ -144,16 +144,16 @@ export class TestAdapter<LogType extends Logger = Logger, SpyType = any> impleme
     }
   }
 
-  async queue<TaskResultType>(fn: Task<TaskResultType>): Promise<void | TaskResultType> {
-    return fn(this);
+  async queue<TaskResultType>(function_: Task<TaskResultType>): Promise<void | TaskResultType> {
+    return function_(this);
   }
 
   async progress<ReturnType>(
-    fn: (progress: { step: (prefix: string, message: string, ...args: any[]) => void }) => ReturnType,
+    function_: (progress: { step: (prefix: string, message: string, ...arguments_: any[]) => void }) => ReturnType,
 
     _options?: { disabled?: boolean | undefined; name?: string | undefined } | undefined,
   ): Promise<void | ReturnType> {
-    return fn({ step() {} });
+    return function_({ step() {} });
   }
 
   close(): void {

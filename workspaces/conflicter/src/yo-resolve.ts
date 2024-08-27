@@ -86,5 +86,5 @@ export class YoResolve {
   }
 }
 
-export const createYoResolveTransform = (...args: ConstructorParameters<typeof YoResolve>): FileTransform<MemFsEditorFile> =>
-  new YoResolve(...args).createTransform();
+export const createYoResolveTransform = (...arguments_: ConstructorParameters<typeof YoResolve>): FileTransform<MemFsEditorFile> =>
+  new YoResolve(...arguments_).createTransform();
