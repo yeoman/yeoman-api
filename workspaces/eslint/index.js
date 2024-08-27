@@ -1,9 +1,27 @@
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import prettier from 'eslint-config-prettier';
+import imports from 'eslint-plugin-import-x';
 import unusedImports from 'eslint-plugin-unused-imports';
 import unicorn from 'eslint-plugin-unicorn';
 import globals from 'globals';
+
+const importConfig = {
+  extends: [imports.flatConfigs.recommended, imports.flatConfigs.typescript],
+  languageOptions: {
+    // import plugin does not use ecmaVersion and sourceType from languageOptions object
+    parserOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'module',
+    },
+  },
+  settings: {
+    'import-x/resolver': {
+      node: true,
+      typescript: true,
+    },
+  },
+};
 
 const unusedImportsRule = {
   plugins: {
@@ -66,6 +84,8 @@ export default [
     },
   },
   eslint.configs.recommended,
+  importConfig,
+  // eslint-disable-next-line import-x/no-named-as-default-member
   ...tseslint.configs.recommended,
   { ignores: ['**/dist/**', '**/fixtures/**', '**/coverage/**'] },
   ...unicornRules,
