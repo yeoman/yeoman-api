@@ -6,8 +6,7 @@ declare let Constructor1: BaseGeneratorConstructor;
 declare let Constructor2: GetGeneratorConstructor;
 declare let generator1: BaseGenerator;
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const testTypes = () => {
+const _testTypes = () => {
   // @ts-expect-error
   constructor1 = generator1;
 
