@@ -10,7 +10,7 @@ import type {
   PromptAnswers,
   PromptQuestions,
   QueuedAdapter as QueuedAdapterApi,
-} from '@yeoman/types';
+} from '../types/index.js';
 import { TerminalAdapter, type TerminalAdapterOptions } from './adapter.js';
 
 export type AdapterWithProgress = QueuedAdapterApi;

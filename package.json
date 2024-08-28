@@ -6,9 +6,9 @@
   "workspaces": [
     "./workspaces/eslint",
     "./workspaces/namespace",
+    "./workspaces/adapter",
     "./workspaces/types",
     "./workspaces/transform",
-    "./workspaces/adapter",
     "./workspaces/conflicter"
   ],
   "scripts": {

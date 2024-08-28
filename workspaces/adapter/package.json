@@ -20,12 +20,16 @@
     "./testing": {
       "types": "./dist/testing/index.d.ts",
       "import": "./dist/testing/index.js"
+    },
+    "./types": {
+      "types": "./types/index.d.ts"
     }
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "types"
   ],
   "scripts": {
     "prebuild": "npm run clean",
@@ -48,9 +52,6 @@
     "@types/text-table": "^0.2.2",
     "strip-ansi": "^7.0.1",
     "yeoman-assert": "^3.1.1"
-  },
-  "peerDependencies": {
-    "@yeoman/types": "^1.1.0"
   },
   "engines": {
     "node": ">=18.12.0"

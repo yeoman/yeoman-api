@@ -5,7 +5,7 @@ import process from 'node:process';
 import table from 'text-table';
 import chalk, { type ChalkInstance, type ForegroundColorName, type ModifierName } from 'chalk';
 import logSymbols from 'log-symbols';
-import type { ColoredMessage, DefaultLoggerCategories, Logger as LoggerApi } from '@yeoman/types';
+import type { ColoredMessage, DefaultLoggerCategories, Logger as LoggerApi } from '../types/index.js';
 
 // Padding step
 const step = '  ';

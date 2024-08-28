@@ -1,6 +1,6 @@
 import events from 'node:events';
 import { PassThrough } from 'node:stream';
-import type { Logger, PromptAnswers, PromptQuestion, PromptQuestions, QueuedAdapter, Task } from '@yeoman/types';
+import type { Logger, PromptAnswers, PromptQuestion, PromptQuestions, QueuedAdapter, Task } from '../../types/index.js';
 import { type PromptModule, createPromptModule } from 'inquirer';
 
 import { createLogger } from '../log.js';
@@ -137,7 +137,7 @@ export class TestAdapter<LogType extends Logger = Logger, SpyType = any> impleme
     const descriptors = Object.getOwnPropertyDescriptors(log);
     // Make sure all log methods are defined
     const logMethods = Object.entries(descriptors)
-      .filter(([method, desc]) => typeof desc.value === 'function' && !Object.getOwnPropertyDescriptor(this.log, method))
+      .filter(([method, desc]) => typeof (desc as any).value === 'function' && !Object.getOwnPropertyDescriptor(this.log, method))
       .map(([method]) => method);
     for (const methodName of logMethods) {
       (this.log as any)[methodName] = this.spyFactory({ returns: this.log });

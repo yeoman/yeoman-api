@@ -5,7 +5,7 @@ import type { MemFsEditorFile } from 'mem-fs-editor';
 import type { BaseGeneratorOptions } from '../generator/generator-options.js';
 import type { BaseGenerator, BaseGeneratorConstructor } from '../generator/generator.js';
 import type { GetGeneratorConstructor } from '../generator/utils.js';
-import type { InputOutputAdapter } from './adapter.js';
+import type { InputOutputAdapter } from '@yeoman/adapter/types';
 import type {
   BaseGeneratorMeta,
   ComposeOptions,
