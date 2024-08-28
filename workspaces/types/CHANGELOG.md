@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.4.0 (2024-08-28)
+
+- feat: move adapter base types to @yeoman/adapter ([b05a357](https://github.com/yeoman/yeoman-api/commit/b05a357))
+
 ## 1.3.0 (2024-08-26)
 
 - feat(types): add inquirer to peerDependencies ([443cb05](https://github.com/yeoman/yeoman-api/commit/443cb05))

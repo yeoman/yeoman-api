@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.6.0 (2024-08-28)
+
+- feat: move adapter base types to @yeoman/adapter ([b05a357](https://github.com/yeoman/yeoman-api/commit/b05a357))
+- feat(eslint): add unicorn plugin ([a9d851b](https://github.com/yeoman/yeoman-api/commit/a9d851b))
+- fix(adapter): adjust engines according to inquirer dependency. ([d77b655](https://github.com/yeoman/yeoman-api/commit/d77b655))
+- chore: bump versions ([e0b4188](https://github.com/yeoman/yeoman-api/commit/e0b4188))
+- chore(deps): bump log-symbols from 5.1.0 to 7.0.0 (#16) ([d1b7d2d](https://github.com/yeoman/yeoman-api/commit/d1b7d2d)), closes [#16](https://github.com/yeoman/yeoman-api/issues/16)
+- chore(deps): bump ora from 6.3.1 to 8.1.0 (#14) ([bdeeb6c](https://github.com/yeoman/yeoman-api/commit/bdeeb6c)), closes [#14](https://github.com/yeoman/yeoman-api/issues/14)
+- chore(deps): bump p-queue from 7.3.4 to 8.0.1 (#20) ([7ed260c](https://github.com/yeoman/yeoman-api/commit/7ed260c)), closes [#20](https://github.com/yeoman/yeoman-api/issues/20)
+- drop xo ([a92f48f](https://github.com/yeoman/yeoman-api/commit/a92f48f))
+
 ## [1.4.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/adapter@1.2.0...@yeoman/adapter@1.4.0) (2023-10-11)
 
 ### Features
