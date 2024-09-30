@@ -48,6 +48,6 @@ export type ProgressCallback<ReturnType> = (progress: {
 export type ProgressOptions = { disabled?: boolean; name?: string };
 
 export type QueuedAdapter = InputOutputAdapter & {
-  queue<TaskResultType>(function_: Task<TaskResultType>): Promise<void | TaskResultType>;
-  progress<ResultType>(function_: ProgressCallback<ResultType>, options?: ProgressOptions): Promise<void | ResultType>;
+  queue<TaskResultType>(function_: Task<TaskResultType>): Promise<TaskResultType>;
+  progress<ResultType>(function_: ProgressCallback<ResultType>, options?: ProgressOptions): Promise<ResultType>;
 };

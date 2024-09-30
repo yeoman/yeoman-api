@@ -146,7 +146,7 @@ export class TestAdapter<LogType extends Logger = Logger, SpyType = any> impleme
     }
   }
 
-  async queue<TaskResultType>(function_: Task<TaskResultType>): Promise<void | TaskResultType> {
+  async queue<TaskResultType>(function_: Task<TaskResultType>): Promise<TaskResultType> {
     return function_(this);
   }
 
@@ -154,7 +154,7 @@ export class TestAdapter<LogType extends Logger = Logger, SpyType = any> impleme
     function_: (progress: { step: (prefix: string, message: string, ...arguments_: any[]) => void }) => ReturnType,
 
     _options?: { disabled?: boolean | undefined; name?: string | undefined } | undefined,
-  ): Promise<void | ReturnType> {
+  ): Promise<ReturnType> {
     return function_({ step() {} });
   }
 
