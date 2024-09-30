@@ -358,64 +358,62 @@ export class Conflicter {
     counter: number;
     adapter: InputOutputAdapter;
   }): Promise<ConflicterStatus> {
-    const prompt = {
-      name: 'action',
-      type: 'expand',
-      message: `Overwrite ${file.relativePath}?`,
-      pageSize: 20,
-      choices: [
-        {
-          key: 'y',
-          name: 'overwrite',
-          value: 'write',
-        },
-        {
-          key: 'n',
-          name: 'do not overwrite',
-          value: 'skip',
-        },
-        {
-          key: 'a',
-          name: 'overwrite this and all others',
-          value: 'force',
-        },
-        {
-          key: 'r',
-          name: 'reload file (experimental)',
-          value: 'reload',
-        },
-        {
-          key: 'x',
-          name: 'abort',
-          value: 'abort',
-        },
-      ],
-    };
+    const prompt = ;
 
     // Only offer diff option for files
     const fileStat = await fsStat(file.path);
-    if (fileStat.isFile()) {
-      prompt.choices.push(
-        {
-          key: 'd',
-          name: 'show the differences between the old and the new',
-          value: 'diff',
-        },
-        {
-          key: 'e',
-          name: 'edit file (experimental)',
-          value: 'edit',
-        },
-        {
-          key: 'i',
-          name: 'ignore, do not overwrite and remember (experimental)',
-          value: 'ignore',
-        },
-      );
-    }
 
     const result = await adapter.prompt<{ action: ConflicterAction | (({ file }: { file: ConflicterFile }) => ConflicterStatus) }>([
-      prompt,
+      {
+        name: 'action',
+        type: 'expand',
+        message: `Overwrite ${file.relativePath}?`,
+        pageSize: 20,
+        choices: [
+          {
+            key: 'y',
+            name: 'overwrite',
+            value: 'write',
+          },
+          {
+            key: 'n',
+            name: 'do not overwrite',
+            value: 'skip',
+          },
+          {
+            key: 'a',
+            name: 'overwrite this and all others',
+            value: 'force',
+          },
+          {
+            key: 'r',
+            name: 'reload file (experimental)',
+            value: 'reload',
+          },
+          {
+            key: 'x',
+            name: 'abort',
+            value: 'abort',
+          },
+          ...fileStat.isFile() ? [] : [
+            {
+              key: 'd',
+              name: 'show the differences between the old and the new',
+              value: 'diff',
+            },
+            {
+              key: 'e',
+              name: 'edit file (experimental)',
+              value: 'edit',
+            },
+            {
+              key: 'i',
+              name: 'ignore, do not overwrite and remember (experimental)',
+              value: 'ignore',
+            },
+          ],
+        ],
+      },
     ]);
     if (typeof result.action === 'function') {
       return result.action.call(this, { file, relativeFilePath: file.relativePath, adapter });
