@@ -5,8 +5,10 @@ import chalk from 'chalk';
 import type { InputOutputAdapter, Logger, PromptAnswers, PromptQuestions } from '../types/index.js';
 import { createLogger } from './log.js';
 
+const PromptModule = ReturnType<typeof createPromptModule>;
+
 export type TerminalAdapterOptions = {
-  promptModule?: ReturnType<typeof createPromptModule>;
+  promptModule?: PromptModule;
   stdin?: NodeJS.ReadStream;
   stdout?: NodeJS.WriteStream;
   stderr?: NodeJS.WriteStream;
