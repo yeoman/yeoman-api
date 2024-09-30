@@ -85,10 +85,6 @@ export class TerminalAdapter implements InputOutputAdapter {
    * @return promise answers
    */
   async prompt<A extends PromptAnswers = PromptAnswers>(questions: PromptQuestions<A>, initialAnswers?: Partial<A>): Promise<A> {
-    const promptPromise = this.promptModule(questions, initialAnswers);
-    this.promptUi = promptPromise.ui as any;
-    const result = await promptPromise;
-    delete this.promptUi;
-    return result;
+    return this.promptModule(questions, initialAnswers);
   }
 }
