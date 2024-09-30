@@ -24,9 +24,6 @@
     "clean-all": "rimraf node_modules",
     "test": ""
   },
-  "dependencies": {
-    "@yeoman/adapter": "^1.6.0"
-  },
   "devDependencies": {
     "@types/node": "16.18.26",
     "@yeoman/adapter": "^1.6.0",
