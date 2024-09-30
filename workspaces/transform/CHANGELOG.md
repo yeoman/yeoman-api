@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.1.0 (2024-09-30)
+
+- fix: move @types/node to peerDependencies (#45) ([52fcde7](https://github.com/yeoman/yeoman-api/commit/52fcde7)), closes [#45](https://github.com/yeoman/yeoman-api/issues/45)
+- feat(eslint): add unicorn plugin ([a9d851b](https://github.com/yeoman/yeoman-api/commit/a9d851b))
+- chore: bump esmocha to v1.0.1 ([eef3159](https://github.com/yeoman/yeoman-api/commit/eef3159))
+- chore: bump versions ([e0b4188](https://github.com/yeoman/yeoman-api/commit/e0b4188))
+- chore: drop sinon ([256b703](https://github.com/yeoman/yeoman-api/commit/256b703))
+- chore: eslint adjusts (#33) ([c1740ae](https://github.com/yeoman/yeoman-api/commit/c1740ae)), closes [#33](https://github.com/yeoman/yeoman-api/issues/33)
+- chore(transform): switch tests to vitest ([5539b2d](https://github.com/yeoman/yeoman-api/commit/5539b2d))
+- chore(transform)!: drop readable-stream (#34) ([a053ff6](https://github.com/yeoman/yeoman-api/commit/a053ff6)), closes [#34](https://github.com/yeoman/yeoman-api/issues/34)
+- drop xo ([a92f48f](https://github.com/yeoman/yeoman-api/commit/a92f48f))
+- update eslint to v9 ([ad86730](https://github.com/yeoman/yeoman-api/commit/ad86730))
+
 ## [1.2.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/transform@1.1.0...@yeoman/transform@1.2.0) (2023-05-29)
 
 ### Features

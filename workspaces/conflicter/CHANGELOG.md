@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.2.0 (2024-09-30)
+
+- chore: bump versions ([e0b4188](https://github.com/yeoman/yeoman-api/commit/e0b4188))
+- chore: eslint adjusts (#33) ([c1740ae](https://github.com/yeoman/yeoman-api/commit/c1740ae)), closes [#33](https://github.com/yeoman/yeoman-api/issues/33)
+- chore(deps): bump diff from 5.1.0 to 7.0.0 (#36) ([c373e26](https://github.com/yeoman/yeoman-api/commit/c373e26)), closes [#36](https://github.com/yeoman/yeoman-api/issues/36)
+- chore(deps): bump textextensions from 5.16.0 to 6.11.0 (#13) ([0f5bc3e](https://github.com/yeoman/yeoman-api/commit/0f5bc3e)), closes [#13](https://github.com/yeoman/yeoman-api/issues/13)
+- fix: move @types/node to peerDependencies (#45) ([52fcde7](https://github.com/yeoman/yeoman-api/commit/52fcde7)), closes [#45](https://github.com/yeoman/yeoman-api/issues/45)
+- fix(conflicter): add message to error (#43) ([51e4a2f](https://github.com/yeoman/yeoman-api/commit/51e4a2f)), closes [#43](https://github.com/yeoman/yeoman-api/issues/43)
+- fix(conflicter): ghost dependency on slash package (#8) ([8c7ba32](https://github.com/yeoman/yeoman-api/commit/8c7ba32)), closes [#8](https://github.com/yeoman/yeoman-api/issues/8)
+- drop xo ([a92f48f](https://github.com/yeoman/yeoman-api/commit/a92f48f))
+- feat(adapter)!: bump inquirer to v11.1.0 (#40) ([a417795](https://github.com/yeoman/yeoman-api/commit/a417795)), closes [#40](https://github.com/yeoman/yeoman-api/issues/40)
+- update eslint to v9 ([ad86730](https://github.com/yeoman/yeoman-api/commit/ad86730))
+- update prettier to v3 (#31) ([ac80763](https://github.com/yeoman/yeoman-api/commit/ac80763)), closes [#31](https://github.com/yeoman/yeoman-api/issues/31)
+- feat(eslint): add unicorn plugin ([a9d851b](https://github.com/yeoman/yeoman-api/commit/a9d851b))
+
 ## [2.0.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@2.0.0-alpha.2...@yeoman/conflicter@2.0.0) (2023-10-27)
 
 ### Features

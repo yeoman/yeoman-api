@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.5.0 (2024-09-30)
+
+- feat: move adapter base types to @yeoman/adapter ([19b9379](https://github.com/yeoman/yeoman-api/commit/19b9379))
+- feat(eslint): add eslint-plugin-unused-imports ([db67e7f](https://github.com/yeoman/yeoman-api/commit/db67e7f))
+- feat(eslint): add unicorn plugin ([a9d851b](https://github.com/yeoman/yeoman-api/commit/a9d851b))
+- feat(types): allow @yeoman/adapter v2 (#46) ([bd8a67b](https://github.com/yeoman/yeoman-api/commit/bd8a67b)), closes [#46](https://github.com/yeoman/yeoman-api/issues/46)
+- fix: move @types/node to peerDependencies (#45) ([52fcde7](https://github.com/yeoman/yeoman-api/commit/52fcde7)), closes [#45](https://github.com/yeoman/yeoman-api/issues/45)
+- chore: bump versions ([7c9c243](https://github.com/yeoman/yeoman-api/commit/7c9c243))
+- chore: prettify changelog ([0643b1d](https://github.com/yeoman/yeoman-api/commit/0643b1d))
+- chore(types): fix tsconfig types (#42) ([1455ded](https://github.com/yeoman/yeoman-api/commit/1455ded)), closes [#42](https://github.com/yeoman/yeoman-api/issues/42)
+
 ## 1.4.0 (2024-08-28)
 
 - feat: move adapter base types to @yeoman/adapter ([b05a357](https://github.com/yeoman/yeoman-api/commit/b05a357))
