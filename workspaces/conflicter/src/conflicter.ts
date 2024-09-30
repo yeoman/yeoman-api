@@ -358,8 +358,6 @@ export class Conflicter {
     counter: number;
     adapter: InputOutputAdapter;
   }): Promise<ConflicterStatus> {
-    const prompt = ;
-
     // Only offer diff option for files
     const fileStat = await fsStat(file.path);
 
