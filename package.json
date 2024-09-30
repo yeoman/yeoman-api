@@ -30,7 +30,6 @@
     "@lerna-lite/cli": "^3.8.0",
     "@lerna-lite/publish": "^3.8.0",
     "@lerna-lite/version": "^3.8.0",
-    "@types/eslint__js": "^8.42.3",
     "@types/node": "^18.11.9",
     "@vitest/coverage-v8": "^2.0.5",
     "conventional-changelog-conventionalcommits": "^8.0.0",
