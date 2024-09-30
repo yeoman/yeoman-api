@@ -1,9 +1,10 @@
 import process from 'node:process';
-import type inquirer from 'inquirer';
-import { type PromptModule, createPromptModule } from 'inquirer';
+import { createPromptModule } from 'inquirer';
 import chalk from 'chalk';
 import type { InputOutputAdapter, Logger, PromptAnswers, PromptQuestions } from '../types/index.js';
 import { createLogger } from './log.js';
+
+type PromptModule = ReturnType<typeof createPromptModule>;
 
 export type TerminalAdapterOptions = {
   promptModule?: PromptModule;
@@ -21,7 +22,7 @@ export class TerminalAdapter implements InputOutputAdapter {
   console: Console;
   log: Logger;
   promptModule: PromptModule;
-  promptUi?: inquirer.ui.Prompt;
+  private abortController = new AbortController();
 
   /**
    * `TerminalAdapter` is the default implementation of `Adapter`, an abstraction
@@ -45,6 +46,7 @@ export class TerminalAdapter implements InputOutputAdapter {
         skipTTYChecks: true,
         input: this.stdin,
         output: this.stdout,
+        signal: this.abortController.signal,
       });
     this.log = options?.log ?? createLogger(this);
   }
@@ -65,9 +67,7 @@ export class TerminalAdapter implements InputOutputAdapter {
   }
 
   close() {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    this.promptUi?.close();
+    this.abortController.abort();
   }
 
   /**
@@ -84,10 +84,6 @@ export class TerminalAdapter implements InputOutputAdapter {
    * @return promise answers
    */
   async prompt<A extends PromptAnswers = PromptAnswers>(questions: PromptQuestions<A>, initialAnswers?: Partial<A>): Promise<A> {
-    const promptPromise = this.promptModule(questions, initialAnswers);
-    this.promptUi = promptPromise.ui as any;
-    const result = await promptPromise;
-    delete this.promptUi;
-    return result;
+    return this.promptModule(questions, initialAnswers);
   }
 }
