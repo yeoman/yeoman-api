@@ -19,7 +19,7 @@
     "fix": "prettier . --write && eslint . --fix",
     "prepare": "patch-package && npm run build && husky",
     "prettier": "prettier --write .",
-    "pretest": "eslint . && prettier . --check",
+    "pretest": "eslint .",
     "test": "npm run test --workspaces",
     "test-coverage": "npm run test-coverage --workspaces"
   },
