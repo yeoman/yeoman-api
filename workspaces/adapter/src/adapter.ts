@@ -1,12 +1,12 @@
 import process from 'node:process';
 import type inquirer from 'inquirer';
-import { type PromptModule, createPromptModule } from 'inquirer';
+import { createPromptModule } from 'inquirer';
 import chalk from 'chalk';
 import type { InputOutputAdapter, Logger, PromptAnswers, PromptQuestions } from '../types/index.js';
 import { createLogger } from './log.js';
 
 export type TerminalAdapterOptions = {
-  promptModule?: PromptModule;
+  promptModule?: ReturnType<typeof createPromptModule>;
   stdin?: NodeJS.ReadStream;
   stdout?: NodeJS.WriteStream;
   stderr?: NodeJS.WriteStream;
