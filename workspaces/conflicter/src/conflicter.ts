@@ -366,7 +366,6 @@ export class Conflicter {
         name: 'action',
         type: 'expand',
         message: `Overwrite ${file.relativePath}?`,
-        pageSize: 20,
         choices: [
           {
             key: 'y',
