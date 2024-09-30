@@ -426,7 +426,7 @@ export class Conflicter {
 
       counter++;
       if (counter === 5) {
-        throw new Error(`Recursive error ${prompt.message}`);
+        throw new Error('Recursive error');
       }
 
       return this._ask({ file, counter, adapter });
