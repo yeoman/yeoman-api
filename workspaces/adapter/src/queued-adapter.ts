@@ -103,7 +103,8 @@ export class QueuedAdapter implements QueuedAdapterApi {
   async prompt<A extends PromptAnswers = PromptAnswers>(questions: PromptQuestions<A>, initialAnswers?: Partial<A>): Promise<A> {
     return this.#queue.add(async () => this.actualAdapter.prompt(questions, initialAnswers), {
       priority: PROMPT_PRIORITY + this.delta,
-    }) as any;
+      throwOnTimeout: true,
+    });
   }
 
   async onIdle() {
@@ -115,8 +116,8 @@ export class QueuedAdapter implements QueuedAdapterApi {
    * @param fn
    * @returns
    */
-  async queue<TaskResultType>(function_: Task<TaskResultType>): Promise<TaskResultType | void> {
-    return this.#queue.add(() => function_(this.actualAdapter), { priority: BLOCKING_PRIORITY + this.delta });
+  async queue<TaskResultType>(function_: Task<TaskResultType>): Promise<TaskResultType> {
+    return this.#queue.add(() => function_(this.actualAdapter), { priority: BLOCKING_PRIORITY + this.delta, throwOnTimeout: true });
   }
 
   /**
@@ -124,8 +125,8 @@ export class QueuedAdapter implements QueuedAdapterApi {
    * @param fn
    * @returns
    */
-  async queueLog<TaskResultType>(function_: Task<TaskResultType>): Promise<TaskResultType | void> {
-    return this.#queue.add(() => function_(this.actualAdapter), { priority: LOG_PRIORITY + this.delta });
+  async queueLog<TaskResultType>(function_: Task<TaskResultType>): Promise<TaskResultType> {
+    return this.#queue.add(() => function_(this.actualAdapter), { priority: LOG_PRIORITY + this.delta, throwOnTimeout: true });
   }
 
   /**
@@ -134,7 +135,7 @@ export class QueuedAdapter implements QueuedAdapterApi {
    * @param options
    * @returns
    */
-  async progress<ReturnType>(function_: ProgressCallback<ReturnType>, options?: ProgressOptions): Promise<void | ReturnType> {
+  async progress<ReturnType>(function_: ProgressCallback<ReturnType>, options?: ProgressOptions): Promise<ReturnType> {
     if (this.#queue.size > 0 || this.#queue.pending > 0 || options?.disabled || this.#ora.isSpinning) {
       // Don't show progress if queue is not empty or already spinning.
       return Promise.resolve(function_({ step() {} })).finally(() => {
