@@ -32,8 +32,9 @@ describe('QueuedAdapter/TerminalAdapter', () => {
 
     it('pass its arguments to inquirer', async () => {
       const questions = [];
-      const returnValue = await adapter.prompt(questions);
-      expect(stub).toHaveBeenCalledWith(questions, undefined);
+      const answers = {};
+      const returnValue = await adapter.prompt(questions, answers);
+      expect(stub).toHaveBeenCalledWith(questions, answers);
       assert.equal(returnValue, fakeAnswers);
     });
 
