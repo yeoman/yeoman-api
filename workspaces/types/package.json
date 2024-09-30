@@ -25,16 +25,17 @@
     "test": ""
   },
   "dependencies": {
-    "@types/node": "^16.18.26",
     "@yeoman/adapter": "^1.6.0"
   },
   "devDependencies": {
+    "@types/node": "16.18.26",
     "@yeoman/adapter": "^1.6.0",
     "mem-fs": "^3.0.0",
     "mem-fs-editor": "^10.0.2"
   },
   "peerDependencies": {
     "@yeoman/adapter": "^1.6.0",
+    "@types/node": ">=16.18.26",
     "mem-fs": "^3.0.0",
     "mem-fs-editor": "^10.0.2"
   },
