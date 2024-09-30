@@ -6,6 +6,6 @@
     "outDir": "./dist",
     "rootDir": "./types",
     "noEmit": true,
-    "types": ["node", "inquirer"]
+    "types": []
   }
 }
