@@ -1,9 +1,11 @@
 import events from 'node:events';
 import { PassThrough } from 'node:stream';
 import type { Logger, PromptAnswers, PromptQuestion, PromptQuestions, QueuedAdapter, Task } from '../../types/index.js';
-import { type PromptModule, createPromptModule } from 'inquirer';
+import { createPromptModule } from 'inquirer';
 
 import { createLogger } from '../log.js';
+
+type PromptModule = ReturnType<typeof createPromptModule>;
 
 export type DummyPromptCallback = (answer: any, { question, answers }: { question: PromptQuestion; answers: PromptAnswers }) => any;
 
