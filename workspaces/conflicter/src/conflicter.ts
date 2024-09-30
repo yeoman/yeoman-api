@@ -409,7 +409,7 @@ export class Conflicter {
               value: 'ignore',
             },
           ] as const,
-        ] as const,
+        ],
       },
     ]);
     if (typeof result.action === 'function') {
