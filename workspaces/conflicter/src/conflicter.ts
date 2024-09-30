@@ -407,7 +407,7 @@ export class Conflicter {
               key: 'i',
               name: 'ignore, do not overwrite and remember (experimental)',
               value: 'ignore',
-            },
+            } as const,
           ],
         ],
       },
