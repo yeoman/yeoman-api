@@ -1,5 +1,4 @@
 import process from 'node:process';
-import type inquirer from 'inquirer';
 import { createPromptModule } from 'inquirer';
 import chalk from 'chalk';
 import type { InputOutputAdapter, Logger, PromptAnswers, PromptQuestions } from '../types/index.js';
