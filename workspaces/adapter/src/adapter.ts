@@ -23,7 +23,7 @@ export class TerminalAdapter implements InputOutputAdapter {
   console: Console;
   log: Logger;
   promptModule: PromptModule;
-  promptUi?: inquirer.ui.Prompt;
+  private abortController = new AbortController();
 
   /**
    * `TerminalAdapter` is the default implementation of `Adapter`, an abstraction
@@ -47,6 +47,7 @@ export class TerminalAdapter implements InputOutputAdapter {
         skipTTYChecks: true,
         input: this.stdin,
         output: this.stdout,
+        signal: this.abortController.signal;
       });
     this.log = options?.log ?? createLogger(this);
   }
@@ -67,9 +68,7 @@ export class TerminalAdapter implements InputOutputAdapter {
   }
 
   close() {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    this.promptUi?.close();
+    this.abortController.abort();
   }
 
   /**
