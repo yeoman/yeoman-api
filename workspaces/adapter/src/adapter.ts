@@ -47,7 +47,7 @@ export class TerminalAdapter implements InputOutputAdapter {
         skipTTYChecks: true,
         input: this.stdin,
         output: this.stdout,
-        signal: this.abortController.signal;
+        signal: this.abortController.signal,
       });
     this.log = options?.log ?? createLogger(this);
   }
