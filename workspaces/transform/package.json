@@ -33,8 +33,13 @@
     "test": "vitest run --coverage"
   },
   "dependencies": {
-    "@types/node": "^18.19.44",
     "minimatch": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "18.19.44"
+  },
+  "peerDependencies": {
+    "@types/node": ">=18.19.44"
   },
   "engines": {
     "node": ">=18.19.0"
