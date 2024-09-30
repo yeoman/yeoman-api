@@ -360,12 +360,13 @@ export class Conflicter {
   }): Promise<ConflicterStatus> {
     // Only offer diff option for files
     const fileStat = await fsStat(file.path);
+    const message = `Overwrite ${file.relativePath}?`;
 
     const result = await adapter.prompt<{ action: ConflicterAction | (({ file }: { file: ConflicterFile }) => ConflicterStatus) }>([
       {
         name: 'action',
         type: 'expand',
-        message: `Overwrite ${file.relativePath}?`,
+        message,
         choices: [
           {
             key: 'y',
@@ -428,7 +429,7 @@ export class Conflicter {
 
       counter++;
       if (counter === 5) {
-        throw new Error('Recursive error');
+        throw new Error(`Recursive error ${message}`);
       }
 
       return this._ask({ file, counter, adapter });
