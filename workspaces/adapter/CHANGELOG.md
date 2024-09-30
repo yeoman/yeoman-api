@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.0.0-beta.0 (2024-09-30)
+
+- fix(adapter): adjust engines according to inquirer dependency. ([d77b655](https://github.com/yeoman/yeoman-api/commit/d77b655))
+- fix(adapter): fix queue types (#41) ([055f138](https://github.com/yeoman/yeoman-api/commit/055f138)), closes [#41](https://github.com/yeoman/yeoman-api/issues/41)
+- fix(adapter): test adjust (#44) ([f1601ba](https://github.com/yeoman/yeoman-api/commit/f1601ba)), closes [#44](https://github.com/yeoman/yeoman-api/issues/44)
+- fix(eslint): adjusts to eslint config ([1eab921](https://github.com/yeoman/yeoman-api/commit/1eab921))
+- drop xo ([a92f48f](https://github.com/yeoman/yeoman-api/commit/a92f48f))
+- feat(adapter)!: bump inquirer to v11.1.0 (#40) ([a417795](https://github.com/yeoman/yeoman-api/commit/a417795)), closes [#40](https://github.com/yeoman/yeoman-api/issues/40)
+- update eslint to v9 ([ad86730](https://github.com/yeoman/yeoman-api/commit/ad86730))
+- update prettier to v3 (#31) ([ac80763](https://github.com/yeoman/yeoman-api/commit/ac80763)), closes [#31](https://github.com/yeoman/yeoman-api/issues/31)
+- chore: bump versions ([7c9c243](https://github.com/yeoman/yeoman-api/commit/7c9c243))
+- chore: bump versions ([e0b4188](https://github.com/yeoman/yeoman-api/commit/e0b4188))
+- chore: eslint adjusts (#33) ([c1740ae](https://github.com/yeoman/yeoman-api/commit/c1740ae)), closes [#33](https://github.com/yeoman/yeoman-api/issues/33)
+- chore(deps): bump log-symbols from 5.1.0 to 7.0.0 (#16) ([d1b7d2d](https://github.com/yeoman/yeoman-api/commit/d1b7d2d)), closes [#16](https://github.com/yeoman/yeoman-api/issues/16)
+- chore(deps): bump ora from 6.3.1 to 8.1.0 (#14) ([bdeeb6c](https://github.com/yeoman/yeoman-api/commit/bdeeb6c)), closes [#14](https://github.com/yeoman/yeoman-api/issues/14)
+- chore(deps): bump p-queue from 7.3.4 to 8.0.1 (#20) ([7ed260c](https://github.com/yeoman/yeoman-api/commit/7ed260c)), closes [#20](https://github.com/yeoman/yeoman-api/issues/20)
+- feat: move adapter base types to @yeoman/adapter ([19b9379](https://github.com/yeoman/yeoman-api/commit/19b9379))
+- feat(eslint): add unicorn plugin ([a9d851b](https://github.com/yeoman/yeoman-api/commit/a9d851b))
+
 ## 1.6.0 (2024-08-28)
 
 - feat: move adapter base types to @yeoman/adapter ([b05a357](https://github.com/yeoman/yeoman-api/commit/b05a357))
