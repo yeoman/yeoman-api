@@ -1,14 +1,18 @@
 import assert from 'node:assert';
 import fs from 'node:fs';
 import path, { dirname } from 'node:path';
+import { Duplex } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
+import { mock } from 'node:test';
 import { fileURLToPath } from 'node:url';
+import { transform } from '@yeoman/transform';
 import { Buffer } from 'node:buffer';
 import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { filter } from 'lodash-es';
 import slash from 'slash';
 import { QueuedAdapter } from '@yeoman/adapter';
 import { TestAdapter, defineConfig as defineTestAdapterConfig } from '@yeoman/adapter/testing';
-import { Conflicter, type ConflicterFile } from '../src/conflicter.js';
+import { Conflicter, type ConflicterFile } from '../src/index.js';
 
 defineTestAdapterConfig({
   spyFactory: ({ returns }) => vitest.fn().mockReturnValue(returns),
@@ -364,6 +368,24 @@ describe('Conflicter', () => {
       });
 
       expect(testAdapter.log.writeln).toHaveBeenCalledWith(expect.stringMatching(/Existing.*Replacement.*Diff/));
+    });
+
+    it('prints diff if diff status is provided', async () => {
+      mock.method(conflicter, '_printDiff');
+      await pipeline(
+        Duplex.from([
+          {
+            path: path.join(__dirname, 'fixtures/conflicter/file-conflict.txt'),
+            conflicter: 'diff',
+            contents: `initial
+           content
+`,
+          },
+        ]),
+        conflicter.createTransform(),
+        transform(() => {}),
+      );
+      assert(conflicter._printDiff.mock.calls.length === 1);
     });
   });
 });
