@@ -394,8 +394,7 @@ export class Conflicter {
             value: 'abort',
           },
           ...(fileStat.isFile()
-            ? []
-            : ([
+            ? ([
                 {
                   key: 'd',
                   name: 'show the differences between the old and the new',
@@ -411,7 +410,8 @@ export class Conflicter {
                   name: 'ignore, do not overwrite and remember (experimental)',
                   value: 'ignore',
                 },
-              ] as const)),
+              ] as const)
+            : []),
         ],
       },
     ]);
