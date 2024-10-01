@@ -46,15 +46,8 @@ describe('Conflicter', () => {
 
     it('handles predefined status', async () => {
       const contents = fs.readFileSync(__filename, 'utf8');
-      return conflicter
-        .checkForCollision({
-          path: __filename,
-          contents,
-          conflicter: 'someStatus',
-        })
-        .then(file => {
-          assert.equal(file.conflicter, 'someStatus');
-        });
+      const file = await conflicter.checkForCollision({ path: __filename, contents, conflicter: 'someStatus' });
+      assert.equal(file.conflicter, 'someStatus');
     });
 
     it('identical status', async () => {
@@ -103,25 +96,17 @@ describe('Conflicter', () => {
     it('identical status', async () => {
       const me = fs.readFileSync(__filename, 'utf8');
 
-      return conflicter
-        .checkForCollision({
-          path: __filename,
-          contents: me,
-        })
-        .then(file => {
-          assert.strictEqual(file.conflicter, 'skip');
-        });
+      const file = await conflicter.checkForCollision({ path: __filename, contents: me });
+      assert.strictEqual(file.conflicter, 'skip');
     });
 
-    it('create status', async () =>
-      conflicter
-        .checkForCollision({
-          path: 'file-who-does-not-exist.js',
-          contents: '',
-        })
-        .then(file => {
-          assert.equal(file.conflicter, 'create');
-        }));
+    it('create status', async () => {
+      const file = await conflicter.checkForCollision({
+        path: 'file-who-does-not-exist.js',
+        contents: '',
+      });
+      assert.equal(file.conflicter, 'create');
+    });
 
     it('user choose "yes"', async () => {
       const conflicter = new Conflicter(
@@ -130,9 +115,8 @@ describe('Conflicter', () => {
         }),
       );
 
-      return conflicter.checkForCollision(conflictingFile).then(file => {
-        assert.equal(file.conflicter, 'force');
-      });
+      const file = await conflicter.checkForCollision(conflictingFile);
+      assert.equal(file.conflicter, 'force');
     });
 
     it('user choose "skip"', async () => {
@@ -142,9 +126,8 @@ describe('Conflicter', () => {
         }),
       );
 
-      return conflicter.checkForCollision(conflictingFile).then(file => {
-        assert.equal(file.conflicter, 'skip');
-      });
+      const file = await conflicter.checkForCollision(conflictingFile);
+      assert.equal(file.conflicter, 'skip');
     });
 
     it('user choose "force"', async () => {
@@ -154,16 +137,14 @@ describe('Conflicter', () => {
         }),
       );
 
-      return conflicter.checkForCollision(conflictingFile).then(file => {
-        assert.equal(file.conflicter, 'force');
-      });
+      const file = await conflicter.checkForCollision(conflictingFile);
+      assert.equal(file.conflicter, 'force');
     });
 
     it('force conflict status', async () => {
       conflicter.force = true;
-      return conflicter.checkForCollision(conflictingFile).then(file => {
-        assert.equal(file.conflicter, 'force');
-      });
+      const file = await conflicter.checkForCollision(conflictingFile);
+      assert.equal(file.conflicter, 'force');
     });
 
     describe('with bail option', () => {
@@ -195,16 +176,13 @@ describe('Conflicter', () => {
             ignoreWhitespace: true,
             bail: true,
           });
-          return conflicter
-            .checkForCollision({
-              path: path.join(__dirname, 'fixtures/conflicter/file-conflict.txt'),
-              contents: `initial
+          const file = await conflicter.checkForCollision({
+            path: path.join(__dirname, 'fixtures/conflicter/file-conflict.txt'),
+            contents: `initial
                  content
       `,
-            })
-            .then(file => {
-              assert.equal(file.conflicter, 'skip');
-            });
+          });
+          assert.equal(file.conflicter, 'skip');
         });
       });
 
@@ -227,17 +205,14 @@ describe('Conflicter', () => {
         force: false,
         dryRun: true,
       });
-      return conflicter
-        .checkForCollision({
-          path: path.join(__dirname, 'fixtures/conflicter/file-conflict.txt'),
-          contents: `initial
+      const file = await conflicter.checkForCollision({
+        path: path.join(__dirname, 'fixtures/conflicter/file-conflict.txt'),
+        contents: `initial
                  content
       `,
-        })
-        .then(file => {
-          assert.equal(file.conflicter, 'skip');
-          assert.equal(file.changesDetected, true);
-        });
+      });
+      assert.equal(file.conflicter, 'skip');
+      assert.equal(file.changesDetected, true);
     });
 
     it('skip new file with dryRun', async () => {
@@ -245,14 +220,8 @@ describe('Conflicter', () => {
         force: false,
         dryRun: true,
       });
-      return conflicter
-        .checkForCollision({
-          path: 'file-who-does-not-exist2.js',
-          contents: '',
-        })
-        .then(file => {
-          assert.equal(file.conflicter, 'skip');
-        });
+      const file = await conflicter.checkForCollision({ path: 'file-who-does-not-exist2.js', contents: '' });
+      assert.equal(file.conflicter, 'skip');
     });
 
     it('skip deleted file with dryRun', async () => {
@@ -260,14 +229,8 @@ describe('Conflicter', () => {
         force: false,
         dryRun: true,
       });
-      return conflicter
-        .checkForCollision({
-          path: path.join(__dirname, 'fixtures/conflicter/foo.js'),
-          contents: null,
-        })
-        .then(file => {
-          assert.equal(file.conflicter, 'skip');
-        });
+      const file = await conflicter.checkForCollision({ path: path.join(__dirname, 'fixtures/conflicter/foo.js'), contents: null });
+      assert.equal(file.conflicter, 'skip');
     });
 
     it('skip whitespace changes with dryRun', async () => {
@@ -276,16 +239,13 @@ describe('Conflicter', () => {
         dryRun: true,
         ignoreWhitespace: true,
       });
-      return conflicter
-        .checkForCollision({
-          path: path.join(__dirname, 'fixtures/conflicter/file-conflict.txt'),
-          contents: `initial
+      const file = await conflicter.checkForCollision({
+        path: path.join(__dirname, 'fixtures/conflicter/file-conflict.txt'),
+        contents: `initial
                  content
       `,
-        })
-        .then(file => {
-          assert.equal(file.conflicter, 'skip');
-        });
+      });
+      assert.equal(file.conflicter, 'skip');
     });
 
     it('does not give a conflict with ignoreWhitespace', async () => {
@@ -294,16 +254,13 @@ describe('Conflicter', () => {
         ignoreWhitespace: true,
       });
 
-      return conflicter
-        .checkForCollision({
-          path: path.join(__dirname, 'fixtures/conflicter/file-conflict.txt'),
-          contents: `initial
+      const file = await conflicter.checkForCollision({
+        path: path.join(__dirname, 'fixtures/conflicter/file-conflict.txt'),
+        contents: `initial
            content
 `,
-        })
-        .then(file => {
-          assert.equal(file.conflicter, 'skip');
-        });
+      });
+      assert.equal(file.conflicter, 'skip');
     });
 
     it('skip rewrite with ignoreWhitespace and skipRegenerate', async () => {
@@ -313,16 +270,13 @@ describe('Conflicter', () => {
         skipRegenerate: true,
       });
 
-      return conflicter
-        .checkForCollision({
-          path: path.join(__dirname, 'fixtures/conflicter/file-conflict.txt'),
-          contents: `initial
+      const file = await conflicter.checkForCollision({
+        path: path.join(__dirname, 'fixtures/conflicter/file-conflict.txt'),
+        contents: `initial
            content
 `,
-        })
-        .then(file => {
-          assert.equal(file.conflicter, 'skip');
-        });
+      });
+      assert.equal(file.conflicter, 'skip');
     });
 
     it('does give a conflict without ignoreWhitespace', async () => {
@@ -332,27 +286,22 @@ describe('Conflicter', () => {
         }),
       );
 
-      return conflicter
-        .checkForCollision({
-          path: path.join(__dirname, 'fixtures/conflicter/file-conflict.txt'),
-          contents: `initial
+      const file = await conflicter.checkForCollision({
+        path: path.join(__dirname, 'fixtures/conflicter/file-conflict.txt'),
+        contents: `initial
            content
 `,
-        })
-        .then(file => {
-          assert.equal(file.conflicter, 'skip');
-        });
+      });
+      assert.equal(file.conflicter, 'skip');
     });
 
-    it('does not give a conflict on same binary files', async () =>
-      conflicter
-        .checkForCollision({
-          path: path.join(__dirname, 'fixtures/conflicter/yeoman-logo.png'),
-          contents: fs.readFileSync(path.join(__dirname, 'fixtures/conflicter/yeoman-logo.png')),
-        })
-        .then(file => {
-          assert.equal(file.conflicter, 'skip');
-        }));
+    it('does not give a conflict on same binary files', async () => {
+      const file = await conflicter.checkForCollision({
+        path: path.join(__dirname, 'fixtures/conflicter/yeoman-logo.png'),
+        contents: fs.readFileSync(path.join(__dirname, 'fixtures/conflicter/yeoman-logo.png')),
+      });
+      assert.equal(file.conflicter, 'skip');
+    });
 
     it('does not provide a diff option for directory', async () => {
       const queuedAdapter = new QueuedAdapter({
@@ -371,14 +320,11 @@ describe('Conflicter', () => {
       });
       const conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }));
 
-      return conflicter
-        .checkForCollision({
-          path: path.join(__dirname, 'fixtures/conflicter/foo.js'),
-          contents: fs.readFileSync(path.join(__dirname, 'fixtures/conflicter/foo-template.js')),
-        })
-        .then(() => {
-          expect(testAdapter.log.colored).toHaveBeenCalled();
-        });
+      await conflicter.checkForCollision({
+        path: path.join(__dirname, 'fixtures/conflicter/foo.js'),
+        contents: fs.readFileSync(path.join(__dirname, 'fixtures/conflicter/foo-template.js')),
+      });
+      expect(testAdapter.log.colored).toHaveBeenCalled();
     });
 
     it('shows old content for deleted text files', async () => {
@@ -399,14 +345,11 @@ describe('Conflicter', () => {
       });
       const conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }));
 
-      return conflicter
-        .checkForCollision({
-          path: path.join(__dirname, 'fixtures/conflicter/yeoman-logo.png'),
-          contents: fs.readFileSync(path.join(__dirname, 'fixtures/conflicter/testFile.tar.gz')),
-        })
-        .then(() => {
-          expect(testAdapter.log.writeln).toHaveBeenCalledWith(expect.stringMatching(/Existing.*Replacement.*Diff/));
-        });
+      await conflicter.checkForCollision({
+        path: path.join(__dirname, 'fixtures/conflicter/yeoman-logo.png'),
+        contents: fs.readFileSync(path.join(__dirname, 'fixtures/conflicter/testFile.tar.gz')),
+      });
+      expect(testAdapter.log.writeln).toHaveBeenCalledWith(expect.stringMatching(/Existing.*Replacement.*Diff/));
     });
 
     it('displays custom diff for deleted binary files', async () => {
