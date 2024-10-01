@@ -11,9 +11,20 @@ import { clearFileState, setModifiedFileState } from 'mem-fs-editor/state';
 import { transform } from 'p-transform';
 import { binaryDiff, isBinary } from './binary-diff.js';
 
-export type ConflicterStatus = 'create' | 'skip' | 'identical' | 'force' | 'conflict' | 'ignore';
+const statusToSkipFile = [
+  'skip',
+  /** Skip file and print diff */
+  'diff',
+  /** Skip file and add to .yo-resolve */
+  'ignore',
+] as const;
 
-export type ConflicterLog = ConflicterStatus | 'conflict';
+export type ConflicterLog = ['create', 'skip', 'identical', 'force', 'conflict'][number];
+
+export type ConflicterStatus = ConflicterLog | (typeof statusToSkipFile)[number];
+
+const fileShouldBeSkipped = (action: ConflicterStatus): action is (typeof statusToSkipFile)[number] =>
+  (statusToSkipFile as readonly string[]).includes(action);
 
 export type ConflicterAction = 'write' | 'abort' | 'diff' | 'reload' | 'force' | 'edit';
 
@@ -104,9 +115,11 @@ export class Conflicter {
 
   private log(file: ConflicterFile, adapter: InputOutputAdapter = this.adapter) {
     const logStatus = file.conflicter;
-    const logLevel = logStatus === 'ignore' ? 'skip' : logStatus;
-    if (logLevel && adapter.log[logLevel]) {
-      adapter.log[logLevel](file.relativePath);
+    if (logStatus) {
+      const logLevel = fileShouldBeSkipped(logStatus) ? 'skip' : logStatus;
+      if (adapter.log[logLevel]) {
+        adapter.log[logLevel](file.relativePath);
+      }
     }
   }
 
@@ -488,13 +501,23 @@ export class Conflicter {
         delete conflicterFile.conflicterChanges;
         delete conflicterFile.fileModeChanges;
 
-        if (action === 'skip') {
-          clearFileState(conflicterFile);
-        }
+        if (action) {
+          if (action === 'ignore') {
+            yoResolveContents += `${file.relativePath} skip\n`;
+          } else if (action === 'diff') {
+            try {
+              const stat = await fsStat(file.path);
+              if (stat.isFile()) {
+                await this._printDiff({ file: conflicterFile as ConflictedFile });
+              }
+            } catch {
+              // ignore
+            }
+          }
 
-        if (action === 'ignore') {
-          yoResolveContents += `${file.relativePath} skip\n`;
-          clearFileState(conflicterFile);
+          if (fileShouldBeSkipped(action)) {
+            clearFileState(conflicterFile);
+          }
         }
 
         if (file.path === yoResolveFilePath) {
