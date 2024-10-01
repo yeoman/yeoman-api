@@ -40,6 +40,7 @@
     "test": "vitest run --coverage"
   },
   "dependencies": {
+    "@inquirer/core": "^9.2.1",
     "chalk": "^5.2.0",
     "inquirer": "^11.1.0",
     "log-symbols": "^7.0.0",

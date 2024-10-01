@@ -1,13 +1,21 @@
 import events from 'node:events';
-import { PassThrough } from 'node:stream';
-import type { Logger, PromptAnswers, PromptQuestion, PromptQuestions, QueuedAdapter, Task } from '../../types/index.js';
+import { Duplex } from 'node:stream';
+import { createPrompt } from '@inquirer/core';
 import { createPromptModule } from 'inquirer';
+import type { Logger, PromptAnswers, PromptQuestions, QueuedAdapter, Task } from '../../types/index.js';
 
 import { createLogger } from '../log.js';
 
 type PromptModule = ReturnType<typeof createPromptModule>;
 
-export type DummyPromptCallback = (answer: any, { question, answers }: { question: PromptQuestion; answers: PromptAnswers }) => any;
+type TestQuestion = {
+  name: string;
+  message: string;
+  type: string;
+  default?: any;
+};
+
+export type DummyPromptCallback = (answer: any, { question, answers }: { question: TestQuestion; answers: PromptAnswers }) => any;
 
 export type DummyPromptOptions = {
   mockedAnswers?: PromptAnswers;
@@ -26,64 +34,45 @@ export type DefineTestAdapterConfig = Pick<TestAdapterOptions, 'log' | 'spyFacto
 
 const defaultConfig: DefineTestAdapterConfig = {};
 
-export class DummyPrompt {
-  answers: PromptAnswers;
-  question: PromptQuestion;
-  callback!: DummyPromptCallback;
-  throwOnMissingAnswer = defaultConfig.throwOnMissingAnswer ?? false;
-
-  constructor(question: PromptQuestion, _rl: any, answers: PromptAnswers, options: DummyPromptOptions = {}) {
-    const { mockedAnswers, callback, throwOnMissingAnswer } = options;
-    this.answers = { ...answers, ...mockedAnswers };
-    this.question = question;
-
-    this.callback = callback ?? (answers => answers);
-    this.throwOnMissingAnswer = throwOnMissingAnswer ?? false;
+const isValueSet = (type: string, answer: any) => {
+  if (type === 'list') {
+    // List prompt accepts any answer value including null
+    return answer !== undefined;
   }
+  if (type === 'confirm') {
+    // Ensure that we don't replace `false` with default `true`
+    return answer || answer === false;
+  }
+  // Other prompts treat all falsy values to default
+  return Boolean(answer);
+};
 
-  async run() {
-    let answer = this.answers[this.question.name!];
-    let isSet;
+const createDummyPrompt = (options: DummyPromptOptions = {}) => {
+  return createPrompt<any, TestQuestion>((config, done) => {
+    const { mockedAnswers = {}, callback = answer => answer, throwOnMissingAnswer = false } = options;
+    let answer = mockedAnswers[config.name!];
 
-    switch (this.question.type) {
-      case 'list': {
-        // List prompt accepts any answer value including null
-        isSet = answer !== undefined;
-        break;
-      }
-
-      case 'confirm': {
-        // Ensure that we don't replace `false` with default `true`
-
-        isSet = answer || answer === false;
-        break;
-      }
-
-      default: {
-        // Other prompts treat all falsy values to default
-        isSet = Boolean(answer);
-      }
-    }
-
-    if (!isSet) {
-      if (answer === undefined && this.question.default === undefined) {
-        const missingAnswerMessage = `yeoman-test: question ${this.question.name ?? ''} was asked but answer was not provided`;
+    if (!isValueSet(config.type, answer)) {
+      if (answer === undefined && config.default === undefined) {
+        const missingAnswerMessage = `yeoman-test: question ${config.name ?? ''} was asked but answer was not provided`;
         console.warn(missingAnswerMessage);
-        if (this.throwOnMissingAnswer) {
+        if (throwOnMissingAnswer) {
           throw new Error(missingAnswerMessage);
         }
       }
 
-      answer = this.question.default;
+      answer = config.default;
 
-      if (answer === undefined && this.question.type === 'confirm') {
+      if (answer === undefined && config.type === 'confirm') {
+        // Confirm prompt defaults to true
         answer = true;
       }
     }
+    done(callback(answer, { question: config, answers: { ...mockedAnswers, [config.name]: answer } }));
 
-    return this.callback(answer, { question: this.question, answers: this.answers });
-  }
-}
+    return config.message;
+  });
+};
 
 export const defineConfig = (config: DefineTestAdapterConfig) => Object.assign(defaultConfig, config);
 
@@ -97,6 +86,7 @@ export class TestAdapter<LogType extends Logger = Logger, SpyType = any> impleme
   diff: any & SpyType;
   log: LogType & SpyType;
   registerDummyPrompt: (promptName: string, customPromptOptions?: DummyPromptOptions) => PromptModule;
+  private abortController = new AbortController();
   private readonly spyFactory: SpyFactory<SpyType>;
 
   constructor(options: TestAdapterOptions<SpyType> = {}) {
@@ -108,23 +98,16 @@ export class TestAdapter<LogType extends Logger = Logger, SpyType = any> impleme
 
     this.spyFactory = spyFactory;
     this.promptModule = createPromptModule({
-      input: new PassThrough() as any,
-      output: new PassThrough() as any,
-
+      input: Duplex.from('should not read from input'),
+      output: Duplex.from(async () => {}),
       skipTTYChecks: true,
+      signal: this.abortController.signal,
     });
 
     const actualRegisterPrompt = this.promptModule.registerPrompt.bind(this.promptModule);
 
     this.registerDummyPrompt = (promptModuleName: string, customPromptOptions?: DummyPromptOptions) =>
-      actualRegisterPrompt(
-        promptModuleName,
-        class CustomDummyPrompt extends DummyPrompt {
-          constructor(question: PromptQuestion, rl: any, answers: PromptAnswers) {
-            super(question, rl, answers, customPromptOptions ?? promptOptions);
-          }
-        } as any,
-      );
+      actualRegisterPrompt(promptModuleName, createDummyPrompt(customPromptOptions ?? promptOptions));
 
     this.promptModule.registerPrompt = (name: string) => this.registerDummyPrompt(name);
 
@@ -159,7 +142,7 @@ export class TestAdapter<LogType extends Logger = Logger, SpyType = any> impleme
   }
 
   close(): void {
-    this.promptModule.restoreDefaultPrompts();
+    this.abortController.abort();
   }
 
   async prompt<A extends PromptAnswers = PromptAnswers>(

@@ -1,5 +1,5 @@
 import assert from 'node:assert';
-import { describe, expect, it, vitest } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { TestAdapter } from '../src/testing/test-adapter.js';
 
 describe('TestAdapter', () => {
@@ -69,14 +69,6 @@ describe('TestAdapter', () => {
       await expect(adapter.prompt([{ name: 'respuesta', message: 'foo', type: 'list' }])).resolves.toMatchObject({
         respuesta: null,
       });
-    });
-  });
-  describe('#close()', () => {
-    it('should restore prompts', async () => {
-      const adapter = new TestAdapter();
-      vitest.spyOn(adapter.promptModule, 'restoreDefaultPrompts');
-      adapter.close();
-      expect(adapter.promptModule.restoreDefaultPrompts).toHaveBeenCalled();
     });
   });
   describe('#queue()', () => {
