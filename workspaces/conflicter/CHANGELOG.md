@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.3.0 (2024-10-02)
+
+- feat(conflicter): allow diff in .yo-resolve files (#50) ([baf4465](https://github.com/yeoman/yeoman-api/commit/baf4465)), closes [#50](https://github.com/yeoman/yeoman-api/issues/50)
+- chore(conflicter): convert tests to async/await ([cf5bc4e](https://github.com/yeoman/yeoman-api/commit/cf5bc4e))
+
 ## <small>2.2.1 (2024-10-01)</small>
 
 - fix(conflicter): correctly show file conflict options ([7d8d754](https://github.com/yeoman/yeoman-api/commit/7d8d754))
