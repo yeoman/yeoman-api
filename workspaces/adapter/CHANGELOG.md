@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.0.0 (2024-10-11)
+
+- chore(adapter): update dependencies (#53) ([53e4518](https://github.com/yeoman/yeoman-api/commit/53e4518)), closes [#53](https://github.com/yeoman/yeoman-api/issues/53)
+
 ## 2.0.0-beta.1 (2024-10-02)
 
 - feat(adapter): reimplement TestAdapter to use @inquirer/core api (#49) ([bb3c0a4](https://github.com/yeoman/yeoman-api/commit/bb3c0a4)), closes [#49](https://github.com/yeoman/yeoman-api/issues/49)
