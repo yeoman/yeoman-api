@@ -11,5 +11,5 @@ Intended for internal yeoman generator/environment stack use.
 
 MIT © [The Yeoman Team](http://yeoman.io)
 
-[npm-image]: https://badge.fury.io/js/@yeoman%2Ftrasnform.svg
+[npm-image]: https://badge.fury.io/js/@yeoman%2Fnamespace.svg
 [npm-url]: https://npmjs.org/package/@yeoman/namespace
