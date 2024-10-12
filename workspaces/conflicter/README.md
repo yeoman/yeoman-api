@@ -1,8 +1,7 @@
 # @yeoman/conflicter
 
 [![NPM version][npm-image]][npm-url]
-[![NPM Test](https://github.com/yeoman/yeoman-api/workflows/NPM%20Test/badge.svg)](https://github.com/yeoman/yeoman-api/actions?query=workflow%3A%22NPM+Test%22)
-[![Integration Build](https://github.com/yeoman/yeoman-api/workflows/Integration%20Build/badge.svg)](https://github.com/yeoman/yeoman-api/actions?query=workflow%3A%22Integration+Build%22)
+[![NPM Test](https://github.com/yeoman/yeoman-api/actions/workflows/ci.yml/badge.svg)](https://github.com/yeoman/yeoman-api/actions/workflows/ci.yml)
 [![Dependency Status][daviddm-image]][daviddm-url]
 
 > File conflict resolution for yeoman's generator/environment stack
