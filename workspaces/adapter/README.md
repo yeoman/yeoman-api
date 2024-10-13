@@ -11,5 +11,5 @@ Intended for internal yeoman generator/environment stack use.
 
 MIT © [The Yeoman Team](http://yeoman.io)
 
-[npm-image]: https://badge.fury.io/js/yeoman-api.svg
-[npm-url]: https://npmjs.org/package/yeoman-api
+[npm-image]: https://badge.fury.io/js/@yeoman%2Fadapter.svg
+[npm-url]: https://npmjs.org/package/@yeoman/adapter
