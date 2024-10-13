@@ -3,7 +3,7 @@
 [![NPM version][npm-image]][npm-url]
 [![NPM Test](https://github.com/yeoman/yeoman-api/actions/workflows/ci.yml/badge.svg)](https://github.com/yeoman/yeoman-api/actions/workflows/ci.yml)
 
-> Types for yeoman's generator/environment stack
+> Stable types for yeoman's generator/environment stack
 
 Intended for internal yeoman generator/environment stack use.
 
