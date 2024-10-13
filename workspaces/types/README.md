@@ -1,9 +1,9 @@
-# @yeoman/conflicter
+# @yeoman/types
 
 [![NPM version][npm-image]][npm-url]
 [![NPM Test](https://github.com/yeoman/yeoman-api/actions/workflows/ci.yml/badge.svg)](https://github.com/yeoman/yeoman-api/actions/workflows/ci.yml)
 
-> File conflict resolution for yeoman's generator/environment stack
+> Stable types for yeoman's generator/environment stack
 
 Intended for internal yeoman generator/environment stack use.
 
@@ -11,5 +11,5 @@ Intended for internal yeoman generator/environment stack use.
 
 MIT © [The Yeoman Team](http://yeoman.io)
 
-[npm-image]: https://badge.fury.io/js/@yeoman%2Fconflicter.svg
-[npm-url]: https://npmjs.org/package/@yeoman/conflicter
+[npm-image]: https://badge.fury.io/js/@yeoman%2Ftypes.svg
+[npm-url]: https://npmjs.org/package/@yeoman/types
