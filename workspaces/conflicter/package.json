@@ -48,7 +48,7 @@
   "devDependencies": {
     "@types/cli-table": "^0.3.4",
     "@types/dateformat": "^5.0.2",
-    "@types/diff": "^5.2.3",
+    "@types/diff": "^6.0.0",
     "@types/node": "^18.19.0",
     "@types/textextensions": "^2.4.2",
     "@yeoman/adapter": "*",
