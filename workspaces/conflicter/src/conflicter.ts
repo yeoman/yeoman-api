@@ -242,7 +242,7 @@ export class Conflicter {
       modified = changes.some(change => change.value?.trim() && (change.added || change.removed));
     } else {
       changes = diffLines(actual.toString(), contents.toString(), this.diffOptions);
-      modified = (changes.length > 1 || changes[0].added || changes[0].removed) ?? false;
+      modified = (changes && changes.length > 0 && (changes.length > 1 || changes[0].added || changes[0].removed)) ?? false;
     }
 
     if (modified) {
