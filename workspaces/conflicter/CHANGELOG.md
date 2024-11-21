@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## <small>2.3.2 (2024-11-21)</small>
+
+- fix: adjust diff behavior change (#59) ([723f5f3](https://github.com/yeoman/yeoman-api/commit/723f5f3)), closes [#59](https://github.com/yeoman/yeoman-api/issues/59)
+- chore(deps-dev): bump @types/diff from 5.2.3 to 6.0.0 (#58) ([5d3b46e](https://github.com/yeoman/yeoman-api/commit/5d3b46e)), closes [#58](https://github.com/yeoman/yeoman-api/issues/58)
+
 ## <small>2.3.1 (2024-10-14)</small>
 
 - chore: drop package-lock added by editor ([0963f8f](https://github.com/yeoman/yeoman-api/commit/0963f8f))
