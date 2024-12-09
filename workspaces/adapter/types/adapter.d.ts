@@ -6,7 +6,7 @@ import type { Logger } from './logger.js';
  */
 export type PromptAnswers = InquirerAnswers;
 
-export type PromptQuestion<A extends PromptAnswers = PromptAnswers> = DistinctQuestion<A>;
+export type PromptQuestion<A extends PromptAnswers = PromptAnswers> = DistinctQuestion<A> & { name: string };
 
 /**
  * Provides a set of questions.
