@@ -31,7 +31,7 @@
     "@lerna-lite/publish": "3.8.0",
     "@lerna-lite/version": "3.8.0",
     "@types/node": "^18.11.9",
-    "@vitest/coverage-v8": "^2.0.5",
+    "@vitest/coverage-v8": "^3.0.4",
     "conventional-changelog-conventionalcommits": "^8.0.0",
     "cpy-cli": "^5.0.0",
     "eslint": "9.9.1",
