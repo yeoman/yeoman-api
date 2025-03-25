@@ -32,11 +32,14 @@
   },
   "peerDependencies": {
     "@types/node": ">=16.18.26",
-    "@yeoman/adapter": "^1.6.0",
-    "mem-fs": "^3.0.0",
-    "mem-fs-editor": "^10.0.2"
+    "@yeoman/adapter": "^1.6.0 || ^2.0.0-beta.0",
+    "mem-fs": "^3.0.0 || ^4.0.0-beta.1",
+    "mem-fs-editor": "^10.0.2 || >=10.0.2"
   },
   "peerDependenciesMeta": {
+    "@yeoman/adapter": {
+      "optional": true
+    },
     "mem-fs": {
       "optional": true
     },
@@ -50,10 +53,5 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
-  },
-  "acceptDependencies": {
-    "@yeoman/adapter": "^2.0.0-beta.0",
-    "mem-fs": "^4.0.0-beta.1",
-    "mem-fs-editor": ">=10.0.2"
   }
 }
