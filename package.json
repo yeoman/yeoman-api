@@ -4,12 +4,12 @@
   "private": true,
   "type": "module",
   "workspaces": [
-    "./workspaces/eslint",
-    "./workspaces/namespace",
-    "./workspaces/adapter",
-    "./workspaces/types",
-    "./workspaces/transform",
-    "./workspaces/conflicter"
+    "workspaces/eslint",
+    "workspaces/namespace",
+    "workspaces/adapter",
+    "workspaces/types",
+    "workspaces/transform",
+    "workspaces/conflicter"
   ],
   "scripts": {
     "prebuild": "npm run clean",
