@@ -1,5 +1,5 @@
 import process from 'node:process';
-import { createPromptModule } from 'inquirer';
+import inquirer, { createPromptModule } from 'inquirer';
 import chalk from 'chalk';
 import type { InputOutputAdapter, Logger, PromptAnswers, PromptQuestions } from '../types/index.js';
 import { createLogger } from './log.js';
@@ -85,5 +85,9 @@ export class TerminalAdapter implements InputOutputAdapter {
    */
   async prompt<A extends PromptAnswers = PromptAnswers>(questions: PromptQuestions<A>, initialAnswers?: Partial<A>): Promise<A> {
     return this.promptModule(questions, initialAnswers);
+  }
+
+  separator(separator?: string) {
+    return new inquirer.Separator(separator);
   }
 }

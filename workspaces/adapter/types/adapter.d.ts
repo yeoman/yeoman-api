@@ -1,3 +1,4 @@
+import type inquirer from 'inquirer';
 import type { DistinctQuestion, Answers as InquirerAnswers } from 'inquirer';
 import type { Logger } from './logger.js';
 
@@ -36,6 +37,11 @@ export type InputOutputAdapter = {
    * Close underline inputs.
    */
   close(): void;
+
+  /**
+   * Creates a separator for prompt choices.
+   */
+  separator?: (separator?: string) => InstanceType<typeof inquirer.Separator>;
 };
 
 type Task<TaskResultType> =
