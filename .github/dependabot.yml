@@ -18,6 +18,9 @@ updates:
       - dependency-name: '*'
         update-types: ['version-update:semver-minor', 'version-update:semver-patch']
     groups:
+      lerna-lite:
+        patterns:
+          - '@lerna-lite/*'
       vitest:
         patterns:
           - '@vitest/*'
