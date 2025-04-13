@@ -37,6 +37,7 @@ export class QueuedAdapter implements QueuedAdapterApi {
   log: Logger;
   #nextChildPriority: number;
   #ora: Ora;
+  separator?: QueuedAdapterApi['separator'];
 
   /**
    * `TerminalAdapter` is the default implementation of `Adapter`, an abstraction
@@ -51,6 +52,7 @@ export class QueuedAdapter implements QueuedAdapterApi {
     const { adapter, queue, delta, ...adapterOptions } = options ?? {};
     this.#queue = queue ?? new PQueue({ concurrency: 1 });
     this.actualAdapter = adapter ?? new TerminalAdapter(adapterOptions);
+    this.separator = this.actualAdapter.separator;
 
     // Deffered logger
     const defferredLogger = (...arguments_: any[]) => {
