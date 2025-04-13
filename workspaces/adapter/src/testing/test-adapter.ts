@@ -48,8 +48,8 @@ const isValueSet = (type: string, answer: any) => {
 };
 
 const createDummyPrompt = (options: DummyPromptOptions = {}) => {
+  const { mockedAnswers = {}, callback = answer => answer, throwOnMissingAnswer = false } = options;
   return createPrompt<any, TestQuestion>((config, done) => {
-    const { mockedAnswers = {}, callback = answer => answer, throwOnMissingAnswer = false } = options;
     let answer = mockedAnswers[config.name!];
 
     if (!isValueSet(config.type, answer)) {
@@ -68,7 +68,7 @@ const createDummyPrompt = (options: DummyPromptOptions = {}) => {
         answer = true;
       }
     }
-    done(callback(answer, { question: config, answers: { ...mockedAnswers, [config.name]: answer } }));
+    done(callback(answer, { question: config, answers: { [config.name]: answer } }));
 
     return config.message;
   });
@@ -86,6 +86,8 @@ export class TestAdapter<LogType extends Logger = Logger, SpyType = any> impleme
   diff: any & SpyType;
   log: LogType & SpyType;
   registerDummyPrompt: (promptName: string, customPromptOptions?: DummyPromptOptions) => PromptModule;
+  readonly mockedAnswers: PromptAnswers;
+
   private abortController = new AbortController();
   private readonly spyFactory: SpyFactory<SpyType>;
 
@@ -93,7 +95,9 @@ export class TestAdapter<LogType extends Logger = Logger, SpyType = any> impleme
     const {
       spyFactory = defaultConfig.spyFactory ?? (spyOptions => () => spyOptions.returns),
       log = defaultConfig.log ?? createLogger(),
-      ...promptOptions
+      mockedAnswers,
+      callback,
+      throwOnMissingAnswer,
     } = options;
 
     this.spyFactory = spyFactory;
@@ -104,10 +108,16 @@ export class TestAdapter<LogType extends Logger = Logger, SpyType = any> impleme
       signal: this.abortController.signal,
     });
 
+    this.mockedAnswers = {};
+    this.addAnswers(mockedAnswers ?? {});
+
     const actualRegisterPrompt = this.promptModule.registerPrompt.bind(this.promptModule);
 
     this.registerDummyPrompt = (promptModuleName: string, customPromptOptions?: DummyPromptOptions) =>
-      actualRegisterPrompt(promptModuleName, createDummyPrompt(customPromptOptions ?? promptOptions));
+      actualRegisterPrompt(
+        promptModuleName,
+        createDummyPrompt({ callback, mockedAnswers: this.mockedAnswers, throwOnMissingAnswer, ...customPromptOptions }),
+      );
 
     this.promptModule.registerPrompt = (name: string) => this.registerDummyPrompt(name);
 
@@ -150,5 +160,18 @@ export class TestAdapter<LogType extends Logger = Logger, SpyType = any> impleme
     initialAnswers?: Partial<A> | undefined,
   ): Promise<A> {
     return this.promptModule(questions, initialAnswers);
+  }
+
+  /**
+   * Add answers to the mocked answers.
+   */
+  addAnswers(answers: PromptAnswers): void {
+    // Copy properties using Object.getOwnPropertyDescriptor to preserve getters and setters
+    for (const key in answers) {
+      const descriptors = Object.getOwnPropertyDescriptor(answers, key);
+      if (descriptors) {
+        Object.defineProperty(this.mockedAnswers, key, descriptors);
+      }
+    }
   }
 }
