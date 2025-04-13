@@ -3,7 +3,9 @@ import { stat as fsStat, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 import { Buffer } from 'node:buffer';
-import type { ColoredMessage, InputOutputAdapter, QueuedAdapter } from '@yeoman/types';
+import type { InputOutputAdapter } from '@yeoman/adapter/types';
+import type { ColoredMessage, QueuedAdapter } from '@yeoman/types';
+import type expand from '@inquirer/expand';
 import { type Change, diffLines, diffWords } from 'diff';
 import { type FileTransform, loadFile } from 'mem-fs';
 import type { MemFsEditorFile } from 'mem-fs-editor';
@@ -26,12 +28,16 @@ export type ConflicterStatus = ConflicterLog | (typeof statusToSkipFile)[number]
 const fileShouldBeSkipped = (action: ConflicterStatus): action is (typeof statusToSkipFile)[number] =>
   (statusToSkipFile as readonly string[]).includes(action);
 
-export type ConflicterAction = 'write' | 'abort' | 'diff' | 'reload' | 'force' | 'edit';
+export type ConflicterAction = 'write' | 'abort' | 'diff' | 'reload' | 'force' | 'edit' | 'ask' | 'skip' | 'ignore';
 
 export function setConflicterStatus<F extends ConflicterFile = ConflicterFile>(file: F, status?: ConflicterStatus): F {
   file.conflicter = status;
   return file;
 }
+
+type ConflicterData = {
+  diskContents: Buffer;
+};
 
 export type ConflicterFile = MemFsEditorFile & {
   relativePath: string;
@@ -40,12 +46,26 @@ export type ConflicterFile = MemFsEditorFile & {
   changesDetected?: boolean;
   binary?: boolean;
   conflicterChanges?: Change[];
+  conflicterData?: ConflicterData;
 };
 
 export type ConflictedFile = ConflicterFile & {
   conflicterChanges: Change[];
   changesDetected: true;
+  conflicterData: ConflicterData;
 };
+
+type ActionCallbackOptions = {
+  file: ConflicterFile | ConflictedFile;
+  relativeFilePath: string;
+  adapter: InputOutputAdapter;
+};
+
+type ValueActionCallback = (opt: ActionCallbackOptions) => ConflicterAction | Promise<ConflicterAction>;
+
+type ActionChoices = Parameters<typeof expand<ConflicterAction | ValueActionCallback>>[0]['choices'];
+
+type CustomizeActions = (actions: ActionChoices) => ActionChoices;
 
 export type ConflicterOptions = {
   force?: boolean;
@@ -55,6 +75,7 @@ export type ConflicterOptions = {
   dryRun?: boolean;
   cwd?: string;
   diffOptions?: any;
+  customizeActions?: CustomizeActions;
 };
 
 type ConflicterTransformOptions = { yoResolveFileName?: string };
@@ -94,6 +115,7 @@ export class Conflicter {
   dryRun: boolean;
   cwd: string;
   diffOptions?: any;
+  customizeActions: CustomizeActions;
 
   constructor(
     private readonly adapter: InputOutputAdapter,
@@ -106,6 +128,7 @@ export class Conflicter {
     this.dryRun = options?.dryRun ?? false;
     this.cwd = path.resolve(options?.cwd ?? process.cwd());
     this.diffOptions = options?.diffOptions;
+    this.customizeActions = options?.customizeActions ?? (actions => actions);
 
     if (this.bail) {
       // Bail conflicts with force option, if bail set force to false.
@@ -225,28 +248,29 @@ export class Conflicter {
       file.binary = isBinary(file.path, file.contents ?? undefined);
     }
 
-    const actual = await readFile(path.resolve(filepath));
+    const diskContents = await readFile(path.resolve(filepath));
 
     if (!Buffer.isBuffer(contents)) {
       contents = Buffer.from(contents ?? '', 'utf8');
     }
 
     if (file.binary) {
-      return Boolean(file.fileModeChanges) || actual.toString('hex') !== contents.toString('hex');
+      return Boolean(file.fileModeChanges) || diskContents.toString('hex') !== contents.toString('hex');
     }
 
     let modified: boolean;
     let changes;
     if (this.ignoreWhitespace) {
-      changes = diffWords(actual.toString(), contents.toString(), this.diffOptions);
+      changes = diffWords(diskContents.toString(), contents.toString(), this.diffOptions);
       modified = changes.some(change => change.value?.trim() && (change.added || change.removed));
     } else {
-      changes = diffLines(actual.toString(), contents.toString(), this.diffOptions);
+      changes = diffLines(diskContents.toString(), contents.toString(), this.diffOptions);
       modified = (changes && changes.length > 0 && (changes.length > 1 || changes[0].added || changes[0].removed)) ?? false;
     }
 
     if (modified) {
       file.conflicterChanges = changes;
+      file.conflicterData = { diskContents };
     }
 
     return Boolean(file.fileModeChanges) || modified;
@@ -375,12 +399,12 @@ export class Conflicter {
     const fileStat = await fsStat(file.path);
     const message = `Overwrite ${file.relativePath}?`;
 
-    const result = await adapter.prompt<{ action: ConflicterAction | (({ file }: { file: ConflicterFile }) => ConflicterStatus) }>([
+    const result = await adapter.prompt<{ action: ConflicterAction | ValueActionCallback }>([
       {
         name: 'action',
         type: 'expand',
         message,
-        choices: [
+        choices: this.customizeActions([
           {
             key: 'y',
             name: 'overwrite',
@@ -396,22 +420,27 @@ export class Conflicter {
             name: 'overwrite this and all others',
             value: 'force',
           },
-          {
-            key: 'r',
-            name: 'reload file (experimental)',
-            value: 'reload',
-          },
-          {
-            key: 'x',
-            name: 'abort',
-            value: 'abort',
-          },
           ...(fileStat.isFile()
             ? ([
                 {
                   key: 'd',
                   name: 'show the differences between the old and the new',
                   value: 'diff',
+                },
+              ] as const)
+            : []),
+          {
+            key: 'x',
+            name: 'abort',
+            value: 'abort',
+          },
+          ...((adapter as any).separator ? [(adapter as any).separator()] : []),
+          ...(fileStat.isFile()
+            ? ([
+                {
+                  key: 'r',
+                  name: 'reload file (experimental)',
+                  value: 'reload',
                 },
                 {
                   key: 'e',
@@ -425,19 +454,21 @@ export class Conflicter {
                 },
               ] as const)
             : []),
-        ],
+        ]),
       },
     ]);
-    if (typeof result.action === 'function') {
-      return result.action.call(this, { file, relativeFilePath: file.relativePath, adapter });
+
+    let { action } = result;
+    if (typeof action === 'function') {
+      action = await action.call(this, { file, relativeFilePath: file.relativePath, adapter });
     }
 
-    if (result.action === 'abort') {
+    if (action === 'abort') {
       adapter.log.writeln('Aborting ...');
       throw new Error('Process aborted by user');
     }
 
-    if (result.action === 'diff') {
+    if (action === 'diff') {
       await this._printDiff({ file, adapter });
 
       counter++;
@@ -448,23 +479,24 @@ export class Conflicter {
       return this._ask({ file, counter, adapter });
     }
 
-    if (result.action === 'force') {
+    if (action === 'force') {
       this.force = true;
-    }
-
-    if (result.action === 'write') {
       return 'force';
     }
 
-    if (result.action === 'reload') {
-      if (await this._detectConflict(file)) {
-        return this._ask({ file, counter, adapter });
-      }
-
-      return 'identical';
+    if (action === 'write') {
+      return 'force';
     }
 
-    if (result.action === 'edit') {
+    if (action === 'reload') {
+      if (await this._detectConflict(file)) {
+        action = 'ask';
+      } else {
+        return 'identical';
+      }
+    }
+
+    if (action === 'edit') {
       const answers = await adapter.prompt<{ content?: string }>([
         {
           name: 'content',
@@ -476,13 +508,21 @@ export class Conflicter {
       ]);
       file.contents = Buffer.from(answers.content ?? '', 'utf8');
       if (await this._detectConflict(file)) {
-        return this._ask({ file, counter, adapter });
+        action = 'ask';
+      } else {
+        return 'skip';
       }
-
-      return 'skip';
     }
 
-    return result.action;
+    if (action === 'ask') {
+      return this._ask({ file, counter, adapter });
+    }
+
+    if (!['skip', 'ignore'].includes(action)) {
+      this.adapter.log.info(`Unknown conflicater action: ${result.action}`);
+    }
+
+    return action;
   }
 
   createTransform({ yoResolveFileName }: ConflicterTransformOptions = {}): FileTransform<MemFsEditorFile> {
