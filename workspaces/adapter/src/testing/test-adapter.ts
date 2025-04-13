@@ -15,6 +15,11 @@ type TestQuestion = {
   default?: any;
 };
 
+type PromptCalls = {
+  question: TestQuestion;
+  answer: any;
+};
+
 export type DummyPromptCallback = (answer: any, { question, answers }: { question: TestQuestion; answers: PromptAnswers }) => any;
 
 export type DummyPromptOptions = {
@@ -47,7 +52,7 @@ const isValueSet = (type: string, answer: any) => {
   return Boolean(answer);
 };
 
-const createDummyPrompt = (options: DummyPromptOptions = {}) => {
+const createDummyPrompt = ({ calls }: { calls: PromptCalls[] }, options: DummyPromptOptions = {}) => {
   const { mockedAnswers = {}, callback = answer => answer, throwOnMissingAnswer = false } = options;
   return createPrompt<any, TestQuestion>((config, done) => {
     let answer = mockedAnswers[config.name!];
@@ -68,6 +73,7 @@ const createDummyPrompt = (options: DummyPromptOptions = {}) => {
         answer = true;
       }
     }
+    calls.push({ question: config, answer });
     done(callback(answer, { question: config, answers: { [config.name]: answer } }));
 
     return config.message;
@@ -87,6 +93,7 @@ export class TestAdapter<LogType extends Logger = Logger, SpyType = any> impleme
   log: LogType & SpyType;
   registerDummyPrompt: (promptName: string, customPromptOptions?: DummyPromptOptions) => PromptModule;
   readonly mockedAnswers: PromptAnswers;
+  readonly calls: PromptCalls[] = [];
 
   private abortController = new AbortController();
   private readonly spyFactory: SpyFactory<SpyType>;
@@ -107,7 +114,6 @@ export class TestAdapter<LogType extends Logger = Logger, SpyType = any> impleme
       skipTTYChecks: true,
       signal: this.abortController.signal,
     });
-
     this.mockedAnswers = {};
     this.addAnswers(mockedAnswers ?? {});
 
@@ -116,7 +122,10 @@ export class TestAdapter<LogType extends Logger = Logger, SpyType = any> impleme
     this.registerDummyPrompt = (promptModuleName: string, customPromptOptions?: DummyPromptOptions) =>
       actualRegisterPrompt(
         promptModuleName,
-        createDummyPrompt({ callback, mockedAnswers: this.mockedAnswers, throwOnMissingAnswer, ...customPromptOptions }),
+        createDummyPrompt(
+          { calls: this.calls },
+          { callback, mockedAnswers: this.mockedAnswers, throwOnMissingAnswer, ...customPromptOptions },
+        ),
       );
 
     this.promptModule.registerPrompt = (name: string) => this.registerDummyPrompt(name);

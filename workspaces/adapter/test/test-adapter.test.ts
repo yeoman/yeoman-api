@@ -92,6 +92,15 @@ describe('TestAdapter', () => {
       await expect(adapter.prompt([{ name: 'respuesta', message: 'foo', type: 'list' }])).resolves.toMatchObject({ respuesta: 'bar' });
       await expect(adapter.prompt([{ name: 'respuesta', message: 'foo', type: 'list' }])).resolves.toMatchObject({ respuesta: undefined });
     });
+    it('adds the question to history', async () => {
+      const adapter = new TestAdapter();
+      adapter.addAnswers({ respuesta: 'foo' });
+
+      const question = { name: 'respuesta', message: 'foo', type: 'list' } as const;
+      await adapter.prompt(question);
+
+      expect(adapter.calls).toMatchObject([{ question, answer: 'foo' }]);
+    });
   });
   describe('#queue()', () => {
     it('should execute the callback', async () => {
