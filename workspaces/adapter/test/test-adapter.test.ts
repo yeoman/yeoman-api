@@ -70,6 +70,28 @@ describe('TestAdapter', () => {
         respuesta: null,
       });
     });
+    it('addAnswers adds answers to mockedAnswers', async () => {
+      const adapter = new TestAdapter();
+
+      adapter.addAnswers({ respuesta: 'foo' });
+
+      await expect(adapter.prompt([{ name: 'respuesta', message: 'foo', type: 'list' }])).resolves.toMatchObject({ respuesta: 'foo' });
+      expect(adapter.mockedAnswers).toMatchObject(expect.objectContaining({ respuesta: 'foo' }));
+    });
+    it('addAnswers supports getters', async () => {
+      const adapter = new TestAdapter();
+
+      adapter.addAnswers({
+        _orderedRespuestas: ['foo', 'bar'],
+        get respuesta() {
+          return this._orderedRespuestas.shift();
+        },
+      });
+
+      await expect(adapter.prompt([{ name: 'respuesta', message: 'foo', type: 'list' }])).resolves.toMatchObject({ respuesta: 'foo' });
+      await expect(adapter.prompt([{ name: 'respuesta', message: 'foo', type: 'list' }])).resolves.toMatchObject({ respuesta: 'bar' });
+      await expect(adapter.prompt([{ name: 'respuesta', message: 'foo', type: 'list' }])).resolves.toMatchObject({ respuesta: undefined });
+    });
   });
   describe('#queue()', () => {
     it('should execute the callback', async () => {
