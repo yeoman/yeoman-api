@@ -34,11 +34,16 @@ const createActions = actions => ({
 describe('Conflicter', () => {
   let conflicter: Conflicter;
   let testAdapter: TestAdapter;
+  let customizeActions: any;
+  let separator: any;
 
   beforeEach(() => {
     testAdapter = new TestAdapter();
+    separator = vitest.fn();
+    testAdapter.separator = separator;
 
-    conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }));
+    customizeActions = vitest.fn().mockImplementation(actions => actions);
+    conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }), { customizeActions });
   });
 
   describe('#checkForCollision()', () => {
@@ -386,6 +391,16 @@ describe('Conflicter', () => {
         transform(() => {}),
       );
       assert(conflicter._printDiff.mock.calls.length === 1);
+    });
+
+    it('should call customizeActions', async () => {
+      await conflicter.checkForCollision({
+        path: path.join(__dirname, 'fixtures/conflicter/foo.js'),
+        contents: fs.readFileSync(path.join(__dirname, 'fixtures/conflicter/foo-template.js')),
+      });
+
+      expect(customizeActions).toHaveBeenCalled();
+      expect(customizeActions).toHaveBeenLastCalledWith(expect.any(Array), expect.objectContaining({ separator }));
     });
   });
 });

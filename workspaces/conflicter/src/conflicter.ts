@@ -6,6 +6,7 @@ import { Buffer } from 'node:buffer';
 import type { InputOutputAdapter } from '@yeoman/adapter/types';
 import type { ColoredMessage, QueuedAdapter } from '@yeoman/types';
 import type expand from '@inquirer/expand';
+import type { Separator } from '@inquirer/expand';
 import { type Change, diffLines, diffWords } from 'diff';
 import { type FileTransform, loadFile } from 'mem-fs';
 import type { MemFsEditorFile } from 'mem-fs-editor';
@@ -65,7 +66,7 @@ type ValueActionCallback = (opt: ActionCallbackOptions) => ConflicterAction | Pr
 
 type ActionChoices = Parameters<typeof expand<ConflicterAction | ValueActionCallback>>[0]['choices'];
 
-type CustomizeActions = (actions: ActionChoices) => ActionChoices;
+type CustomizeActions = (actions: ActionChoices, options: { separator?: (separator?: string) => Separator }) => ActionChoices;
 
 export type ConflicterOptions = {
   force?: boolean;
@@ -398,63 +399,67 @@ export class Conflicter {
     // Only offer diff option for files
     const fileStat = await fsStat(file.path);
     const message = `Overwrite ${file.relativePath}?`;
+    const { separator } = adapter as any;
 
     const result = await adapter.prompt<{ action: ConflicterAction | ValueActionCallback }>([
       {
         name: 'action',
         type: 'expand',
         message,
-        choices: this.customizeActions([
-          {
-            key: 'y',
-            name: 'overwrite',
-            value: 'write',
-          },
-          {
-            key: 'n',
-            name: 'do not overwrite',
-            value: 'skip',
-          },
-          {
-            key: 'a',
-            name: 'overwrite this and all others',
-            value: 'force',
-          },
-          ...(fileStat.isFile()
-            ? ([
-                {
-                  key: 'd',
-                  name: 'show the differences between the old and the new',
-                  value: 'diff',
-                },
-              ] as const)
-            : []),
-          {
-            key: 'x',
-            name: 'abort',
-            value: 'abort',
-          },
-          ...((adapter as any).separator ? [(adapter as any).separator()] : []),
-          ...(fileStat.isFile()
-            ? ([
-                {
-                  key: 'r',
-                  name: 'reload file (experimental)',
-                  value: 'reload',
-                },
-                {
-                  key: 'e',
-                  name: 'edit file (experimental)',
-                  value: 'edit',
-                },
-                {
-                  key: 'i',
-                  name: 'ignore, do not overwrite and remember (experimental)',
-                  value: 'ignore',
-                },
-              ] as const)
-            : []),
-        ]),
+        choices: this.customizeActions(
+          [
+            {
+              key: 'y',
+              name: 'overwrite',
+              value: 'write',
+            },
+            {
+              key: 'n',
+              name: 'do not overwrite',
+              value: 'skip',
+            },
+            {
+              key: 'a',
+              name: 'overwrite this and all others',
+              value: 'force',
+            },
+            ...(fileStat.isFile()
+              ? ([
+                  {
+                    key: 'd',
+                    name: 'show the differences between the old and the new',
+                    value: 'diff',
+                  },
+                ] as const)
+              : []),
+            {
+              key: 'x',
+              name: 'abort',
+              value: 'abort',
+            },
+            ...(separator ? [separator()] : []),
+            ...(fileStat.isFile()
+              ? ([
+                  {
+                    key: 'r',
+                    name: 'reload file (experimental)',
+                    value: 'reload',
+                  },
+                  {
+                    key: 'e',
+                    name: 'edit file (experimental)',
+                    value: 'edit',
+                  },
+                  {
+                    key: 'i',
+                    name: 'ignore, do not overwrite and remember (experimental)',
+                    value: 'ignore',
+                  },
+                ] as const)
+              : []),
+          ],
+          { separator },
+        ),
       },
     ]);
 
