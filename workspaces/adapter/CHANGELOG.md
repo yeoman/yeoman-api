@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## <small>2.1.1 (2025-04-15)</small>
+
+- feat(adapter): add calls history support (#97) ([b7f4b67](https://github.com/yeoman/yeoman-api/commit/b7f4b67)), closes [#97](https://github.com/yeoman/yeoman-api/issues/97)
+
 ## 2.1.0 (2025-04-15)
 
 - feat(adapter): add addAnswers support (#96) ([126aa83](https://github.com/yeoman/yeoman-api/commit/126aa83)), closes [#96](https://github.com/yeoman/yeoman-api/issues/96)
