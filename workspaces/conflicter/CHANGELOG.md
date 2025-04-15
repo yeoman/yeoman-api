@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.4.0 (2025-04-15)
+
+- feat(adapter): add separator to customizeActions callback ([6d7f837](https://github.com/yeoman/yeoman-api/commit/6d7f837))
+- feat(conflicter): add customizeActions option (#95) ([58503a0](https://github.com/yeoman/yeoman-api/commit/58503a0)), closes [#95](https://github.com/yeoman/yeoman-api/issues/95)
+- chore(deps-dev): bump @types/diff from 6.0.0 to 7.0.0 (#61) ([3b68f0f](https://github.com/yeoman/yeoman-api/commit/3b68f0f)), closes [#61](https://github.com/yeoman/yeoman-api/issues/61)
+
 ## <small>2.3.2 (2024-11-21)</small>
 
 - fix: adjust diff behavior change (#59) ([723f5f3](https://github.com/yeoman/yeoman-api/commit/723f5f3)), closes [#59](https://github.com/yeoman/yeoman-api/issues/59)

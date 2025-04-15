@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.6.0 (2025-04-15)
+
+- chore: drop acceptDependencies (#85) ([f94f3e3](https://github.com/yeoman/yeoman-api/commit/f94f3e3)), closes [#85](https://github.com/yeoman/yeoman-api/issues/85)
+- chore: drop package-lock added by editor ([0963f8f](https://github.com/yeoman/yeoman-api/commit/0963f8f))
+- chore: fix package-lock.json ([931fcba](https://github.com/yeoman/yeoman-api/commit/931fcba))
+- chore: fix readme links (#55) ([1cfbd7f](https://github.com/yeoman/yeoman-api/commit/1cfbd7f)), closes [#55](https://github.com/yeoman/yeoman-api/issues/55)
+- fix(types): keep @yeoman/adapter only in peerDependencies ([25d37bc](https://github.com/yeoman/yeoman-api/commit/25d37bc))
+
 ## 1.5.0 (2024-09-30)
 
 - feat: move adapter base types to @yeoman/adapter ([19b9379](https://github.com/yeoman/yeoman-api/commit/19b9379))

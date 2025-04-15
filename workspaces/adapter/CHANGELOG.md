@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.1.0 (2025-04-15)
+
+- feat(adapter): add addAnswers support (#96) ([126aa83](https://github.com/yeoman/yeoman-api/commit/126aa83)), closes [#96](https://github.com/yeoman/yeoman-api/issues/96)
+- feat(adapter): add separator to adapter (#90) ([ecd7931](https://github.com/yeoman/yeoman-api/commit/ecd7931)), closes [#90](https://github.com/yeoman/yeoman-api/issues/90)
+- chore: drop package-lock added by editor ([0963f8f](https://github.com/yeoman/yeoman-api/commit/0963f8f))
+- chore: fix readme links (#55) ([1cfbd7f](https://github.com/yeoman/yeoman-api/commit/1cfbd7f)), closes [#55](https://github.com/yeoman/yeoman-api/issues/55)
+
 ## 2.0.0 (2024-10-11)
 
 - chore(adapter): update dependencies (#53) ([53e4518](https://github.com/yeoman/yeoman-api/commit/53e4518)), closes [#53](https://github.com/yeoman/yeoman-api/issues/53)
