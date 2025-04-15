@@ -1,6 +1,6 @@
 {
   "name": "@yeoman/conflicter",
-  "version": "2.3.2",
+  "version": "2.4.0",
   "private": false,
   "description": "Conflict resolution for yeoman's generator/environment stack",
   "keywords": [
