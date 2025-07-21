@@ -50,7 +50,7 @@
     "@types/dateformat": "^5.0.2",
     "@types/diff": "^7.0.0",
     "@types/node": "^18.19.0",
-    "@types/textextensions": "^2.4.2",
+    "@types/textextensions": "^5.0.0",
     "@yeoman/adapter": "*",
     "lodash-es": "^4.17.21"
   },
