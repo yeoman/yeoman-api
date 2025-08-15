@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@2.4.0...@yeoman/conflicter@3.0.0) (2025-08-15)
+
+### ⚠ BREAKING CHANGES
+
+- **conflicter:** update dependencies (#123)
+- **deps:** bump pretty-bytes from 6.1.1 to 7.0.0 (#102)
+- **deps:** bump binary-extensions from 2.3.0 to 3.1.0
+
+### Features
+
+- **conflicter:** update dependencies ([#123](https://github.com/yeoman/yeoman-api/issues/123)) ([e7edfd9](https://github.com/yeoman/yeoman-api/commit/e7edfd9148f08723e189f26408612cba5a196040))
+- **conflicter:** update diff to v8 ([#122](https://github.com/yeoman/yeoman-api/issues/122)) ([bef9061](https://github.com/yeoman/yeoman-api/commit/bef90614d5a9cb58377a60dc95049c91a7a93ad4))
+
+### Miscellaneous Chores
+
+- **deps:** bump binary-extensions from 2.3.0 to 3.1.0 ([28ae46e](https://github.com/yeoman/yeoman-api/commit/28ae46ed4843273e1087d3a918d3bfd67c66e3bf))
+- **deps:** bump pretty-bytes from 6.1.1 to 7.0.0 ([#102](https://github.com/yeoman/yeoman-api/issues/102)) ([a82f017](https://github.com/yeoman/yeoman-api/commit/a82f0176f9017b036eff43da3fc3db24f10124f6))
+
 ## 2.4.0 (2025-04-15)
 
 - feat(adapter): add separator to customizeActions callback ([6d7f837](https://github.com/yeoman/yeoman-api/commit/6d7f837))
