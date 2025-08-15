@@ -87,7 +87,7 @@ describe('Conflicter', () => {
               mockedAnswers: {
                 action(data) {
                   try {
-                    assert(this === conflicter);
+                    assert.ok(this === conflicter);
                     assert.strictEqual(slash(data.relativeFilePath), 'test/conflicter.test.ts');
                     resolve();
                   } catch (error) {
@@ -390,7 +390,7 @@ describe('Conflicter', () => {
         conflicter.createTransform(),
         transform(() => {}),
       );
-      assert(conflicter._printDiff.mock.calls.length === 1);
+      assert.ok(conflicter._printDiff.mock.calls.length === 1);
     });
 
     it('should call customizeActions', async () => {

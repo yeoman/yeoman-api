@@ -29,7 +29,7 @@ const equalsNamespace = function (namespace, expected) {
 describe('Namespace', () => {
   describe('#isNamespace()', () => {
     it('returns true if a YeomanNamespace is passed', () => {
-      assert(isNamespaceObject(requireNamespace('foo-bar')));
+      assert.ok(isNamespaceObject(requireNamespace('foo-bar')));
     });
   });
 
@@ -44,7 +44,7 @@ describe('Namespace', () => {
   describe('#requireNamespace()', () => {
     it('returns namespace', () => {
       const parsed = requireNamespace('foo-bar');
-      assert(
+      assert.ok(
         equalsNamespace(parsed, {
           complete: 'foo-bar',
           generatorHint: 'generator-foo-bar',
@@ -59,7 +59,7 @@ describe('Namespace', () => {
 
     it('returns namespace with scope', () => {
       const parsed = requireNamespace('@scope/foo-bar');
-      assert(
+      assert.ok(
         equalsNamespace(parsed, {
           complete: '@scope/foo-bar',
           scope: '@scope',
@@ -75,7 +75,7 @@ describe('Namespace', () => {
 
     it('returns namespace with scope and generator', () => {
       const parsed = requireNamespace('@scope/foo-bar:app');
-      assert(
+      assert.ok(
         equalsNamespace(parsed, {
           complete: '@scope/foo-bar:app',
           scope: '@scope',
@@ -92,7 +92,7 @@ describe('Namespace', () => {
 
     it('returns namespace with generator', () => {
       const parsed = requireNamespace('foo-bar:app');
-      assert(
+      assert.ok(
         equalsNamespace(parsed, {
           complete: 'foo-bar:app',
           unscoped: 'foo-bar',
@@ -108,7 +108,7 @@ describe('Namespace', () => {
 
     it('returns namespace with id', () => {
       const parsed = requireNamespace('foo-bar#1');
-      assert(
+      assert.ok(
         equalsNamespace(parsed, {
           complete: 'foo-bar#1',
           unscoped: 'foo-bar',
@@ -124,7 +124,7 @@ describe('Namespace', () => {
 
     it('returns namespace with generator and id', () => {
       const parsed = requireNamespace('foo-bar:app#1');
-      assert(
+      assert.ok(
         equalsNamespace(parsed, {
           complete: 'foo-bar:app#1',
           unscoped: 'foo-bar',
@@ -141,7 +141,7 @@ describe('Namespace', () => {
 
     it('returns namespace with scope, generator, id and optional', () => {
       const parsed = requireNamespace('@scope/foo-bar:app#1?');
-      assert(
+      assert.ok(
         equalsNamespace(parsed, {
           complete: '@scope/foo-bar:app#1?',
           scope: '@scope',
@@ -165,7 +165,7 @@ describe('Namespace', () => {
 
     it('returns namespace with scope, multiples generator and id', () => {
       const parsed = requireNamespace('@scope/foo-bar:app:client#1');
-      assert(
+      assert.ok(
         equalsNamespace(parsed, {
           complete: '@scope/foo-bar:app:client#1',
           scope: '@scope',
@@ -184,7 +184,7 @@ describe('Namespace', () => {
     it('returns with semver', () => {
       const complete = 'foo-bar@1.0.0-beta+exp.sha.5114f85';
       const parsed = requireNamespace(complete);
-      assert(
+      assert.ok(
         equalsNamespace(parsed, {
           complete,
           generatorHint: 'generator-foo-bar',
@@ -201,7 +201,7 @@ describe('Namespace', () => {
     it('returns with semver +', () => {
       const complete = 'foo-bar@1.0.0-beta+exp.sha.5114f85';
       const parsed = requireNamespace(complete);
-      assert(
+      assert.ok(
         equalsNamespace(parsed, {
           complete,
           generatorHint: 'generator-foo-bar',
@@ -218,7 +218,7 @@ describe('Namespace', () => {
     it('returns with semver ^', () => {
       const complete = 'foo-bar@^1.0.4';
       const parsed = requireNamespace(complete);
-      assert(
+      assert.ok(
         equalsNamespace(parsed, {
           complete,
           generatorHint: 'generator-foo-bar',
@@ -235,7 +235,7 @@ describe('Namespace', () => {
     it('returns with semver *', () => {
       const complete = 'foo-bar@*';
       const parsed = requireNamespace(complete);
-      assert(
+      assert.ok(
         equalsNamespace(parsed, {
           complete,
           generatorHint: 'generator-foo-bar',
@@ -252,7 +252,7 @@ describe('Namespace', () => {
     it('semver space', () => {
       const complete = 'foo-bar@1.0.0 - 1.2.0';
       const parsed = requireNamespace(complete);
-      assert(
+      assert.ok(
         equalsNamespace(parsed, {
           complete,
           generatorHint: 'generator-foo-bar',
@@ -269,7 +269,7 @@ describe('Namespace', () => {
     it('returns with semver <=>', () => {
       const complete = 'foo-bar@>=1.2.3 <2.0.0';
       const parsed = requireNamespace(complete);
-      assert(
+      assert.ok(
         equalsNamespace(parsed, {
           complete,
           generatorHint: 'generator-foo-bar',
@@ -286,7 +286,7 @@ describe('Namespace', () => {
     it('returns with semver and instanceId', () => {
       const complete = 'foo-bar@>=1.2.3 <2.0.0@#1';
       const parsed = requireNamespace(complete);
-      assert(
+      assert.ok(
         equalsNamespace(parsed, {
           complete,
           generatorHint: 'generator-foo-bar',
@@ -303,7 +303,7 @@ describe('Namespace', () => {
 
     it('returns method update', () => {
       const parsed = requireNamespace('foo-bar+update');
-      assert(
+      assert.ok(
         equalsNamespace(parsed, {
           complete: 'foo-bar+update',
           generatorHint: 'generator-foo-bar',
@@ -319,7 +319,7 @@ describe('Namespace', () => {
 
     it('returns method update and done', () => {
       const parsed = requireNamespace('foo-bar+update+done');
-      assert(
+      assert.ok(
         equalsNamespace(parsed, {
           complete: 'foo-bar+update+done',
           generatorHint: 'generator-foo-bar',
@@ -335,7 +335,7 @@ describe('Namespace', () => {
 
     it('accepts upper case methods', () => {
       const parsed = requireNamespace('foo-bar+UPDATE+done');
-      assert(
+      assert.ok(
         equalsNamespace(parsed, {
           complete: 'foo-bar+UPDATE+done',
           generatorHint: 'generator-foo-bar',
@@ -351,7 +351,7 @@ describe('Namespace', () => {
 
     it('returns instanceId with methods update and done', () => {
       const parsed = requireNamespace('foo-bar#foo+update+done');
-      assert(
+      assert.ok(
         equalsNamespace(parsed, {
           complete: 'foo-bar#foo+update+done',
           generatorHint: 'generator-foo-bar',
@@ -368,7 +368,7 @@ describe('Namespace', () => {
 
     it('returns instanceId *', () => {
       const parsed = requireNamespace('foo-bar#*');
-      assert(
+      assert.ok(
         equalsNamespace(parsed, {
           complete: 'foo-bar#*',
           generatorHint: 'generator-foo-bar',

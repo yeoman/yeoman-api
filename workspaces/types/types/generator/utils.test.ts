@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/ban-ts-comment, unicorn/prevent-abbreviations */
 import type { BaseGenerator, BaseGeneratorConstructor } from './generator.js';
 import type { GetGeneratorConstructor } from './utils.js';
 
