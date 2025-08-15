@@ -7,7 +7,7 @@ import type { InputOutputAdapter } from '@yeoman/adapter/types';
 import type { ColoredMessage, QueuedAdapter } from '@yeoman/types';
 import type expand from '@inquirer/expand';
 import type { Separator } from '@inquirer/expand';
-import { type Change, diffLines, diffWords } from 'diff';
+import { type Change, ChangeObject, DiffLinesOptionsNonabortable, DiffWordsOptionsNonabortable, diffLines, diffWords } from 'diff';
 import { type FileTransform, loadFile } from 'mem-fs';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import { clearFileState, setModifiedFileState } from 'mem-fs-editor/state';
@@ -69,13 +69,21 @@ type ActionChoices = Parameters<typeof expand<ConflicterAction | ValueActionCall
 type CustomizeActions = (actions: ActionChoices, options: { separator?: (separator?: string) => Separator }) => ActionChoices;
 
 export type ConflicterOptions = {
+  /** When set to true, we won't check for conflict. (the conflicter become a passthrough) */
   force?: boolean;
+  /** When set to true, we will abort on first conflict. (used for testing reproducibility) */
   bail?: boolean;
+  /** When set to true, whitespace changes should not generate a conflict. */
   ignoreWhitespace?: boolean;
+  /** When set to true, identical files should be written to disc. */
   regenerate?: boolean;
+  /** When set to true, no write operation will be executed. */
   dryRun?: boolean;
+  /** Path to be used as reference for relative path. */
   cwd?: string;
-  diffOptions?: any;
+  /** Custom diff options */
+  diffOptions?: DiffWordsOptionsNonabortable | DiffLinesOptionsNonabortable;
+  /** Customize file actions */
   customizeActions?: CustomizeActions;
 };
 
@@ -94,19 +102,6 @@ const prepareChange = (changes: string, prefix: string) =>
  *
  * When a potential conflict is detected, we prompt the user and ask them for
  * confirmation before proceeding with the actual write.
- *
- * @constructor
- * @property {Boolean} force - same as the constructor argument
- *
- * @param  {TerminalAdapter} adapter - The generator adapter
- * @param  {Object} options - Conflicter options
- * @param  {Boolean} [options.force=false] - When set to true, we won't check for conflict. (the conflicter become a passthrough)
- * @param  {Boolean} [options.bail=false] - When set to true, we will abort on first conflict. (used for testing reproducibility)
- * @param  {Boolean} [options.ignoreWhitespace=false] - When set to true, whitespace changes should not generate a conflict.
- * @param  {Boolean} [options.regenerate=false] - When set to true, identical files should be written to disc.
- * @param  {Boolean} [options.dryRun=false] - When set to true, no write operation will be executed.
- * @param  {Boolean} [options.cwd=process.cwd()] - Path to be used as reference for relative path.
- * @param  {string} cwd - Set cwd for relative logs.
  */
 export class Conflicter {
   force: boolean;
@@ -115,7 +110,7 @@ export class Conflicter {
   regenerate: boolean;
   dryRun: boolean;
   cwd: string;
-  diffOptions?: any;
+  diffOptions?: DiffWordsOptionsNonabortable | DiffLinesOptionsNonabortable;
   customizeActions: CustomizeActions;
 
   constructor(
@@ -260,7 +255,7 @@ export class Conflicter {
     }
 
     let modified: boolean;
-    let changes;
+    let changes: ChangeObject<string>[];
     if (this.ignoreWhitespace) {
       changes = diffWords(diskContents.toString(), contents.toString(), this.diffOptions);
       modified = changes.some(change => change.value?.trim() && (change.added || change.removed));
