@@ -41,6 +41,9 @@
   "peerDependencies": {
     "@types/node": ">=18.19.44"
   },
+  "acceptDependencies": {
+    "minimatch": "^10.0.3"
+  },
   "engines": {
     "node": ">=18.19.0"
   },
