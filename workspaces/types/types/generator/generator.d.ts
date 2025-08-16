@@ -1,4 +1,5 @@
 import type { BaseEnvironment } from '../environment/environment.js';
+import type { GeneratorMeta } from '../environment/methods-options.js';
 import type { GeneratorFeatures } from './generator-features.js';
 import type { GeneratorOptions } from './generator-options.js';
 
@@ -33,6 +34,8 @@ export type BaseGenerator<
 
   // Generator >= v5
   readonly features: F | undefined;
+
+  readonly _meta?: GeneratorMeta;
 };
 
 export type BaseGeneratorConstructor<O extends GeneratorOptions = GeneratorOptions, F extends GeneratorFeatures = GeneratorFeatures> = new (
