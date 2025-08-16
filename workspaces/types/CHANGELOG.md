@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.6.0...@yeoman/types@1.7.0) (2025-08-16)
+
+### Features
+
+- improve meta types ([#128](https://github.com/yeoman/yeoman-api/issues/128)) ([3c0932c](https://github.com/yeoman/yeoman-api/commit/3c0932c2a55e785fa3fd0a4f65e09a2435ec78c2))
+
+### Bug Fixes
+
+- keep only a single generator constructor ([#127](https://github.com/yeoman/yeoman-api/issues/127)) ([a982714](https://github.com/yeoman/yeoman-api/commit/a982714e64036eebae8386b66a1de221c75231ad))
+
 ## 1.6.0 (2025-04-15)
 
 - chore: drop acceptDependencies (#85) ([f94f3e3](https://github.com/yeoman/yeoman-api/commit/f94f3e3)), closes [#85](https://github.com/yeoman/yeoman-api/issues/85)
