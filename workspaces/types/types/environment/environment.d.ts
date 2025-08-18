@@ -88,7 +88,10 @@ export type BaseEnvironment<A = InputOutputAdapter, S extends Store<MemFsEditorF
    * @param namespaceOrPath The namespace of the generator or the path to a generator.
    * @returns The constructor of the generator registered under the namespace.
    */
-  get<C extends BaseGeneratorConstructor = BaseGeneratorConstructor>(namespaceOrPath: string): Promise<C | undefined>;
+  get<C extends BaseGeneratorConstructor = BaseGeneratorConstructor>(namespaceOrPath: string): Promise<C | undefined> | (C | undefined);
+  get<G extends BaseGenerator = BaseGenerator>(
+    namespaceOrPath: string,
+  ): Promise<GetGeneratorConstructor<G> | undefined> | (GetGeneratorConstructor<G> | undefined);
 
   create<G extends BaseGenerator = BaseGenerator>(
     namespaceOrPath: string | GetGeneratorConstructor<G>,
