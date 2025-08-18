@@ -64,15 +64,14 @@ export type BaseGeneratorMeta = {
   packagePath?: string;
 };
 
+export type BaseGeneratorConstructorMeta = BaseGeneratorMeta & { _meta?: GeneratorMeta };
+
 export type GeneratorMeta = BaseGeneratorMeta & {
   packageNamespace?: string;
   /** Import and find the Generator Class */
-  importGenerator: <G extends BaseGenerator>() => Promise<
-    GetGeneratorConstructor<G> &
-      BaseGeneratorMeta & {
-        _meta?: GeneratorMeta;
-      }
-  >;
+  importGenerator: <G extends BaseGenerator>() =>
+    | Promise<GetGeneratorConstructor<G> & BaseGeneratorConstructorMeta>
+    | (GetGeneratorConstructor<G> & BaseGeneratorConstructorMeta);
   /** Import the module `import(meta.resolved)` */
   importModule?: () => Promise<unknown>;
   /** Intantiate the Generator `env.instantiate(await meta.importGenerator())` */
