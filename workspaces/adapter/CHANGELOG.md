@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/adapter@2.1.1...@yeoman/adapter@3.0.0) (2025-09-23)
+
+### ⚠ BREAKING CHANGES
+
+- **adapter:** require Node.js 20 (#140)
+
+### Features
+
+- **adapter:** abort the adapter on prompt failure ([#141](https://github.com/yeoman/yeoman-api/issues/141)) ([e5364a2](https://github.com/yeoman/yeoman-api/commit/e5364a2150f14e2368fcde05ff3c55e2a0cb3f82))
+- **adapter:** expose signal and pass it to p-queue ([#139](https://github.com/yeoman/yeoman-api/issues/139)) ([9d75499](https://github.com/yeoman/yeoman-api/commit/9d75499b4d43702b496b543100e539128098c24e))
+- **adapter:** require Node.js 20 ([#140](https://github.com/yeoman/yeoman-api/issues/140)) ([77b847b](https://github.com/yeoman/yeoman-api/commit/77b847bd7a46c8772ed5a2fb31fa3ece23f3cdda))
+
 ## <small>2.1.1 (2025-04-15)</small>
 
 - feat(adapter): add calls history support (#97) ([b7f4b67](https://github.com/yeoman/yeoman-api/commit/b7f4b67)), closes [#97](https://github.com/yeoman/yeoman-api/issues/97)
