@@ -45,6 +45,17 @@ describe('QueuedAdapter/TerminalAdapter', () => {
       expect(stub).toHaveBeenCalledWith(questions, answers);
       assert.equal(returnValue, fakeAnswers);
     });
+
+    it('should not be executed on aborted adapter', async () => {
+      adapter.close();
+      try {
+        await adapter.prompt([], {});
+      } catch {
+        expect(stub).not.toHaveBeenCalled();
+        return;
+      }
+      throw new Error('Promise should be rejected');
+    });
   });
 
   describe('#prompt() with answers', () => {
@@ -126,6 +137,18 @@ describe('QueuedAdapter/TerminalAdapter', () => {
       expect(spyerror).toHaveBeenLastCalledWith(outputObject);
       assert.equal(stripAnsi(logMessage), '{ something: 72, another: 12 }\n');
     });
+
+    it('should execute on aborted adapter', async () => {
+      adapter.close();
+      const outputObject = {
+        something: 72,
+        another: 12,
+      };
+
+      adapter.log(outputObject);
+      await adapter.onIdle();
+      expect(spyerror).toHaveBeenCalled();
+    });
   });
 
   describe('#log', () => {
@@ -196,6 +219,27 @@ describe('QueuedAdapter/TerminalAdapter', () => {
       for (const k of [...funcs, ...defaultColors, 'merge']) {
         assert.equal(typeof adapter.log[k], 'function');
       }
+    });
+  });
+
+  describe('#queue()', () => {
+    it('should return the result of the queued function', async () => {
+      const stub = vitest.fn().mockReturnValue(true);
+      const result = await adapter.queue(stub);
+      expect(stub).toHaveBeenCalledOnce();
+      expect(result).toBe(true);
+    });
+
+    it('should not be executed on aborted adapter', async () => {
+      adapter.close();
+      const stub = vitest.fn();
+      try {
+        await adapter.queue(stub);
+      } catch {
+        expect(stub).not.toHaveBeenCalled();
+        return;
+      }
+      throw new Error('Promise should be rejected');
     });
   });
 });
