@@ -119,4 +119,26 @@ describe('TestAdapter', () => {
       ).resolves.toBe(2);
     });
   });
+
+  describe('signal', () => {
+    describe('TestAdapter#prompt()', () => {
+      it('if prompt fails it should abort the adapter', async () => {
+        const adapter = new TestAdapter();
+        try {
+          await adapter.prompt(
+            { name: 'respuesta', message: 'foo', type: 'list' },
+            {
+              get respuesta() {
+                throw new Error('error in answer getter');
+              },
+            },
+          );
+        } catch {
+          expect(adapter.signal.aborted).toBe(true);
+          return;
+        }
+        throw new Error('Error was expected but not thrown');
+      });
+    });
+  });
 });

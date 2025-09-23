@@ -242,4 +242,40 @@ describe('QueuedAdapter/TerminalAdapter', () => {
       throw new Error('Promise should be rejected');
     });
   });
+
+  describe('signal', () => {
+    describe('TerminalAdapter#prompt()', () => {
+      let terminalAdapter: TerminalAdapter;
+
+      beforeEach(() => {
+        terminalAdapter = new TerminalAdapter({ promptModule: vitest.fn().mockRejectedValue(new Error('abort')) });
+      });
+
+      it('on failure it should abort the adapter', async () => {
+        try {
+          await terminalAdapter.prompt([], {});
+        } catch {
+          expect(terminalAdapter.signal.aborted).toBe(true);
+          return;
+        }
+        throw new Error('Error was expected but not thrown');
+      });
+    });
+
+    describe('QueuedAdapter#prompt()', () => {
+      beforeEach(() => {
+        adapter = new QueuedAdapter({ adapter: new TerminalAdapter({ promptModule: vitest.fn().mockRejectedValue(new Error('abort')) }) });
+      });
+
+      it('on failure it should abort the adapter', async () => {
+        try {
+          await adapter.prompt([], {});
+        } catch {
+          expect(adapter.signal.aborted).toBe(true);
+          return;
+        }
+        throw new Error('Error was expected but not thrown');
+      });
+    });
+  });
 });
