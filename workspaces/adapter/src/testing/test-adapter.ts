@@ -96,6 +96,8 @@ export class TestAdapter<LogType extends Logger = Logger, SpyType = any> impleme
   readonly calls: PromptCalls[] = [];
 
   private abortController = new AbortController();
+  readonly signal: AbortSignal = this.abortController.signal;
+
   private readonly spyFactory: SpyFactory<SpyType>;
 
   constructor(options: TestAdapterOptions<SpyType> = {}) {

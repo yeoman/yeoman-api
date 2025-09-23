@@ -38,6 +38,7 @@ export class QueuedAdapter implements QueuedAdapterApi {
   #nextChildPriority: number;
   #ora: Ora;
   separator?: QueuedAdapterApi['separator'];
+  readonly signal: AbortSignal;
 
   /**
    * `TerminalAdapter` is the default implementation of `Adapter`, an abstraction
@@ -52,6 +53,7 @@ export class QueuedAdapter implements QueuedAdapterApi {
     const { adapter, queue, delta, ...adapterOptions } = options ?? {};
     this.#queue = queue ?? new PQueue({ concurrency: 1 });
     this.actualAdapter = adapter ?? new TerminalAdapter(adapterOptions);
+    this.signal = this.actualAdapter.signal!;
     this.separator = this.actualAdapter.separator;
 
     // Deffered logger
@@ -106,6 +108,7 @@ export class QueuedAdapter implements QueuedAdapterApi {
     return this.#queue.add(async () => this.actualAdapter.prompt(questions, initialAnswers), {
       priority: PROMPT_PRIORITY + this.delta,
       throwOnTimeout: true,
+      signal: this.signal,
     });
   }
 
@@ -119,7 +122,11 @@ export class QueuedAdapter implements QueuedAdapterApi {
    * @returns
    */
   async queue<TaskResultType>(function_: Task<TaskResultType>): Promise<TaskResultType> {
-    return this.#queue.add(() => function_(this.actualAdapter), { priority: BLOCKING_PRIORITY + this.delta, throwOnTimeout: true });
+    return this.#queue.add(() => function_(this.actualAdapter), {
+      priority: BLOCKING_PRIORITY + this.delta,
+      throwOnTimeout: true,
+      signal: this.signal,
+    });
   }
 
   /**

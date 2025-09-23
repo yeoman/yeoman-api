@@ -26,6 +26,11 @@ export type InputOutputAdapter = {
   log: Logger;
 
   /**
+   * An AbortSignal to communicate aborting ongoing operations.
+   */
+  readonly signal?: AbortSignal;
+
+  /**
    * Prompts the user for one or more questions.
    *
    * @param questions The questions to prompt.

@@ -23,6 +23,7 @@ export class TerminalAdapter implements InputOutputAdapter {
   log: Logger;
   promptModule: PromptModule;
   private abortController = new AbortController();
+  readonly signal: AbortSignal = this.abortController.signal;
 
   /**
    * `TerminalAdapter` is the default implementation of `Adapter`, an abstraction
