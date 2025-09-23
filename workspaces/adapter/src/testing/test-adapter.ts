@@ -170,7 +170,12 @@ export class TestAdapter<LogType extends Logger = Logger, SpyType = any> impleme
     questions: PromptQuestions<A>,
     initialAnswers?: Partial<A> | undefined,
   ): Promise<A> {
-    return this.promptModule(questions, initialAnswers);
+    try {
+      return await this.promptModule(questions, initialAnswers);
+    } catch (error) {
+      this.abortController.abort(error);
+      throw error;
+    }
   }
 
   /**
