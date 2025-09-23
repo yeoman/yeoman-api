@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.7.1...@yeoman/types@1.8.0) (2025-09-23)
+
+### Features
+
+- **types:** allow @yeoman/adapter v3 ([#142](https://github.com/yeoman/yeoman-api/issues/142)) ([bac5472](https://github.com/yeoman/yeoman-api/commit/bac5472d4e057e56cf55b991ca8f76eba503466e))
+
 ## [1.7.1](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.7.0...@yeoman/types@1.7.1) (2025-08-18)
 
 **Note:** Version bump only for package @yeoman/types
