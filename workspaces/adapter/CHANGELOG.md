@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/adapter@3.0.0...@yeoman/adapter@3.1.0) (2025-09-24)
+
+### Features
+
+- **adapter:** replace close with abort api ([#143](https://github.com/yeoman/yeoman-api/issues/143)) ([80928a9](https://github.com/yeoman/yeoman-api/commit/80928a96a6d61a4cccb504cc8061c7b92629d193))
+
 ## [3.0.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/adapter@2.1.1...@yeoman/adapter@3.0.0) (2025-09-23)
 
 ### ⚠ BREAKING CHANGES
