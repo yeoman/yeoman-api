@@ -39,9 +39,15 @@ export type InputOutputAdapter = {
   prompt<A extends PromptAnswers = PromptAnswers>(questions: PromptQuestions<A>, initialAnswers?: Partial<A>): Promise<A>;
 
   /**
-   * Close underline inputs.
+   * @deprecated use `abort` instead
+   * Close the adapter by aborting the adapter with default reason.
    */
   close(): void;
+
+  /**
+   * Aborts ongoing operations and prevents to add new operations.
+   */
+  abort?(reason?: any): void;
 
   /**
    * Creates a separator for prompt choices.

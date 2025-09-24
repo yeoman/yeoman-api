@@ -68,7 +68,11 @@ export class TerminalAdapter implements InputOutputAdapter {
   }
 
   close() {
-    this.abortController.abort();
+    this.abort();
+  }
+
+  abort(reason?: any) {
+    this.abortController.abort(reason);
   }
 
   /**

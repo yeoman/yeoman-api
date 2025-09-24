@@ -86,7 +86,11 @@ export class QueuedAdapter implements QueuedAdapterApi {
   }
 
   close() {
-    this.actualAdapter.close();
+    this.abort();
+  }
+
+  abort(reason?: any): void {
+    this.actualAdapter.abort?.(reason);
     this.#queue.clear();
   }
 
