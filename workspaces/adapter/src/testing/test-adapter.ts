@@ -163,7 +163,11 @@ export class TestAdapter<LogType extends Logger = Logger, SpyType = any> impleme
   }
 
   close(): void {
-    this.abortController.abort();
+    this.abort();
+  }
+
+  abort(reason?: any): void {
+    this.abortController.abort(reason);
   }
 
   async prompt<A extends PromptAnswers = PromptAnswers>(
