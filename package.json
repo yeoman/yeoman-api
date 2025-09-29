@@ -24,7 +24,7 @@
     "test-coverage": "npm run test-coverage --workspaces"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.8.1",
+    "@commitlint/cli": "^20.0.0",
     "@commitlint/config-conventional": "^20.0.0",
     "@eslint/js": "9.33.0",
     "@lerna-lite/cli": "4.7.1",
