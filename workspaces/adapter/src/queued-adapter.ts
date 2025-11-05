@@ -111,7 +111,6 @@ export class QueuedAdapter implements QueuedAdapterApi {
   async prompt<A extends PromptAnswers = PromptAnswers>(questions: PromptQuestions<A>, initialAnswers?: Partial<A>): Promise<A> {
     return this.#queue.add(async () => this.actualAdapter.prompt(questions, initialAnswers), {
       priority: PROMPT_PRIORITY + this.delta,
-      throwOnTimeout: true,
       signal: this.signal,
     });
   }
@@ -128,7 +127,6 @@ export class QueuedAdapter implements QueuedAdapterApi {
   async queue<TaskResultType>(function_: Task<TaskResultType>): Promise<TaskResultType> {
     return this.#queue.add(() => function_(this.actualAdapter), {
       priority: BLOCKING_PRIORITY + this.delta,
-      throwOnTimeout: true,
       signal: this.signal,
     });
   }
@@ -139,7 +137,7 @@ export class QueuedAdapter implements QueuedAdapterApi {
    * @returns
    */
   async queueLog<TaskResultType>(function_: Task<TaskResultType>): Promise<TaskResultType> {
-    return this.#queue.add(() => function_(this.actualAdapter), { priority: LOG_PRIORITY + this.delta, throwOnTimeout: true });
+    return this.#queue.add(() => function_(this.actualAdapter), { priority: LOG_PRIORITY + this.delta });
   }
 
   /**
