@@ -31,7 +31,7 @@ const fileShouldBeSkipped = (action: ConflicterStatus): action is (typeof status
 
 export type ConflicterAction = 'write' | 'abort' | 'diff' | 'reload' | 'force' | 'edit' | 'ask' | 'skip' | 'ignore';
 
-export function setConflicterStatus<F extends ConflicterFile = ConflicterFile>(file: F, status?: ConflicterStatus): F {
+export function setConflicterStatus<F extends ConflicterFileInternal = ConflicterFileInternal>(file: F, status?: ConflicterStatus): F {
   file.conflicter = status;
   return file;
 }
@@ -41,8 +41,11 @@ type ConflicterData = {
 };
 
 export type ConflicterFile = MemFsEditorFile & {
-  relativePath: string;
   conflicter?: ConflicterStatus;
+};
+
+type ConflicterFileInternal = ConflicterFile & {
+  relativePath: string;
   fileModeChanges?: [number, number];
   changesDetected?: boolean;
   binary?: boolean;
@@ -50,14 +53,14 @@ export type ConflicterFile = MemFsEditorFile & {
   conflicterData?: ConflicterData;
 };
 
-export type ConflictedFile = ConflicterFile & {
+type ConflictedFile = ConflicterFileInternal & {
   conflicterChanges: Change[];
   changesDetected: true;
   conflicterData: ConflicterData;
 };
 
 type ActionCallbackOptions = {
-  file: ConflicterFile | ConflictedFile;
+  file: ConflicterFileInternal | ConflictedFile;
   relativeFilePath: string;
   adapter: InputOutputAdapter;
 };
@@ -132,7 +135,7 @@ export class Conflicter {
     }
   }
 
-  private log(file: ConflicterFile, adapter: InputOutputAdapter = this.adapter) {
+  private log(file: ConflicterFileInternal, adapter: InputOutputAdapter = this.adapter) {
     const logStatus = file.conflicter;
     if (logStatus) {
       const logLevel = fileShouldBeSkipped(logStatus) ? 'skip' : logStatus;
@@ -225,7 +228,7 @@ export class Conflicter {
    * @param  {import('vinyl')} file File object respecting this interface: { path, contents }
    * @return {Boolean} `true` if there's a conflict, `false` otherwise.
    */
-  private async _detectConflict(file: ConflicterFile): Promise<boolean> {
+  private async _detectConflict(file: ConflicterFileInternal): Promise<boolean> {
     let { contents } = file;
     const { stat } = file;
     const filepath = path.resolve(file.path);
@@ -285,7 +288,7 @@ export class Conflicter {
    * @param file - Vinyl file
    * @return Promise the Vinyl file
    */
-  async checkForCollision(file: ConflicterFile): Promise<ConflicterFile> {
+  private async checkForCollision(file: ConflicterFileInternal): Promise<ConflicterFileInternal> {
     file.relativePath = path.relative(this.cwd, file.path);
 
     if (!file.conflicter) {
@@ -342,7 +345,7 @@ export class Conflicter {
     return file;
   }
 
-  private async _checkForCollision(file: ConflicterFile): Promise<ConflicterFile> {
+  private async _checkForCollision(file: ConflicterFileInternal): Promise<ConflicterFileInternal> {
     if (!fs.existsSync(file.path)) {
       file.changesDetected = true;
       setConflicterStatus(file, 'create');
@@ -527,11 +530,11 @@ export class Conflicter {
 
   createTransform({ yoResolveFileName }: ConflicterTransformOptions = {}): FileTransform<MemFsEditorFile> {
     const yoResolveFilePath = path.resolve(this.cwd, yoResolveFileName ?? '.yo-resolve');
-    let yoResolveFile: ConflicterFile;
+    let yoResolveFile: ConflicterFileInternal;
     let yoResolveContents = '';
 
-    return transform<ConflicterFile>(
-      async (file: ConflicterFile) => {
+    return transform<ConflicterFileInternal>(
+      async (file: ConflicterFileInternal) => {
         const conflicterFile = await this.checkForCollision(file);
         const action = conflicterFile.conflicter;
 
@@ -569,7 +572,7 @@ export class Conflicter {
       },
       function () {
         if (yoResolveContents) {
-          yoResolveFile ??= loadFile(yoResolveFilePath) as unknown as ConflicterFile;
+          yoResolveFile ??= loadFile(yoResolveFilePath) as unknown as ConflicterFileInternal;
           setModifiedFileState(yoResolveFile);
           const oldContents = yoResolveFile.contents?.toString() ?? '';
           yoResolveFile.contents = Buffer.from(oldContents + yoResolveContents);
