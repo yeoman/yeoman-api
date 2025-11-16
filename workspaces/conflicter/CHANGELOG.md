@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@2.4.0...@yeoman/conflicter@4.0.0) (2025-11-16)
+
+### ⚠ BREAKING CHANGES
+
+- **conflicter:** cleanup exposed api (#162)
+- **conflicter:** update dependencies (#123)
+- **deps:** bump pretty-bytes from 6.1.1 to 7.0.0 (#102)
+- **deps:** bump binary-extensions from 2.3.0 to 3.1.0
+
+### Features
+
+- **conflicter:** update dependencies ([#123](https://github.com/yeoman/yeoman-api/issues/123)) ([e7edfd9](https://github.com/yeoman/yeoman-api/commit/e7edfd9148f08723e189f26408612cba5a196040))
+- **conflicter:** update diff to v8 ([#122](https://github.com/yeoman/yeoman-api/issues/122)) ([bef9061](https://github.com/yeoman/yeoman-api/commit/bef90614d5a9cb58377a60dc95049c91a7a93ad4))
+
+### Bug Fixes
+
+- **conflicter:** cleanup exposed api ([#162](https://github.com/yeoman/yeoman-api/issues/162)) ([ba56feb](https://github.com/yeoman/yeoman-api/commit/ba56febce78dedec2c8177a7b8c704087c41d225))
+
+### Miscellaneous Chores
+
+- **deps:** bump binary-extensions from 2.3.0 to 3.1.0 ([28ae46e](https://github.com/yeoman/yeoman-api/commit/28ae46ed4843273e1087d3a918d3bfd67c66e3bf))
+- **deps:** bump pretty-bytes from 6.1.1 to 7.0.0 ([#102](https://github.com/yeoman/yeoman-api/issues/102)) ([a82f017](https://github.com/yeoman/yeoman-api/commit/a82f0176f9017b036eff43da3fc3db24f10124f6))
+
 ## [3.0.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@2.4.0...@yeoman/conflicter@3.0.0) (2025-08-15)
 
 ### ⚠ BREAKING CHANGES
