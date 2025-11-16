@@ -31,7 +31,7 @@ const fileShouldBeSkipped = (action: ConflicterStatus): action is (typeof status
 
 export type ConflicterAction = 'write' | 'abort' | 'diff' | 'reload' | 'force' | 'edit' | 'ask' | 'skip' | 'ignore';
 
-export function setConflicterStatus<F extends ConflicterFileInternal = ConflicterFileInternal>(file: F, status?: ConflicterStatus): F {
+export function setConflicterStatus<F extends ConflicterFile = ConflicterFile>(file: F, status?: ConflicterStatus): F {
   file.conflicter = status;
   return file;
 }
