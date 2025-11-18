@@ -42,7 +42,7 @@
   "dependencies": {
     "@inquirer/core": "^10.0.0",
     "chalk": "^5.2.0",
-    "inquirer": "^12.0.0",
+    "inquirer": "^13.0.1",
     "log-symbols": "^7.0.0",
     "ora": "^9.0.0",
     "p-queue": "^9.0.0",
