@@ -36,7 +36,7 @@
     "minimatch": "^9.0.0"
   },
   "devDependencies": {
-    "@types/node": "18.19.44"
+    "@types/node": "18.19.130"
   },
   "peerDependencies": {
     "@types/node": ">=18.19.44"

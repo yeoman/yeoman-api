@@ -30,7 +30,7 @@
     "@lerna-lite/cli": "4.7.1",
     "@lerna-lite/publish": "4.7.1",
     "@lerna-lite/version": "4.7.1",
-    "@types/node": "^20.19.0",
+    "@types/node": "^18.19.130",
     "@vitest/coverage-v8": "^4.0.3",
     "conventional-changelog-conventionalcommits": "^9.1.0",
     "cpy-cli": "^6.0.0",
