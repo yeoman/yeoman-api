@@ -12,7 +12,7 @@ updates:
       - dependency-name: mem-fs-editor
         versions: ['*']
       - dependency-name: '@types/node'
-        versions: ['>=20']
+        versions: ['>=17']
       - dependency-name: '*'
         update-types: ['version-update:semver-minor', 'version-update:semver-patch']
     groups:
