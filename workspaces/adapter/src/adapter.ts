@@ -1,10 +1,8 @@
 import process from 'node:process';
-import inquirer, { createPromptModule } from 'inquirer';
 import chalk from 'chalk';
 import type { InputOutputAdapter, Logger, PromptAnswers, PromptQuestions } from '../types/index.js';
 import { createLogger } from './log.js';
-
-type PromptModule = ReturnType<typeof createPromptModule>;
+import { PromptModule, Separator, createAdapterPromptModule } from './inquirer.js';
 
 export type TerminalAdapterOptions = {
   promptModule?: PromptModule;
@@ -43,7 +41,7 @@ export class TerminalAdapter implements InputOutputAdapter {
 
     this.promptModule =
       options?.promptModule ??
-      createPromptModule({
+      createAdapterPromptModule({
         skipTTYChecks: true,
         input: this.stdin,
         output: this.stdout,
@@ -90,7 +88,7 @@ export class TerminalAdapter implements InputOutputAdapter {
    */
   async prompt<A extends PromptAnswers = PromptAnswers>(questions: PromptQuestions<A>, initialAnswers?: Partial<A>): Promise<A> {
     try {
-      return await this.promptModule(questions, initialAnswers);
+      return (await this.promptModule(questions as Parameters<typeof this.promptModule>[0], initialAnswers)) as A;
     } catch (error) {
       this.abortController.abort(error);
       throw error;
@@ -98,6 +96,6 @@ export class TerminalAdapter implements InputOutputAdapter {
   }
 
   separator(separator?: string) {
-    return new inquirer.Separator(separator);
+    return new Separator(separator);
   }
 }

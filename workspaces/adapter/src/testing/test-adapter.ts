@@ -1,12 +1,10 @@
 import events from 'node:events';
 import { Duplex } from 'node:stream';
 import { createPrompt } from '@inquirer/core';
-import { createPromptModule } from 'inquirer';
 import type { Logger, PromptAnswers, PromptQuestions, QueuedAdapter, Task } from '../../types/index.js';
 
 import { createLogger } from '../log.js';
-
-type PromptModule = ReturnType<typeof createPromptModule>;
+import { PromptModule, createAdapterPromptModule } from '../inquirer.js';
 
 type TestQuestion = {
   name: string;
@@ -40,7 +38,7 @@ export type DefineTestAdapterConfig = Pick<TestAdapterOptions, 'log' | 'spyFacto
 const defaultConfig: DefineTestAdapterConfig = {};
 
 const isValueSet = (type: string, answer: any) => {
-  if (type === 'list') {
+  if (type === 'list' || type === 'select') {
     // List prompt accepts any answer value including null
     return answer !== undefined;
   }
@@ -110,7 +108,7 @@ export class TestAdapter<LogType extends Logger = Logger, SpyType = any> impleme
     } = options;
 
     this.spyFactory = spyFactory;
-    this.promptModule = createPromptModule({
+    this.promptModule = createAdapterPromptModule({
       input: Duplex.from('should not read from input'),
       output: Duplex.from(async () => {}),
       skipTTYChecks: true,
@@ -175,7 +173,7 @@ export class TestAdapter<LogType extends Logger = Logger, SpyType = any> impleme
     initialAnswers?: Partial<A> | undefined,
   ): Promise<A> {
     try {
-      return await this.promptModule(questions, initialAnswers);
+      return (await this.promptModule(questions as Parameters<typeof this.promptModule>[0], initialAnswers)) as A;
     } catch (error) {
       this.abortController.abort(error);
       throw error;
