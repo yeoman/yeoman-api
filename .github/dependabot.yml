@@ -12,9 +12,7 @@ updates:
       - dependency-name: mem-fs-editor
         versions: ['*']
       - dependency-name: '@types/node'
-        versions: ['>=17']
-      - dependency-name: rimraf
-        versions: ['>=6']
+        versions: ['>=20']
       - dependency-name: '*'
         update-types: ['version-update:semver-minor', 'version-update:semver-patch']
     groups:
@@ -25,6 +23,10 @@ updates:
         patterns:
           - '@vitest/*'
           - 'vitest'
+      inquirer:
+        patterns:
+          - '@inquirer/*'
+          - 'inquirer'
 
   - package-ecosystem: 'github-actions'
     directory: '/'
