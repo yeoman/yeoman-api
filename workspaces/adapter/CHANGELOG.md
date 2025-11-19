@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/adapter@3.1.1...@yeoman/adapter@4.0.0) (2025-11-19)
+
+### Features
+
+- **adapter:** add inquirer 13 migration ([#173](https://github.com/yeoman/yeoman-api/issues/173)) ([a03709c](https://github.com/yeoman/yeoman-api/commit/a03709cc0b97c4a3b43c2ceff6c148c0456970b9))
+- export inquirer types ([#174](https://github.com/yeoman/yeoman-api/issues/174)) ([7019621](https://github.com/yeoman/yeoman-api/commit/701962135d8dd0ad031f7421ff36e9cc848d212a))
+
 ## [3.1.1](https://github.com/yeoman/yeoman-api/compare/@yeoman/adapter@3.1.0...@yeoman/adapter@3.1.1) (2025-11-16)
 
 **Note:** Version bump only for package @yeoman/adapter
