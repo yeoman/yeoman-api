@@ -1,6 +1,6 @@
 {
   "name": "@yeoman/adapter",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "private": false,
   "description": "Input Output adapter for yeoman's generator/environment stack",
   "keywords": [
