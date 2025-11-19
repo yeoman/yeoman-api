@@ -61,7 +61,13 @@
   "peerDependencies": {
     "@types/node": ">=20.14.8",
     "@yeoman/types": "^1.0.0",
+    "@yeoman/adapter": "^4.0.0",
     "mem-fs": "^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@yeoman/adapter": {
+      "optional": true
+    }
   },
   "engines": {
     "node": "20 || >=22"
