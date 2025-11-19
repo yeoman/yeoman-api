@@ -1,6 +1,6 @@
 {
   "name": "@yeoman/types",
-  "version": "1.9.0",
+  "version": "1.9.1",
   "private": false,
   "description": "Common API for yeoman's generator/environment stack",
   "keywords": [
