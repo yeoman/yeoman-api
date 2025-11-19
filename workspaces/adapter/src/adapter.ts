@@ -1,8 +1,9 @@
 import process from 'node:process';
 import chalk from 'chalk';
+import { Separator } from '@inquirer/core';
 import type { InputOutputAdapter, Logger, PromptAnswers, PromptQuestions } from '../types/index.js';
 import { createLogger } from './log.js';
-import { PromptModule, Separator, createAdapterPromptModule } from './inquirer.js';
+import { PromptModule, createAdapterPromptModule } from './inquirer.js';
 
 export type TerminalAdapterOptions = {
   promptModule?: PromptModule;
