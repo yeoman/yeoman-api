@@ -23,6 +23,9 @@
     },
     "./types": {
       "types": "./types/index.d.ts"
+    },
+    "./inquirer-types": {
+      "types": "./dist/inquirer.d.ts"
     }
   },
   "main": "./dist/index.js",
@@ -41,6 +44,7 @@
   },
   "dependencies": {
     "@inquirer/core": "^11.0.1",
+    "@inquirer/prompts": "^8.0.1",
     "chalk": "^5.2.0",
     "inquirer": "^13.0.1",
     "log-symbols": "^7.0.0",

@@ -1,9 +1,9 @@
-import type expand from '@inquirer/expand';
 import { createPromptModule } from 'inquirer';
+export type * from '@inquirer/prompts';
 
-// Used by Conflicter
-export type ExpandChoices<T> = Parameters<typeof expand<T>>[0]['choices'];
-
+/**
+ * Creates a prompt module with a deprecated `list` prompt aliasing the `select` prompt.
+ */
 export const createAdapterPromptModule: typeof createPromptModule = parameter => {
   const promptModule = createPromptModule(parameter);
   const originalRestoreDefaultPrompts = promptModule.restoreDefaultPrompts;
@@ -24,6 +24,5 @@ export const createAdapterPromptModule: typeof createPromptModule = parameter =>
   promptModule.restoreDefaultPrompts();
   return promptModule;
 };
-export type PromptModule = ReturnType<typeof createPromptModule>;
 
-export { Separator } from '@inquirer/core';
+export type PromptModule = ReturnType<typeof createPromptModule>;
