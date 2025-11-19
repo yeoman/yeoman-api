@@ -15,7 +15,11 @@ export const createAdapterPromptModule: typeof createPromptModule = parameter =>
         return promptModule.prompts['select'];
       },
       set: value => {
-        Object.defineProperty(promptModule.prompts, 'list', { value });
+        Object.defineProperty(promptModule.prompts, 'list', {
+          value,
+          writable: true,
+          configurable: true,
+        });
       },
       configurable: true,
       enumerable: true,
