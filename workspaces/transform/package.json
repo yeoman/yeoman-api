@@ -33,7 +33,7 @@
     "test": "vitest run --coverage"
   },
   "dependencies": {
-    "minimatch": "^9.0.0"
+    "minimatch": "^10.2.0"
   },
   "devDependencies": {
     "@types/node": "18.19.44"
