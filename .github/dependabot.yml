@@ -27,6 +27,10 @@ updates:
         patterns:
           - '@inquirer/*'
           - 'inquirer'
+      eslint:
+        patterns:
+          - '@eslint/*'
+          - 'eslint'
 
   - package-ecosystem: 'github-actions'
     directory: '/'
