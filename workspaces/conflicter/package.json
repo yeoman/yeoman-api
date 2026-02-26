@@ -36,12 +36,12 @@
     "binary-extensions": "^3.1.0",
     "cli-table": "^0.3.11",
     "dateformat": "^5.0.3",
-    "diff": "^8.0.2",
+    "diff": "^8.0.3",
     "isbinaryfile": "^5.0.4",
     "mem-fs-editor": "^11.1.4",
-    "minimatch": "^10.2.2",
+    "minimatch": "^10.2.4",
     "p-transform": "^5.0.1",
-    "pretty-bytes": "^7.0.1",
+    "pretty-bytes": "^7.1.0",
     "slash": "^5.1.0",
     "textextensions": "^6.11.0"
   },
@@ -51,10 +51,11 @@
     "@types/node": "^20.14.8",
     "@types/textextensions": "^5.0.0",
     "@yeoman/adapter": "*",
-    "lodash-es": "^4.17.21"
+    "lodash-es": "^4.17.23"
   },
   "acceptDependencies": {
     "@yeoman/transform": "^2.0.0",
+    "isbinaryfile": "^6.0.0",
     "minimatch": "^10.0.1",
     "p-transform": "^5.0.1"
   },
