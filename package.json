@@ -33,7 +33,7 @@
     "@types/node": "^20.19.35",
     "@vitest/coverage-v8": "^4.0.18",
     "conventional-changelog-conventionalcommits": "^9.1.0",
-    "cpy-cli": "^6.0.0",
+    "cpy-cli": "^7.0.0",
     "eslint": "9.39.3",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
