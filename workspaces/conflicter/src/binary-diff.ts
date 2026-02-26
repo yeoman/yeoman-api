@@ -20,7 +20,7 @@ const isBinary = (filePath: string, newFileContents?: Buffer | string): boolean 
 
   return Boolean(
     (fs.existsSync(filePath) && isBinaryFileSync(filePath)) ||
-      (newFileContents && isBinaryFileSync(Buffer.isBuffer(newFileContents) ? newFileContents : Buffer.from(newFileContents))),
+    (newFileContents && isBinaryFileSync(Buffer.isBuffer(newFileContents) ? newFileContents : Buffer.from(newFileContents))),
   );
 };
 

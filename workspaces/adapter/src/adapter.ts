@@ -1,4 +1,5 @@
 import process from 'node:process';
+import console from 'node:console';
 import chalk from 'chalk';
 import { Separator } from '@inquirer/core';
 import type { InputOutputAdapter, Logger, PromptAnswers, PromptQuestions } from '../types/index.js';
