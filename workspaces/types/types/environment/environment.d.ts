@@ -1,6 +1,5 @@
 import type { PipelineSource, Transform } from 'node:stream';
 import type { Store } from 'mem-fs';
-import type { MemFsEditorFile } from 'mem-fs-editor';
 
 import type { BaseGeneratorOptions } from '../generator/generator-options.js';
 import type { BaseGenerator, BaseGeneratorConstructor } from '../generator/generator.js';
@@ -14,6 +13,8 @@ import type {
   LookupGeneratorMeta,
   LookupOptions,
 } from './methods-options.js';
+
+type StreamFile = typeof import('mem-fs-editor') extends never ? { path: string } : import('mem-fs-editor').MemFsEditorFile;
 
 export type EnvironmentConstructor<A extends InputOutputAdapter = InputOutputAdapter> = new (
   options?: BaseEnvironmentOptions<A>,
@@ -53,17 +54,17 @@ export type BaseEnvironmentOptions<A extends InputOutputAdapter = InputOutputAda
   adapter?: A;
 };
 
-export type ApplyTransformsOptions = {
+export type ApplyTransformsOptions<S extends Store<{ path: string }> = Store<StreamFile>> = {
   name?: string;
   log?: boolean;
   stream?: PipelineSource<any>;
-  streamOptions?: Parameters<Store<MemFsEditorFile>['stream']>[0];
+  streamOptions?: Parameters<S['stream']>[0];
 };
 
 /**
  * BaseEnvironment provides the api used by yeoman-test and yeoman-generator that should remain stable between major yeoman-environment versions.
  */
-export type BaseEnvironment<A = InputOutputAdapter, S extends Store<MemFsEditorFile> = Store<MemFsEditorFile>> = {
+export type BaseEnvironment<A = InputOutputAdapter, S extends Store<{ path: string }> = Store<StreamFile>> = {
   cwd: string;
   adapter: A;
   sharedFs: S;
@@ -76,7 +77,7 @@ export type BaseEnvironment<A = InputOutputAdapter, S extends Store<MemFsEditorF
   on(eventName: string | symbol, listener: (...arguments_: any[]) => void): unknown;
   once(eventName: string | symbol, listener: (...arguments_: any[]) => void): unknown;
 
-  applyTransforms(transformStreams: Transform[], options?: ApplyTransformsOptions): Promise<void>;
+  applyTransforms(transformStreams: Transform[], options?: ApplyTransformsOptions<S>): Promise<void>;
 
   /**
    * Gets a single constructor of a generator from the registered list of generators.
