@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.10.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.9.1...@yeoman/types@1.10.0) (2026-02-27)
+
+### Features
+
+- **types:** remove mem-fs-editor from peerDependencies ([#220](https://github.com/yeoman/yeoman-api/issues/220)) ([d9129c7](https://github.com/yeoman/yeoman-api/commit/d9129c75557b44e8be062d81856d9da4dc0c6e3c))
+
 ## [1.9.1](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.9.0...@yeoman/types@1.9.1) (2025-11-19)
 
 ### Bug Fixes
