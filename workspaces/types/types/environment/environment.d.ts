@@ -14,7 +14,8 @@ import type {
   LookupOptions,
 } from './methods-options.js';
 
-type StreamFile = typeof import('mem-fs-editor') extends never ? { path: string } : import('mem-fs-editor').MemFsEditorFile;
+type BasicFile = { path: string; content?: Buffer | null };
+type StreamFile = typeof import('mem-fs-editor') extends never ? BasicFile : import('mem-fs-editor').MemFsEditorFile;
 
 export type EnvironmentConstructor<A extends InputOutputAdapter = InputOutputAdapter> = new (
   options?: BaseEnvironmentOptions<A>,
@@ -54,7 +55,7 @@ export type BaseEnvironmentOptions<A extends InputOutputAdapter = InputOutputAda
   adapter?: A;
 };
 
-export type ApplyTransformsOptions<S extends Store<{ path: string }> = Store<StreamFile>> = {
+export type ApplyTransformsOptions<S extends Store<BasicFile> = Store<StreamFile>> = {
   name?: string;
   log?: boolean;
   stream?: PipelineSource<any>;
@@ -64,7 +65,7 @@ export type ApplyTransformsOptions<S extends Store<{ path: string }> = Store<Str
 /**
  * BaseEnvironment provides the api used by yeoman-test and yeoman-generator that should remain stable between major yeoman-environment versions.
  */
-export type BaseEnvironment<A = InputOutputAdapter, S extends Store<{ path: string }> = Store<StreamFile>> = {
+export type BaseEnvironment<A = InputOutputAdapter, S extends Store<BasicFile> = Store<StreamFile>> = {
   cwd: string;
   adapter: A;
   sharedFs: S;
