@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.10.1](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.4.0...@yeoman/types@1.10.1) (2026-02-28)
+
+### Bug Fixes
+
+- fix file type ([f580ba8](https://github.com/yeoman/yeoman-api/commit/f580ba854818f50a933567d4898ee4c710ca8a80))
+
 ## [1.10.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.9.1...@yeoman/types@1.10.0) (2026-02-27)
 
 ### Features
