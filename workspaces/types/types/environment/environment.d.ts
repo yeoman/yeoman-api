@@ -14,7 +14,7 @@ import type {
   LookupOptions,
 } from './methods-options.js';
 
-type BasicFile = { path: string; contents?: Buffer | null };
+type BasicFile = { path: string; contents: Buffer | null };
 type StreamFile = typeof import('mem-fs-editor') extends never ? BasicFile : import('mem-fs-editor').MemFsEditorFile;
 
 export type EnvironmentConstructor<A extends InputOutputAdapter = InputOutputAdapter> = new (
