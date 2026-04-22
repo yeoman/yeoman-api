@@ -4,6 +4,7 @@
   "include-component-in-tag": true,
   "include-v-in-tag": false,
   "tag-separator": "@",
+  "bootstrap-sha": "57e26f7551dfddc99fc2da33e0919b30e51d4796",
   "packages": {
     "workspaces/adapter": {
       "component": "@yeoman/adapter"
