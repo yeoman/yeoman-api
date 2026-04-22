@@ -5,10 +5,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [2.1.1](https://github.com/yeoman/yeoman-api/compare/@yeoman/transform@2.1.0...@yeoman/transform@2.1.1) (2026-04-22)
 
-
 ### Bug Fixes
 
-* **transform:** accept minimatch v10 ([#268](https://github.com/yeoman/yeoman-api/issues/268)) ([11aa666](https://github.com/yeoman/yeoman-api/commit/11aa666996c1687879eb3af47a47393e988ba170))
+- **transform:** accept minimatch v10 ([#268](https://github.com/yeoman/yeoman-api/issues/268)) ([11aa666](https://github.com/yeoman/yeoman-api/commit/11aa666996c1687879eb3af47a47393e988ba170))
 
 ## 2.1.0 (2024-09-30)
 
