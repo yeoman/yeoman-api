@@ -1,12 +1,7 @@
 name: Publish to npm
 
 on:
-  release:
-    types: [published]
-
-permissions:
-  contents: read
-  id-token: write # Required for npm provenance
+  workflow_call:
 
 jobs:
   publish:
