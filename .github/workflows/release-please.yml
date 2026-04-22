@@ -26,6 +26,10 @@ jobs:
         if: ${{ steps.release.outputs.prs_created == 'true' }}
         with:
           ref: ${{ fromJson(steps.release.outputs.pr).headBranchName }}
+      - uses: actions/setup-node@v6
+        if: ${{ steps.release.outputs.prs_created == 'true' }}
+        with:
+          node-version: '24'
       - name: Fix lint on Release PR
         if: ${{ steps.release.outputs.prs_created == 'true' }}
         run: |
