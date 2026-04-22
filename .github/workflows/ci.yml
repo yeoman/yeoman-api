@@ -29,3 +29,16 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm test
+  check-npm:
+    permissions:
+      contents: none
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: always()
+    steps:
+      - run: |
+          echo '${{ toJSON(needs) }}'
+          if [ 'skipped' == '${{ needs.build.result }}' ] || [ 'success' == '${{ needs.build.result }}' ] || [ 'closed' == '${{ github.event.action }}' ]; then
+            exit 0
+          fi
+          exit 1
