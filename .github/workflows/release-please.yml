@@ -16,6 +16,7 @@ jobs:
       pull-requests: write
     outputs:
       releases_created: ${{ steps.release.outputs.releases_created }}
+      paths_released: ${{ steps.release.outputs.paths_released }}
     steps:
       - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
         id: release
@@ -49,3 +50,5 @@ jobs:
       contents: read
       id-token: write # Required for npm provenance
     uses: ./.github/workflows/publish.yml
+    with:
+      paths: ${{ needs.release-please.outputs.paths_released }}

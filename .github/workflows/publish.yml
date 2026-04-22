@@ -2,6 +2,15 @@ name: Publish to npm
 
 on:
   workflow_call:
+    inputs:
+      paths:
+        description: 'The paths that were released as JSON array string. E.g. ["packages/namespace"]'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write # Required for npm provenance
 
 jobs:
   publish:
@@ -21,4 +30,4 @@ jobs:
         run: npm test
 
       - name: Publish with provenance
-        run: npm publish --workspaces --provenance --access public
+        run: npm publish --workspace=${{ join(fromJson(inputs.paths), ' --workspace=') }} --provenance --access public
