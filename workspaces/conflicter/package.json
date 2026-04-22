@@ -54,10 +54,7 @@
     "lodash-es": "^4.17.23"
   },
   "acceptDependencies": {
-    "@yeoman/transform": "^2.0.0",
-    "isbinaryfile": "^6.0.0",
-    "minimatch": "^10.0.1",
-    "p-transform": "^5.0.1"
+    "isbinaryfile": "^6.0.0"
   },
   "peerDependencies": {
     "@types/node": ">=20.14.8",
