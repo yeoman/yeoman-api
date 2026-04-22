@@ -39,7 +39,7 @@
     "diff": "^8.0.3",
     "isbinaryfile": "^5.0.4",
     "mem-fs-editor": "^12.0.2",
-    "minimatch": "^10.2.4",
+    "minimatch": "^10.2.5",
     "p-transform": "^5.0.1",
     "pretty-bytes": "^7.1.0",
     "slash": "^5.1.0",
