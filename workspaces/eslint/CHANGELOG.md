@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/eslint@1.0.0...@yeoman/eslint@1.1.0) (2026-04-22)
+
+### Features
+
+- **eslint:** support eslint 10 ([#249](https://github.com/yeoman/yeoman-api/issues/249)) ([313348d](https://github.com/yeoman/yeoman-api/commit/313348d800d2dd081ea14e23796ca31d4c444d00))
+
 ## [1.0.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/eslint@0.2.0...@yeoman/eslint@1.0.0) (2025-08-15)
 
 **Note:** Version bump only for package @yeoman/eslint
