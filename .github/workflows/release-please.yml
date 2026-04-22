@@ -25,17 +25,13 @@ jobs:
       - name: Fix lint on Release PR
         if: ${{ steps.release.outputs.prs_created == 'true' }}
         run: |
-          # Extrai o nome da branch do PR criado/atualizado
           BRANCH_NAME=$(echo '${{ steps.release.outputs.pr }}' | jq -r '.headBranchName')
 
-          # Faz checkout nessa branch específica
           git checkout $BRANCH_NAME
           npm install
 
-          # Roda a correção
-          npx run fix
+          npm run fix
 
-          # Comita e faz push de volta para o PR
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add .
