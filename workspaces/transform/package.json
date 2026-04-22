@@ -42,7 +42,7 @@
     "@types/node": ">=18.19.44"
   },
   "acceptDependencies": {
-    "minimatch": "^10.2.4"
+    "minimatch": "^10.2.5"
   },
   "engines": {
     "node": ">=18.19.0"
