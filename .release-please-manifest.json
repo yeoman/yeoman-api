@@ -3,6 +3,6 @@
   "workspaces/conflicter": "4.0.1",
   "workspaces/eslint": "1.1.0",
   "workspaces/namespace": "1.0.1",
-  "workspaces/transform": "2.1.0",
+  "workspaces/transform": "2.1.1",
   "workspaces/types": "1.10.3"
 }
