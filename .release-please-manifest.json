@@ -1,7 +1,7 @@
 {
   "workspaces/adapter": "4.0.2",
   "workspaces/conflicter": "4.0.1",
-  "workspaces/eslint": "1.1.0",
+  "workspaces/eslint": "1.0.0",
   "workspaces/namespace": "1.0.1",
   "workspaces/transform": "2.1.0",
   "workspaces/types": "1.10.3"
