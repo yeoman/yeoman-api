@@ -44,10 +44,8 @@ jobs:
           git push origin
   publish:
     needs: release-please
-    runs-on: ubuntu-latest
     if: ${{ needs.release-please.outputs.releases_created == 'true' }}
     permissions:
       contents: read
       id-token: write # Required for npm provenance
-    steps:
-      - uses: ./.github/workflows/publish.yml
+    uses: ./.github/workflows/publish.yml
