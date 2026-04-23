@@ -43,13 +43,13 @@
     "test": "vitest run --coverage"
   },
   "dependencies": {
-    "@inquirer/core": "^11.1.5",
-    "@inquirer/prompts": "^8.3.0",
+    "@inquirer/core": "^11.1.9",
+    "@inquirer/prompts": "^8.4.2",
     "chalk": "^5.6.2",
-    "inquirer": "^13.3.0",
+    "inquirer": "^13.4.2",
     "log-symbols": "^7.0.1",
-    "ora": "^9.3.0",
-    "p-queue": "^9.1.0",
+    "ora": "^9.4.0",
+    "p-queue": "^9.1.2",
     "text-table": "^0.2.0"
   },
   "devDependencies": {
