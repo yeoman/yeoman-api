@@ -163,6 +163,60 @@ describe('Namespace', () => {
       assert.throws(() => requireNamespace('@scope/foo-bar:app#1!$'));
     });
 
+    it('returns namespace with empty semver and optional flag', () => {
+      const parsed = requireNamespace('foo-bar@?');
+      assert.ok(
+        equalsNamespace(parsed, {
+          complete: 'foo-bar?',
+          generatorHint: 'generator-foo-bar',
+          versionedHint: 'generator-foo-bar',
+          namespace: 'foo-bar',
+          unscoped: 'foo-bar',
+          id: 'foo-bar',
+          packageNamespace: 'foo-bar',
+          semver: '',
+          flags: '?',
+          optional: true,
+        }),
+      );
+    });
+
+    it('returns namespace with empty method list and optional flag', () => {
+      const parsed = requireNamespace('foo-bar+?');
+      assert.ok(
+        equalsNamespace(parsed, {
+          complete: 'foo-bar+?',
+          generatorHint: 'generator-foo-bar',
+          versionedHint: 'generator-foo-bar',
+          namespace: 'foo-bar',
+          unscoped: 'foo-bar',
+          id: 'foo-bar',
+          packageNamespace: 'foo-bar',
+          methods: [''],
+          flags: '?',
+          optional: true,
+        }),
+      );
+    });
+
+    it('returns namespace with semver and optional flag', () => {
+      const parsed = requireNamespace('foo-bar@1.0.0?');
+      assert.ok(
+        equalsNamespace(parsed, {
+          complete: 'foo-bar@1.0.0@?',
+          generatorHint: 'generator-foo-bar',
+          versionedHint: 'generator-foo-bar@"1.0.0"',
+          namespace: 'foo-bar',
+          unscoped: 'foo-bar',
+          id: 'foo-bar',
+          packageNamespace: 'foo-bar',
+          semver: '1.0.0',
+          flags: '?',
+          optional: true,
+        }),
+      );
+    });
+
     it('returns namespace with scope, multiples generator and id', () => {
       const parsed = requireNamespace('@scope/foo-bar:app:client#1');
       assert.ok(
