@@ -39,7 +39,7 @@
     "@types/node": "^22.5.0"
   },
   "peerDependencies": {
-    "@types/node": ">=22.5.0"
+    "@types/node": ">=18.19.44"
   },
   "acceptDependencies": {
     "minimatch": "^10.2.5"

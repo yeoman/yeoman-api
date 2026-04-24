@@ -57,7 +57,7 @@
     "isbinaryfile": "^6.0.0"
   },
   "peerDependencies": {
-    "@types/node": ">=22.5.0",
+    "@types/node": ">=20.14.8",
     "@yeoman/types": "^1.0.0",
     "mem-fs": "^4.0.0"
   },
