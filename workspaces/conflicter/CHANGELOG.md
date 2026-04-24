@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@4.0.1...@yeoman/conflicter@4.1.0) (2026-04-24)
+
+### Features
+
+- **deps:** bump diff from 8.0.3 to 9.0.0 ([#276](https://github.com/yeoman/yeoman-api/issues/276)) ([6c6f00c](https://github.com/yeoman/yeoman-api/commit/6c6f00ccd1db9d5695f1a7cf6e6db0fddb3de29c))
+
 ## [4.0.1](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@4.0.0...@yeoman/conflicter@4.0.1) (2026-02-28)
 
 **Note:** Version bump only for package @yeoman/conflicter
