@@ -36,7 +36,7 @@
     "binary-extensions": "^3.1.0",
     "cli-table": "^0.3.11",
     "dateformat": "^5.0.3",
-    "diff": "^8.0.3",
+    "diff": "^9.0.0",
     "isbinaryfile": "^5.0.4",
     "mem-fs-editor": "^12.0.4",
     "minimatch": "^10.2.5",
