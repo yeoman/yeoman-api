@@ -1,1 +1,1 @@
-export * from './namespace/index.js';
+export { isNamespaceObject, namespaceFromPackageName, requireNamespace, toNamespace, YeomanNamespace } from './namespace/index.js';

@@ -1,36 +1,170 @@
-// ===================== | == @ ======== scope ======== | ===== unscoped ===== | = : ========== generator ======== | = @ ===== semver ===== @  | = # ========= instanceId ======== | == + ======== method ======= |= flags = |
-
-const NAMESPACE_REGEX =
-  /^(?:(@[a-z\d-~][a-z\d-._~]*)\/)?([a-z\d-~][a-z\d-._~]*)(?::((?:[a-z\d-~][a-z\d-._~]*:?)*))?(?:@([a-z\d-. *+<=>^~]*)@?)?(?:#((?:[a-z\d-~][a-z\d-._~]*|\*)))?(?:\+((?:[\dA-Za-z]\w*\+?)*))?(\?)?$/;
-
-const groups = {
-  complete: 0,
-  scope: 1,
-  unscoped: 2,
-  generator: 3,
-  semver: 4,
-  instanceId: 5,
-  method: 6,
-  flags: 7,
-};
+const NAME_REGEX = /^[a-z\d-~][a-z\d-._~]*$/;
+const SEMVER_REGEX = /^[a-z\d-. *+<=>^~]*$/;
+const METHOD_REGEX = /^[\dA-Za-z]\w*$/;
+const TOKEN_SCOPE_SEPARATOR = '/';
+const TOKEN_GENERATOR = ':';
+const TOKEN_SEMVER = '@';
+const TOKEN_INSTANCE_ID = '#';
+const TOKEN_METHOD = '+';
+const TOKEN_OPTIONAL = '?';
+const UNESCOPED_STOP_TOKENS = [TOKEN_GENERATOR, TOKEN_SEMVER, TOKEN_INSTANCE_ID, TOKEN_METHOD, TOKEN_OPTIONAL];
+const GENERATOR_STOP_TOKENS = [TOKEN_SEMVER, TOKEN_INSTANCE_ID, TOKEN_METHOD, TOKEN_OPTIONAL];
+const INSTANCE_ID_STOP_TOKENS = [TOKEN_METHOD, TOKEN_OPTIONAL];
 const flags = { optional: '?' };
+
+function nextTokenIndex(value: string, start: number, tokens: string[]): number {
+  let end = value.length;
+
+  for (const token of tokens) {
+    const index = value.indexOf(token, start);
+    if (index !== -1 && index < end) {
+      end = index;
+    }
+  }
+
+  return end;
+}
+
+function isName(value: string): boolean {
+  return NAME_REGEX.test(value);
+}
+
+function isGenerator(value: string): boolean {
+  return value.length > 0 && value.split(':').every(value => isName(value));
+}
+
+function isSemver(value: string): boolean {
+  return SEMVER_REGEX.test(value);
+}
+
+function isMethodList(value: string): boolean {
+  if (value === '') {
+    return true;
+  }
+
+  const methods = value.split('+');
+  for (let index = 0; index < methods.length; index += 1) {
+    const method = methods[index];
+
+    // Keep compatibility with trailing '+' (e.g. 'build+') from previous parser behavior.
+    if (method === '' && index === methods.length - 1) {
+      return true;
+    }
+
+    if (!METHOD_REGEX.test(method)) {
+      return false;
+    }
+  }
+
+  return true;
+}
 
 function parseNamespace(complete: string): YeomanNamespace | undefined {
   if (typeof complete !== 'string') {
     throw new TypeError('Must be a string');
   }
 
-  const result = NAMESPACE_REGEX.exec(complete);
-  if (!result) {
+  let cursor = 0;
+  const parsed: ParsedNamespace = { complete, unscoped: '' };
+
+  if (complete.startsWith('@')) {
+    const scopeEnd = complete.indexOf(TOKEN_SCOPE_SEPARATOR);
+    if (scopeEnd === -1) {
+      return;
+    }
+
+    const scope = complete.slice(0, scopeEnd);
+    if (!isName(scope.slice(1))) {
+      return;
+    }
+
+    parsed.scope = scope;
+    cursor = scopeEnd + 1;
+  }
+
+  const unscopedEnd = nextTokenIndex(complete, cursor, UNESCOPED_STOP_TOKENS);
+  const unscoped = complete.slice(cursor, unscopedEnd);
+  if (!isName(unscoped)) {
     return;
   }
 
-  const parsed = { complete } as ParsedNamespace;
-  // Populate fields
-  for (const [name, value] of Object.entries(groups)) {
-    if (result[value]) {
-      (parsed as any)[name] = result[value];
+  parsed.unscoped = unscoped;
+  cursor = unscopedEnd;
+
+  if (complete.charAt(cursor) === TOKEN_GENERATOR) {
+    cursor += 1;
+    const generatorEnd = nextTokenIndex(complete, cursor, GENERATOR_STOP_TOKENS);
+    const generator = complete.slice(cursor, generatorEnd);
+    if (!isGenerator(generator)) {
+      return;
     }
+
+    parsed.generator = generator;
+    cursor = generatorEnd;
+  }
+
+  if (complete.charAt(cursor) === TOKEN_SEMVER) {
+    cursor += 1;
+
+    const hashAt = complete.indexOf(TOKEN_INSTANCE_ID, cursor);
+    const flagAt = complete.indexOf(TOKEN_OPTIONAL, cursor);
+    let tokenEnd = complete.length;
+    if (hashAt !== -1 && hashAt < tokenEnd) {
+      tokenEnd = hashAt;
+    }
+
+    if (flagAt !== -1 && flagAt < tokenEnd) {
+      tokenEnd = flagAt;
+    }
+
+    let semverEnd = tokenEnd;
+    let nextCursor = tokenEnd;
+    const closingAt = complete.indexOf(TOKEN_SEMVER, cursor);
+    if (closingAt !== -1 && closingAt <= tokenEnd) {
+      semverEnd = closingAt;
+      nextCursor = closingAt + 1;
+    }
+
+    const semver = complete.slice(cursor, semverEnd);
+    if (!isSemver(semver)) {
+      return;
+    }
+
+    parsed.semver = semver;
+    cursor = nextCursor;
+  }
+
+  if (complete.charAt(cursor) === TOKEN_INSTANCE_ID) {
+    cursor += 1;
+    const instanceIdEnd = nextTokenIndex(complete, cursor, INSTANCE_ID_STOP_TOKENS);
+    const instanceId = complete.slice(cursor, instanceIdEnd);
+    if (instanceId !== '*' && !isName(instanceId)) {
+      return;
+    }
+
+    parsed.instanceId = instanceId;
+    cursor = instanceIdEnd;
+  }
+
+  if (complete.charAt(cursor) === TOKEN_METHOD) {
+    cursor += 1;
+    const methodsEnd = complete.endsWith(TOKEN_OPTIONAL) ? complete.length - 1 : complete.length;
+    const method = complete.slice(cursor, methodsEnd);
+    if (!isMethodList(method)) {
+      return;
+    }
+
+    parsed.method = method;
+    cursor = methodsEnd;
+  }
+
+  if (complete.charAt(cursor) === TOKEN_OPTIONAL) {
+    parsed.flags = TOKEN_OPTIONAL;
+    cursor += 1;
+  }
+
+  if (cursor !== complete.length) {
+    return;
   }
 
   return new YeomanNamespace(parsed);
@@ -40,22 +174,22 @@ type ParsedNamespace = {
   complete: string;
   scope?: string;
   unscoped: string;
-  generator: string;
+  generator?: string;
   instanceId?: string;
   semver?: string;
   method?: string;
-  flags: any;
+  flags?: string;
 };
 
 export class YeomanNamespace {
   _original: string;
   scope?: string;
   unscoped: string;
-  generator: string;
+  generator?: string;
   instanceId?: string;
   semver?: string;
   methods?: string[];
-  flags?: any;
+  flags?: string;
   command?: any;
 
   constructor(parsed: ParsedNamespace) {
