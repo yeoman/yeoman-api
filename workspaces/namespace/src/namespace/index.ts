@@ -12,6 +12,8 @@ const GENERATOR_STOP_TOKENS = [TOKEN_SEMVER, TOKEN_INSTANCE_ID, TOKEN_METHOD, TO
 const INSTANCE_ID_STOP_TOKENS = [TOKEN_METHOD, TOKEN_OPTIONAL];
 const flags = { optional: '?' };
 
+export const ENTRYPOINT_GENERATOR_NAME = 'app';
+
 function nextTokenIndex(value: string, start: number, tokens: string[]): number {
   let end = value.length;
 
@@ -59,7 +61,9 @@ function isMethodList(value: string): boolean {
   return true;
 }
 
-function parseNamespace(complete: string): YeomanNamespace | undefined {
+function parseNamespace<GeneratorPropertyType extends string | undefined = undefined | string>(
+  complete: string,
+): YeomanNamespace<GeneratorPropertyType> | undefined {
   if (typeof complete !== 'string') {
     throw new TypeError('Must be a string');
   }
@@ -181,11 +185,11 @@ type ParsedNamespace = {
   flags?: string;
 };
 
-export class YeomanNamespace {
+export class YeomanNamespace<GeneratorPropertyType extends string | undefined = undefined | string> implements ParsedNamespace {
   _original: string;
   scope?: string;
   unscoped: string;
-  generator?: string;
+  generator: GeneratorPropertyType;
   instanceId?: string;
   semver?: string;
   methods?: string[];
@@ -196,7 +200,7 @@ export class YeomanNamespace {
     this._original = parsed.complete;
     this.scope = parsed.scope;
     this.unscoped = parsed.unscoped;
-    this.generator = parsed.generator;
+    this.generator = parsed.generator as GeneratorPropertyType;
     this.instanceId = parsed.instanceId;
     this.semver = parsed.semver;
     this.methods = parsed.method?.split('+');
@@ -245,7 +249,7 @@ export class YeomanNamespace {
   }
 
   set namespace(namespace) {
-    const parsed = parseNamespace(namespace);
+    const parsed = parseNamespace<GeneratorPropertyType>(namespace);
     if (!parsed) {
       throw new Error(`Error parsing namespace ${namespace}`);
     }
@@ -292,7 +296,7 @@ export class YeomanNamespace {
     return `@${this.semver}`;
   }
 
-  private _update(parsed: YeomanNamespace) {
+  private _update<T extends YeomanNamespace<GeneratorPropertyType>>(parsed: T) {
     this.scope = parsed.scope ?? this.scope;
     this.unscoped = parsed.unscoped ?? this.unscoped;
     this.generator = parsed.generator ?? this.generator;
@@ -329,18 +333,30 @@ export function namespaceFromPackageName(packageName: string): YeomanNamespace {
  *
  * @throws if not a valid namespace
  */
-export function requireNamespace(namespace: string | YeomanNamespace): YeomanNamespace {
+export function requireNamespace(namespace: YeomanNamespace, options: { allowPackageNamespace: false }): YeomanNamespace<string>;
+export function requireNamespace<T extends YeomanNamespace>(namespace: T, options?: { allowPackageNamespace: true | undefined }): T;
+export function requireNamespace(namespace: string, options: { allowPackageNamespace: false }): YeomanNamespace<string>;
+export function requireNamespace(namespace: string, options: { allowPackageNamespace: true | undefined }): YeomanNamespace;
+export function requireNamespace(namespace: string | YeomanNamespace, options: { allowPackageNamespace?: boolean } = {}): YeomanNamespace {
+  const { allowPackageNamespace = true } = options;
   const parsed = toNamespace(namespace);
   if (!parsed) {
     throw new Error(`Error parsing namespace ${namespace.toString()}`);
   }
+  if (allowPackageNamespace || hasGenerator(parsed)) {
+    return parsed;
+  }
 
-  return parsed;
+  throw new Error(`Namespace ${namespace.toString()} does not contain a generator`);
 }
 
 /**
  * Test if the object is an YeomanNamespace instance.
  */
-export function isNamespaceObject(namespace: unknown): boolean {
+export function isNamespaceObject(namespace: unknown): namespace is YeomanNamespace {
   return namespace?.constructor?.name === 'YeomanNamespace';
+}
+
+export function hasGenerator(value: YeomanNamespace<string | undefined>): value is YeomanNamespace<string> {
+  return value.generator !== undefined;
 }

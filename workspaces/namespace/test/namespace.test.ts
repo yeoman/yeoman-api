@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 import { describe, it } from 'vitest';
-import { isNamespaceObject, requireNamespace } from '../src/namespace/index.js';
+import { hasGenerator, isNamespaceObject, requireNamespace } from '../src/namespace/index.js';
 
 const fields = [
   'complete',
@@ -31,6 +31,20 @@ describe('Namespace', () => {
     it('returns true if a YeomanNamespace is passed', () => {
       assert.ok(isNamespaceObject(requireNamespace('foo-bar')));
     });
+
+    it('returns false for plain objects', () => {
+      assert.equal(isNamespaceObject({}), false);
+    });
+  });
+
+  describe('#hasGenerator()', () => {
+    it('returns true when namespace contains generator', () => {
+      assert.equal(hasGenerator(requireNamespace('foo-bar:app')), true);
+    });
+
+    it('returns false when namespace does not contain generator', () => {
+      assert.equal(hasGenerator(requireNamespace('foo-bar')), false);
+    });
   });
 
   describe('#namespace setter', () => {
@@ -42,6 +56,15 @@ describe('Namespace', () => {
   });
 
   describe('#requireNamespace()', () => {
+    it('throws when package name is not allowed and namespace has no generator', () => {
+      assert.throws(() => requireNamespace('foo-bar', { allowPackageNamespace: false }));
+    });
+
+    it('returns namespace when package name is not allowed and namespace has generator', () => {
+      const parsed = requireNamespace('foo-bar:app', { allowPackageNamespace: false });
+      assert.equal(parsed.generator, 'app');
+    });
+
     it('returns namespace', () => {
       const parsed = requireNamespace('foo-bar');
       assert.ok(
