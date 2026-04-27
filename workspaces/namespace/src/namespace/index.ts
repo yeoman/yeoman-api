@@ -333,17 +333,20 @@ export function namespaceFromPackageName(packageName: string): YeomanNamespace {
  *
  * @throws if not a valid namespace
  */
-export function requireNamespace(namespace: YeomanNamespace, options: { allowPackageNamespace: false }): YeomanNamespace<string>;
-export function requireNamespace<T extends YeomanNamespace>(namespace: T, options?: { allowPackageNamespace: true | undefined }): T;
-export function requireNamespace(namespace: string, options: { allowPackageNamespace: false }): YeomanNamespace<string>;
-export function requireNamespace(namespace: string, options?: { allowPackageNamespace: true | undefined }): YeomanNamespace;
-export function requireNamespace(namespace: string | YeomanNamespace, options: { allowPackageNamespace?: boolean } = {}): YeomanNamespace {
-  const { allowPackageNamespace = true } = options;
+export function requireNamespace(namespace: YeomanNamespace, options: { allowPackageOnlyNamespace: false }): YeomanNamespace<string>;
+export function requireNamespace<T extends YeomanNamespace>(namespace: T, options?: { allowPackageOnlyNamespace: true | undefined }): T;
+export function requireNamespace(namespace: string, options: { allowPackageOnlyNamespace: false }): YeomanNamespace<string>;
+export function requireNamespace(namespace: string, options?: { allowPackageOnlyNamespace: true | undefined }): YeomanNamespace;
+export function requireNamespace(
+  namespace: string | YeomanNamespace,
+  options: { allowPackageOnlyNamespace?: boolean } = {},
+): YeomanNamespace {
+  const { allowPackageOnlyNamespace = true } = options;
   const parsed = toNamespace(namespace);
   if (!parsed) {
     throw new Error(`Error parsing namespace ${namespace.toString()}`);
   }
-  if (allowPackageNamespace || hasGenerator(parsed)) {
+  if (allowPackageOnlyNamespace || hasGenerator(parsed)) {
     return parsed;
   }
 

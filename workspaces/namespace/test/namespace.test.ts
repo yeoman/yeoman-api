@@ -60,11 +60,11 @@ describe('Namespace', () => {
 
   describe('#requireNamespace()', () => {
     it('throws when package name is not allowed and namespace has no generator', () => {
-      assert.throws(() => requireNamespace('foo-bar', { allowPackageNamespace: false }));
+      assert.throws(() => requireNamespace('foo-bar', { allowPackageOnlyNamespace: false }));
     });
 
     it('returns namespace when package name is not allowed and namespace has generator', () => {
-      const parsed = requireNamespace('foo-bar:app', { allowPackageNamespace: false });
+      const parsed = requireNamespace('foo-bar:app', { allowPackageOnlyNamespace: false });
       assert.equal(parsed.generator, 'app');
     });
 
