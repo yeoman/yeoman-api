@@ -18,7 +18,7 @@ jobs:
       releases_created: ${{ steps.release.outputs.releases_created }}
       paths_released: ${{ steps.release.outputs.paths_released }}
       prs_created: ${{ steps.release.outputs.prs_created }}
-      head_branch: ${{ fromJson(steps.release.outputs.pr).headBranchName }}
+      head_branch: ${{ fromJson(steps.release.outputs.pr || '{}').headBranchName }}
     steps:
       - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
         id: release
