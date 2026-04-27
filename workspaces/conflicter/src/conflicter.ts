@@ -117,7 +117,7 @@ export class Conflicter {
   customizeActions: CustomizeActions;
 
   constructor(
-    private readonly adapter: InputOutputAdapter,
+    readonly adapter: InputOutputAdapter,
     options?: ConflicterOptions,
   ) {
     this.force = options?.force ?? false;
@@ -288,15 +288,16 @@ export class Conflicter {
    * @param file - Vinyl file
    * @return Promise the Vinyl file
    */
-  private async checkForCollision(file: ConflicterFileInternal): Promise<ConflicterFileInternal> {
-    file.relativePath = path.relative(this.cwd, file.path);
+  async checkForCollision(file: ConflicterFile): Promise<ConflicterFileInternal> {
+    let internalFile = file as ConflicterFileInternal;
+    internalFile.relativePath = path.relative(this.cwd, file.path);
 
-    if (!file.conflicter) {
-      file = await this._checkForCollision(file);
+    if (!internalFile.conflicter) {
+      internalFile = await this._checkForCollision(internalFile);
     }
 
-    if (file.conflicter === 'conflict' && !this.bail && !this.dryRun) {
-      const conflictedFile: ConflictedFile = file as ConflictedFile;
+    if (internalFile.conflicter === 'conflict' && !this.bail && !this.dryRun) {
+      const conflictedFile: ConflictedFile = internalFile as ConflictedFile;
 
       if ((this.adapter as any).queue) {
         const queuedFile = await (this.adapter as QueuedAdapter).queue(async adapter => {
@@ -309,40 +310,40 @@ export class Conflicter {
           throw new Error('A conflicter file was not returned');
         }
 
-        file = queuedFile;
+        internalFile = queuedFile;
       } else {
         /* c8 ignore next 3 */
-        file = await this.ask(this.adapter, conflictedFile);
-        this.log(file);
+        internalFile = await this.ask(this.adapter, conflictedFile);
+        this.log(internalFile);
       }
     } else {
-      this.log(file);
+      this.log(internalFile);
     }
 
-    if (file.changesDetected && this.bail) {
-      if (file.conflicterChanges) {
-        await this._printDiff({ file: file as ConflictedFile });
+    if (internalFile.changesDetected && this.bail) {
+      if (internalFile.conflicterChanges) {
+        await this._printDiff({ file: internalFile as ConflictedFile });
       }
 
       this.adapter.log.writeln('Aborting ...');
-      const error = new Error(`Process aborted by conflict: ${file.relativePath}`);
-      (error as any).file = file;
+      const error = new Error(`Process aborted by conflict: ${internalFile.relativePath}`);
+      (error as any).file = internalFile;
       throw error;
     }
 
     if (this.dryRun) {
-      if (file.conflicterChanges) {
-        await this._printDiff({ file: file as ConflictedFile });
+      if (internalFile.conflicterChanges) {
+        await this._printDiff({ file: internalFile as ConflictedFile });
       }
 
-      setConflicterStatus(file, 'skip');
+      setConflicterStatus(internalFile, 'skip');
     }
 
-    if (!this.regenerate && file.conflicter === 'identical') {
-      setConflicterStatus(file, 'skip');
+    if (!this.regenerate && internalFile.conflicter === 'identical') {
+      setConflicterStatus(internalFile, 'skip');
     }
 
-    return file;
+    return internalFile;
   }
 
   private async _checkForCollision(file: ConflicterFileInternal): Promise<ConflicterFileInternal> {

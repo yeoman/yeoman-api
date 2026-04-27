@@ -1,6 +1,6 @@
 import process from 'node:process';
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
-import assert from 'yeoman-assert';
+import assert from 'node:assert';
 import logSymbols from 'log-symbols';
 import stripAnsi from 'strip-ansi';
 import { TerminalAdapter } from '../src/adapter.js';
@@ -21,17 +21,17 @@ describe('QueuedAdapter/TerminalAdapter', () => {
   });
 
   describe('#prompt()', () => {
-    let fakeAnswers;
-    let stub;
+    let fakeAnswers: Record<string, unknown>;
+    let stub: ReturnType<typeof vitest.fn>;
 
     beforeEach(() => {
       fakeAnswers = { foo: 'bar' };
       stub = vitest.fn().mockResolvedValue(fakeAnswers);
-      adapter = new QueuedAdapter({ adapter: new TerminalAdapter({ promptModule: stub }) });
+      adapter = new QueuedAdapter({ adapter: new TerminalAdapter({ promptModule: stub as any }) });
     });
 
     it('pass its arguments to inquirer', async () => {
-      const questions = [];
+      const questions: any[] = [];
       const answers = {};
       const returnValue = await adapter.prompt(questions, answers);
       expect(stub).toHaveBeenCalledWith(questions, answers);
@@ -39,7 +39,7 @@ describe('QueuedAdapter/TerminalAdapter', () => {
     });
 
     it('pass its arguments with answers to inquirer', async () => {
-      const questions = [];
+      const questions: any[] = [];
       const answers = {};
       const returnValue = await adapter.prompt(questions, answers);
       expect(stub).toHaveBeenCalledWith(questions, answers);
@@ -60,7 +60,7 @@ describe('QueuedAdapter/TerminalAdapter', () => {
 
   describe('#prompt() with answers', () => {
     it('pass its arguments to inquirer', async () => {
-      const questions = [];
+      const questions: any[] = [];
       const answers = { prompt1: 'foo' };
       const returnValue = await adapter.prompt(questions, answers);
       assert.equal(returnValue.prompt1, answers.prompt1);
@@ -71,27 +71,28 @@ describe('QueuedAdapter/TerminalAdapter', () => {
     it('returns properly colored diffs', () => {
       const logSpy = vitest.spyOn(adapter.actualAdapter.log, 'write');
       adapter.log.colored([{ color: 'added', message: 'var' }, { message: ' ' }, { color: 'removed', message: 'let' }]);
-      assert.textEqual(stripAnsi(logSpy.mock.calls[0][0]), 'var let');
+      expect(logSpy.mock.calls[0][0]).toBe('var let');
     });
   });
 
   describe('#log()', () => {
-    let logMessage;
-    let spyerror;
-    const stderrWriteBackup = process.stderr.write;
+    let logMessage: string;
+    let spyerror: ReturnType<typeof vitest.spyOn>;
+    let spylog: ReturnType<typeof vitest.spyOn>;
 
     beforeEach(() => {
-      spyerror = vitest.spyOn(adapter.actualAdapter.console, 'error');
+      spyerror = vitest.spyOn((adapter.actualAdapter as TerminalAdapter).console, 'error');
 
       logMessage = '';
-      process.stderr.write = (() => string => {
-        logMessage = string;
-      })(process.stderr.write);
+      spylog = vitest.spyOn(process.stderr, 'write').mockImplementation((chunk: any) => {
+        logMessage += String(chunk);
+        return true;
+      });
     });
 
     afterEach(() => {
-      adapter.actualAdapter.console.error.mockRestore();
-      process.stderr.write = stderrWriteBackup;
+      spyerror.mockRestore();
+      spylog.mockRestore();
     });
 
     it('calls console.error and perform strings interpolation', async () => {
@@ -152,14 +153,14 @@ describe('QueuedAdapter/TerminalAdapter', () => {
   });
 
   describe('#log', () => {
-    let spylog;
+    let spylog: ReturnType<typeof vitest.spyOn>;
 
     beforeEach(() => {
       spylog = vitest.spyOn(process.stderr, 'write');
     });
 
     afterEach(() => {
-      process.stderr.write.mockRestore();
+      spylog.mockRestore();
     });
 
     it('#write() pass strings as they are', async () => {
@@ -211,13 +212,13 @@ describe('QueuedAdapter/TerminalAdapter', () => {
     it('log has functions', () => {
       adapter.log = createLogger();
       for (const k of [...funcs, ...defaultColors]) {
-        assert.equal(typeof adapter.log[k], 'function');
+        assert.equal(typeof (adapter.log as any)[k], 'function');
       }
     });
     it('log can be added custom status', () => {
       adapter.log = createLogger({ colors: { merge: 'yellow' } });
       for (const k of [...funcs, ...defaultColors, 'merge']) {
-        assert.equal(typeof adapter.log[k], 'function');
+        assert.equal(typeof (adapter.log as any)[k], 'function');
       }
     });
   });
@@ -248,7 +249,7 @@ describe('QueuedAdapter/TerminalAdapter', () => {
       let terminalAdapter: TerminalAdapter;
 
       beforeEach(() => {
-        terminalAdapter = new TerminalAdapter({ promptModule: vitest.fn().mockRejectedValue(new Error('abort')) });
+        terminalAdapter = new TerminalAdapter({ promptModule: vitest.fn().mockRejectedValue(new Error('abort')) as any });
       });
 
       it('on failure it should abort the adapter', async () => {
@@ -264,7 +265,9 @@ describe('QueuedAdapter/TerminalAdapter', () => {
 
     describe('QueuedAdapter#prompt()', () => {
       beforeEach(() => {
-        adapter = new QueuedAdapter({ adapter: new TerminalAdapter({ promptModule: vitest.fn().mockRejectedValue(new Error('abort')) }) });
+        adapter = new QueuedAdapter({
+          adapter: new TerminalAdapter({ promptModule: vitest.fn().mockRejectedValue(new Error('abort')) as any }),
+        });
       });
 
       it('on failure it should abort the adapter', async () => {

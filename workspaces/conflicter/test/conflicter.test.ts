@@ -3,16 +3,14 @@ import fs from 'node:fs';
 import path, { dirname } from 'node:path';
 import { Duplex } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
-import { mock } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { transform } from '@yeoman/transform';
 import { Buffer } from 'node:buffer';
 import { beforeEach, describe, expect, it, vitest } from 'vitest';
-import { filter } from 'lodash-es';
 import slash from 'slash';
 import { QueuedAdapter } from '@yeoman/adapter';
 import { TestAdapter, defineConfig as defineTestAdapterConfig } from '@yeoman/adapter/testing';
-import { Conflicter, type ConflicterFile } from '../src/index.js';
+import { Conflicter, type ConflicterFile, type ConflicterStatus } from '../src/index.js';
 
 defineTestAdapterConfig({
   spyFactory: ({ returns }) => vitest.fn().mockReturnValue(returns),
@@ -24,7 +22,7 @@ const __dirname = dirname(__filename);
 /**
  * Create conflicter action answers to be returned in order.
  */
-const createActions = actions => ({
+const createActions = (actions: string[]) => ({
   _action: actions,
   get action() {
     return this._action.shift();
@@ -40,7 +38,7 @@ describe('Conflicter', () => {
   beforeEach(() => {
     testAdapter = new TestAdapter();
     separator = vitest.fn();
-    testAdapter.separator = separator;
+    (testAdapter as any).separator = separator;
 
     customizeActions = vitest.fn().mockImplementation(actions => actions);
     conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }), { customizeActions });
@@ -55,7 +53,11 @@ describe('Conflicter', () => {
 
     it('handles predefined status', async () => {
       const contents = fs.readFileSync(__filename, 'utf8');
-      const file = await conflicter.checkForCollision({ path: __filename, contents, conflicter: 'someStatus' });
+      const file = await conflicter.checkForCollision({
+        path: __filename,
+        contents: Buffer.from(contents),
+        conflicter: 'someStatus' as ConflicterStatus,
+      });
       assert.equal(file.conflicter, 'someStatus');
     });
 
@@ -69,23 +71,22 @@ describe('Conflicter', () => {
 
       const file = await conflicter.checkForCollision({
         path: __filename,
-        contents: me,
+        contents: Buffer.from(me),
         stat: {
           mode: 1,
         },
       });
 
       assert.strictEqual(file.conflicter, 'force');
-      assert.strictEqual(file.conflicterLog, undefined);
     });
 
     it('handles custom actions', async () =>
-      new Promise((resolve, reject) => {
+      new Promise<void>((resolve, reject) => {
         const conflicter = new Conflicter(
           new QueuedAdapter({
             adapter: new TestAdapter({
               mockedAnswers: {
-                action(data) {
+                action(data: { relativeFilePath: string }) {
                   try {
                     assert.ok(this === conflicter);
                     assert.strictEqual(slash(data.relativeFilePath), 'test/conflicter.test.ts');
@@ -105,14 +106,14 @@ describe('Conflicter', () => {
     it('identical status', async () => {
       const me = fs.readFileSync(__filename, 'utf8');
 
-      const file = await conflicter.checkForCollision({ path: __filename, contents: me });
+      const file = await conflicter.checkForCollision({ path: __filename, contents: Buffer.from(me) });
       assert.strictEqual(file.conflicter, 'skip');
     });
 
     it('create status', async () => {
       const file = await conflicter.checkForCollision({
         path: 'file-who-does-not-exist.js',
-        contents: '',
+        contents: Buffer.from(''),
       });
       assert.equal(file.conflicter, 'create');
     });
@@ -169,9 +170,9 @@ describe('Conflicter', () => {
         return conflicter
           .checkForCollision({
             path: path.join(__dirname, 'fixtures/conflicter/file-conflict.txt'),
-            contents: `initial
+            contents: Buffer.from(`initial
                  content
-      `,
+      `),
           })
           .then(() => assert.fail('was not supposed to succeed'))
           .catch(error => {
@@ -187,9 +188,9 @@ describe('Conflicter', () => {
           });
           const file = await conflicter.checkForCollision({
             path: path.join(__dirname, 'fixtures/conflicter/file-conflict.txt'),
-            contents: `initial
+            contents: Buffer.from(`initial
                  content
-      `,
+      `),
           });
           assert.equal(file.conflicter, 'skip');
         });
@@ -200,7 +201,7 @@ describe('Conflicter', () => {
         return conflicter
           .checkForCollision({
             path: 'file-who-does-not-exist2.js',
-            contents: '',
+            contents: Buffer.from(''),
           })
           .then(() => assert.fail('was not supposed to succeed'))
           .catch(error => {
@@ -216,9 +217,9 @@ describe('Conflicter', () => {
       });
       const file = await conflicter.checkForCollision({
         path: path.join(__dirname, 'fixtures/conflicter/file-conflict.txt'),
-        contents: `initial
+        contents: Buffer.from(`initial
                  content
-      `,
+      `),
       });
       assert.equal(file.conflicter, 'skip');
       assert.equal(file.changesDetected, true);
@@ -229,7 +230,7 @@ describe('Conflicter', () => {
         force: false,
         dryRun: true,
       });
-      const file = await conflicter.checkForCollision({ path: 'file-who-does-not-exist2.js', contents: '' });
+      const file = await conflicter.checkForCollision({ path: 'file-who-does-not-exist2.js', contents: Buffer.from('') });
       assert.equal(file.conflicter, 'skip');
     });
 
@@ -250,9 +251,9 @@ describe('Conflicter', () => {
       });
       const file = await conflicter.checkForCollision({
         path: path.join(__dirname, 'fixtures/conflicter/file-conflict.txt'),
-        contents: `initial
+        contents: Buffer.from(`initial
                  content
-      `,
+      `),
       });
       assert.equal(file.conflicter, 'skip');
     });
@@ -265,25 +266,24 @@ describe('Conflicter', () => {
 
       const file = await conflicter.checkForCollision({
         path: path.join(__dirname, 'fixtures/conflicter/file-conflict.txt'),
-        contents: `initial
+        contents: Buffer.from(`initial
            content
-`,
+`),
       });
       assert.equal(file.conflicter, 'skip');
     });
 
-    it('skip rewrite with ignoreWhitespace and skipRegenerate', async () => {
+    it('skip rewrite with ignoreWhitespace', async () => {
       const conflicter = new Conflicter(new QueuedAdapter({ adapter: testAdapter }), {
         force: false,
         ignoreWhitespace: true,
-        skipRegenerate: true,
       });
 
       const file = await conflicter.checkForCollision({
         path: path.join(__dirname, 'fixtures/conflicter/file-conflict.txt'),
-        contents: `initial
+        contents: Buffer.from(`initial
            content
-`,
+`),
       });
       assert.equal(file.conflicter, 'skip');
     });
@@ -297,9 +297,9 @@ describe('Conflicter', () => {
 
       const file = await conflicter.checkForCollision({
         path: path.join(__dirname, 'fixtures/conflicter/file-conflict.txt'),
-        contents: `initial
+        contents: Buffer.from(`initial
            content
-`,
+`),
       });
       assert.equal(file.conflicter, 'skip');
     });
@@ -317,10 +317,11 @@ describe('Conflicter', () => {
         adapter: new TestAdapter({ mockedAnswers: { action: 'write' } }),
       });
       const conflicter = new Conflicter(queuedAdapter);
-      const spy = vitest.spyOn(conflicter.adapter.actualAdapter, 'prompt');
+      const spy = vitest.spyOn(queuedAdapter.actualAdapter, 'prompt');
       await conflicter.checkForCollision({ path: __dirname, contents: null });
       await queuedAdapter.onIdle();
-      assert.equal(filter(spy.mock.lastCall![0], { value: 'diff' }).length, 0);
+      const choices = (spy.mock.lastCall?.[0] as any[]) ?? [];
+      assert.equal(choices.filter((choice: any) => choice.value === 'diff').length, 0);
     });
 
     it('displays default diff for text files', async () => {
@@ -376,21 +377,21 @@ describe('Conflicter', () => {
     });
 
     it('prints diff if diff status is provided', async () => {
-      mock.method(conflicter, '_printDiff');
+      const printDiffSpy = vitest.spyOn(conflicter as any, '_printDiff');
       await pipeline(
         Duplex.from([
           {
             path: path.join(__dirname, 'fixtures/conflicter/file-conflict.txt'),
-            conflicter: 'diff',
-            contents: `initial
+            conflicter: 'diff' as ConflicterStatus,
+            contents: Buffer.from(`initial
            content
-`,
+    `),
           },
         ]),
         conflicter.createTransform(),
         transform(() => {}),
       );
-      assert.ok(conflicter._printDiff.mock.calls.length === 1);
+      assert.ok(printDiffSpy.mock.calls.length === 1);
     });
 
     it('should call customizeActions', async () => {

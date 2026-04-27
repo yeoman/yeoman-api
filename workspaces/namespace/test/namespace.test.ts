@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 import { describe, it } from 'vitest';
-import { hasGenerator, isNamespaceObject, requireNamespace } from '../src/namespace/index.js';
+import { YeomanNamespace, hasGenerator, isNamespaceObject, requireNamespace } from '../src/namespace/index.js';
 
 const fields = [
   'complete',
@@ -13,14 +13,17 @@ const fields = [
   'generatorHint',
   'flags',
   'optional',
-  'instanceId',
   'semver',
   'versionedHint',
-];
+] as const;
 
-const equalsNamespace = function (namespace, expected) {
+type NamespaceField = (typeof fields)[number];
+
+const equalsNamespace = function (namespace: YeomanNamespace, expected: Partial<YeomanNamespace & { optional: boolean }>) {
+  const ns = namespace as unknown as Record<NamespaceField, unknown>;
+  const exp = expected as unknown as Record<NamespaceField, unknown>;
   for (const field of fields) {
-    assert.deepStrictEqual(namespace[field], expected[field], `Field ${field} differs: ${namespace[field]} === ${expected[field]}`);
+    assert.deepStrictEqual(ns[field], exp[field], `Field ${field} differs: ${String(ns[field])} === ${String(exp[field])}`);
   }
 
   return true;

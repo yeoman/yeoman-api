@@ -336,7 +336,7 @@ export function namespaceFromPackageName(packageName: string): YeomanNamespace {
 export function requireNamespace(namespace: YeomanNamespace, options: { allowPackageNamespace: false }): YeomanNamespace<string>;
 export function requireNamespace<T extends YeomanNamespace>(namespace: T, options?: { allowPackageNamespace: true | undefined }): T;
 export function requireNamespace(namespace: string, options: { allowPackageNamespace: false }): YeomanNamespace<string>;
-export function requireNamespace(namespace: string, options: { allowPackageNamespace: true | undefined }): YeomanNamespace;
+export function requireNamespace(namespace: string, options?: { allowPackageNamespace: true | undefined }): YeomanNamespace;
 export function requireNamespace(namespace: string | YeomanNamespace, options: { allowPackageNamespace?: boolean } = {}): YeomanNamespace {
   const { allowPackageNamespace = true } = options;
   const parsed = toNamespace(namespace);

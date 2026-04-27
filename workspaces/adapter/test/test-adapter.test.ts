@@ -66,7 +66,7 @@ describe('TestAdapter', () => {
     });
     it('list prompt should accept null answer', async () => {
       const adapter = new TestAdapter({ mockedAnswers: { respuesta: null } });
-      await expect(adapter.prompt([{ name: 'respuesta', message: 'foo', type: 'list' }])).resolves.toMatchObject({
+      await expect(adapter.prompt([{ name: 'respuesta', message: 'foo', type: 'select' }])).resolves.toMatchObject({
         respuesta: null,
       });
     });
@@ -75,7 +75,7 @@ describe('TestAdapter', () => {
 
       adapter.addAnswers({ respuesta: 'foo' });
 
-      await expect(adapter.prompt([{ name: 'respuesta', message: 'foo', type: 'list' }])).resolves.toMatchObject({ respuesta: 'foo' });
+      await expect(adapter.prompt([{ name: 'respuesta', message: 'foo', type: 'select' }])).resolves.toMatchObject({ respuesta: 'foo' });
       expect(adapter.mockedAnswers).toMatchObject(expect.objectContaining({ respuesta: 'foo' }));
     });
     it('addAnswers supports getters', async () => {
@@ -88,15 +88,17 @@ describe('TestAdapter', () => {
         },
       });
 
-      await expect(adapter.prompt([{ name: 'respuesta', message: 'foo', type: 'list' }])).resolves.toMatchObject({ respuesta: 'foo' });
-      await expect(adapter.prompt([{ name: 'respuesta', message: 'foo', type: 'list' }])).resolves.toMatchObject({ respuesta: 'bar' });
-      await expect(adapter.prompt([{ name: 'respuesta', message: 'foo', type: 'list' }])).resolves.toMatchObject({ respuesta: undefined });
+      await expect(adapter.prompt([{ name: 'respuesta', message: 'foo', type: 'select' }])).resolves.toMatchObject({ respuesta: 'foo' });
+      await expect(adapter.prompt([{ name: 'respuesta', message: 'foo', type: 'select' }])).resolves.toMatchObject({ respuesta: 'bar' });
+      await expect(adapter.prompt([{ name: 'respuesta', message: 'foo', type: 'select' }])).resolves.toMatchObject({
+        respuesta: undefined,
+      });
     });
     it('adds the question to history', async () => {
       const adapter = new TestAdapter();
       adapter.addAnswers({ respuesta: 'foo' });
 
-      const question = { name: 'respuesta', message: 'foo', type: 'list' } as const;
+      const question = { name: 'respuesta', message: 'foo', type: 'select' } as const;
       await adapter.prompt(question);
 
       expect(adapter.calls).toMatchObject([{ question, answer: 'foo' }]);
@@ -126,7 +128,7 @@ describe('TestAdapter', () => {
         const adapter = new TestAdapter();
         try {
           await adapter.prompt(
-            { name: 'respuesta', message: 'foo', type: 'list' },
+            { name: 'respuesta', message: 'foo', type: 'select' },
             {
               get respuesta() {
                 throw new Error('error in answer getter');
