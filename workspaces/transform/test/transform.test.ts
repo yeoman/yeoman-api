@@ -2,34 +2,42 @@ import assert from 'node:assert';
 import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { type File, filePipeline, filterPattern, passthrough, transformContents } from '../src/transform.js';
 
+type TestFile = File & {
+  state?: 'modified' | 'deleted';
+  isNew?: boolean;
+  conflicter?: string;
+  stateCleared?: string;
+};
+
 describe('Transform stream', () => {
-  let unmodifiedFile;
-  let newFile;
-  let modifiedFile;
-  let newDeletedFile;
-  let yoRcFile;
-  let yoRcGlobalFile;
-  let yoResolveFile;
-  let conflicterSkippedFile;
+  let unmodifiedFile: TestFile;
+  let newFile: TestFile;
+  let modifiedFile: TestFile;
+  let newDeletedFile: TestFile;
+  let yoRcFile: TestFile;
+  let yoRcGlobalFile: TestFile;
+  let yoResolveFile: TestFile;
+  let conflicterSkippedFile: TestFile;
 
-  let stream;
-  let files;
+  let stream: ReturnType<typeof passthrough>;
+  let files: TestFile[];
 
-  let spyTransformPre;
-  let spyTransformPost;
+  let spyTransformPre: any;
+  let spyTransformPost: any;
 
   beforeEach(() => {
-    yoRcFile = { state: 'modified', path: '.yo-rc.json' };
-    yoRcGlobalFile = { state: 'modified', path: '.yo-rc-global.json' };
-    yoResolveFile = { state: 'modified', path: '.yo-resolve' };
-    unmodifiedFile = { path: 'unmodifiedFile' };
-    newFile = { state: 'modified', isNew: true, path: 'newFile' };
-    modifiedFile = { state: 'modified', path: 'modifiedFile' };
-    newDeletedFile = { state: 'deleted', isNew: true, path: 'newDeletedFile' };
+    yoRcFile = { state: 'modified', path: '.yo-rc.json', contents: null };
+    yoRcGlobalFile = { state: 'modified', path: '.yo-rc-global.json', contents: null };
+    yoResolveFile = { state: 'modified', path: '.yo-resolve', contents: null };
+    unmodifiedFile = { path: 'unmodifiedFile', contents: null };
+    newFile = { state: 'modified', isNew: true, path: 'newFile', contents: null };
+    modifiedFile = { state: 'modified', path: 'modifiedFile', contents: null };
+    newDeletedFile = { state: 'deleted', isNew: true, path: 'newDeletedFile', contents: null };
     conflicterSkippedFile = {
       state: 'modified',
       path: 'conflicterSkippedFile',
       conflicter: 'skip',
+      contents: null,
     };
 
     files = [yoRcFile, yoRcGlobalFile, yoResolveFile, unmodifiedFile, newFile, modifiedFile, newDeletedFile, conflicterSkippedFile];
@@ -53,14 +61,14 @@ describe('Transform stream', () => {
         }
 
         await filePipeline(stream, [
-          passthrough(spyTransformPre),
+          passthrough(file => spyTransformPre(file)),
           passthrough<File & { conflicter: string }>(
             file => {
               file.conflicter = 'force';
             },
             { pattern: '**/{.yo-rc.json,.yo-resolve,.yo-rc-global.json}' },
           ),
-          passthrough(spyTransformPost),
+          passthrough(file => spyTransformPost(file)),
         ]);
       });
 
@@ -88,14 +96,14 @@ describe('Transform stream', () => {
     describe('using filter', () => {
       beforeEach(async () => {
         await filePipeline(stream, [
-          passthrough(spyTransformPre),
+          passthrough(file => spyTransformPre(file)),
           passthrough<File & { conflicter: string }>(
             file => {
               file.conflicter = 'force';
             },
             { filter: file => file.path.endsWith('.yo-rc.json') },
           ),
-          passthrough(spyTransformPost),
+          passthrough(file => spyTransformPost(file)),
         ]);
       });
 
@@ -121,11 +129,11 @@ describe('Transform stream', () => {
         }
 
         await filePipeline(stream, [
-          passthrough(spyTransformPre),
+          passthrough(file => spyTransformPre(file)),
           transformContents<File & { conflicter: string }>(() => Buffer.from('foo'), {
             pattern: '**/{.yo-rc.json,.yo-resolve,.yo-rc-global.json}',
           }),
-          passthrough(spyTransformPost),
+          passthrough(file => spyTransformPost(file)),
         ]);
       });
 
@@ -153,9 +161,9 @@ describe('Transform stream', () => {
     describe('using filter', () => {
       beforeEach(async () => {
         await filePipeline(stream, [
-          passthrough(spyTransformPre),
+          passthrough(file => spyTransformPre(file)),
           transformContents<File & { conflicter: string }>(() => Buffer.from('foo'), { filter: file => file.path.endsWith('.yo-rc.json') }),
-          passthrough(spyTransformPost),
+          passthrough(file => spyTransformPost(file)),
         ]);
       });
 
@@ -176,9 +184,9 @@ describe('Transform stream', () => {
   describe('filterPattern()', () => {
     beforeEach(async () => {
       await filePipeline(stream, [
-        passthrough(spyTransformPre),
+        passthrough(file => spyTransformPre(file)),
         filterPattern('**/{.yo-rc.json,.yo-resolve,.yo-rc-global.json}'),
-        passthrough(spyTransformPost),
+        passthrough(file => spyTransformPost(file)),
       ]);
     });
 

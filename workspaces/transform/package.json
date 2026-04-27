@@ -30,6 +30,7 @@
     "clean-all": "npm run clean && rimraf node_modules",
     "precommit": "lint-staged",
     "prepare": "npm run build",
+    "pretest": "tsc -p tsconfig.test.json",
     "test": "vitest run --coverage"
   },
   "dependencies": {

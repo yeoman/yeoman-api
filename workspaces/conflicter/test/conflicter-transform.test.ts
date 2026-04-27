@@ -3,42 +3,44 @@ import { Readable } from 'node:stream';
 import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { passthrough, pipeline } from '@yeoman/transform';
 import { TestAdapter } from '@yeoman/adapter/testing';
-import { type ConflictedFile, createConflicterTransform } from '../src/conflicter.js';
+import { type ConflicterFile, createConflicterTransform } from '../src/conflicter.js';
 
 describe('Transform stream', () => {
-  let unmodifiedFile;
-  let newFile;
-  let modifiedFile;
-  let newDeletedFile;
-  let yoRcFile;
-  let yoRcGlobalFile;
-  let yoResolveFile;
-  let conflicterSkippedFile;
-  let conflicterIgnoreFile;
+  let unmodifiedFile: ConflicterFile;
+  let newFile: ConflicterFile;
+  let modifiedFile: ConflicterFile;
+  let newDeletedFile: ConflicterFile;
+  let yoRcFile: ConflicterFile;
+  let yoRcGlobalFile: ConflicterFile;
+  let yoResolveFile: ConflicterFile;
+  let conflicterSkippedFile: ConflicterFile;
+  let conflicterIgnoreFile: ConflicterFile;
 
-  let stream;
-  let files: any[];
+  let stream: Readable;
+  let files: ConflicterFile[];
 
-  let spyTransformPre;
-  let spyTransformPost;
+  let spyTransformPre: any;
+  let spyTransformPost: any;
 
   beforeEach(() => {
-    unmodifiedFile = { path: 'unmodifiedFile' };
-    newFile = { state: 'modified', isNew: true, path: 'newFile' };
-    modifiedFile = { state: 'modified', path: 'modifiedFile' };
-    newDeletedFile = { state: 'deleted', isNew: true, path: 'newDeletedFile' };
-    yoRcFile = { state: 'modified', path: '.yo-rc.json' };
-    yoRcGlobalFile = { state: 'modified', path: '.yo-rc-global.json' };
-    yoResolveFile = { state: 'modified', path: '.yo-resolve' };
+    unmodifiedFile = { path: 'unmodifiedFile', contents: null };
+    newFile = { state: 'modified', isNew: true, path: 'newFile', contents: null };
+    modifiedFile = { state: 'modified', path: 'modifiedFile', contents: null };
+    newDeletedFile = { state: 'deleted', isNew: true, path: 'newDeletedFile', contents: null };
+    yoRcFile = { state: 'modified', path: '.yo-rc.json', contents: null };
+    yoRcGlobalFile = { state: 'modified', path: '.yo-rc-global.json', contents: null };
+    yoResolveFile = { state: 'modified', path: '.yo-resolve', contents: null };
     conflicterSkippedFile = {
       state: 'modified',
       path: 'conflicterSkippedFile',
       conflicter: 'skip',
+      contents: null,
     };
     conflicterIgnoreFile = {
       state: 'modified',
       path: 'conflicterIgnoreFile',
       conflicter: 'ignore',
+      contents: null,
     };
 
     files = [
@@ -60,18 +62,18 @@ describe('Transform stream', () => {
   });
 
   describe('Conflicter.createTransform()', () => {
-    let yoResolveFile;
+    let yoResolveFile: ConflicterFile | undefined;
 
     beforeEach(async () => {
       await pipeline(
         stream,
-        passthrough(spyTransformPre),
-        passthrough((file: ConflictedFile) => {
+        passthrough(file => spyTransformPre(file)),
+        passthrough((file: ConflicterFile) => {
           file.conflicter ||= 'force';
         }),
         createConflicterTransform(new TestAdapter()),
-        passthrough(spyTransformPost),
-        passthrough(file => {
+        passthrough(file => spyTransformPost(file)),
+        passthrough((file: ConflicterFile) => {
           if (file.path.endsWith('.yo-resolve')) {
             yoResolveFile = file;
           }
@@ -90,7 +92,7 @@ describe('Transform stream', () => {
 
     it('should write .yo-resolve file', () => {
       expect(yoResolveFile).toBeTruthy();
-      expect(yoResolveFile.contents.toString()).toBe('conflicterIgnoreFile skip\n');
+      expect(yoResolveFile!.contents!.toString()).toBe('conflicterIgnoreFile skip\n');
     });
 
     it('should clear the state of skipped file', () => {

@@ -40,6 +40,7 @@
     "clean": "rimraf dist",
     "clean-all": "npm run clean && rimraf node_modules",
     "precommit": "lint-staged",
+    "pretest": "tsc -p tsconfig.test.json",
     "test": "vitest run --coverage"
   },
   "dependencies": {
@@ -54,8 +55,7 @@
   },
   "devDependencies": {
     "@types/text-table": "^0.2.5",
-    "strip-ansi": "^7.2.0",
-    "yeoman-assert": "^3.1.1"
+    "strip-ansi": "^7.2.0"
   },
   "engines": {
     "node": "20 || >=22"
