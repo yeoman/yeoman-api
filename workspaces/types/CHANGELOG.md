@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.11.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.10.3...@yeoman/types@1.11.0) (2026-04-28)
+
+
+### Features
+
+* **types:** add customCommitTask and customInstallTask features ([#281](https://github.com/yeoman/yeoman-api/issues/281)) ([099cb6b](https://github.com/yeoman/yeoman-api/commit/099cb6b7c3ca5481465be827fee174b8c8ab4a8d))
+
 ## [1.10.3](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.10.2...@yeoman/types@1.10.3) (2026-02-28)
 
 ### Bug Fixes
