@@ -5,15 +5,13 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [2.1.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/namespace@2.0.0...@yeoman/namespace@2.1.0) (2026-04-28)
 
-
 ### Features
 
-* **namespace:** improve namespace api ([#283](https://github.com/yeoman/yeoman-api/issues/283)) ([9d9b611](https://github.com/yeoman/yeoman-api/commit/9d9b61165836069d6a3fa0c803b9bc87d401762a))
-
+- **namespace:** improve namespace api ([#283](https://github.com/yeoman/yeoman-api/issues/283)) ([9d9b611](https://github.com/yeoman/yeoman-api/commit/9d9b61165836069d6a3fa0c803b9bc87d401762a))
 
 ### Bug Fixes
 
-* **namespace:** rename allowPackageNamespace to allowPackageOnlyNamespace ([#286](https://github.com/yeoman/yeoman-api/issues/286)) ([ebf4636](https://github.com/yeoman/yeoman-api/commit/ebf463621b7ba3d2496256f8380535170e57ff03))
+- **namespace:** rename allowPackageNamespace to allowPackageOnlyNamespace ([#286](https://github.com/yeoman/yeoman-api/issues/286)) ([ebf4636](https://github.com/yeoman/yeoman-api/commit/ebf463621b7ba3d2496256f8380535170e57ff03))
 
 ## [2.0.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/namespace@1.0.1...@yeoman/namespace@2.0.0) (2026-04-24)
 
