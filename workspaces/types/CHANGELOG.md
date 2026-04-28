@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.12.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.11.0...@yeoman/types@1.12.0) (2026-04-28)
+
+
+### Features
+
+* improve meta types ([#128](https://github.com/yeoman/yeoman-api/issues/128)) ([3c0932c](https://github.com/yeoman/yeoman-api/commit/3c0932c2a55e785fa3fd0a4f65e09a2435ec78c2))
+* **types:** add customCommitTask and customInstallTask features ([#281](https://github.com/yeoman/yeoman-api/issues/281)) ([099cb6b](https://github.com/yeoman/yeoman-api/commit/099cb6b7c3ca5481465be827fee174b8c8ab4a8d))
+* **types:** add support to @yeoman/adapter@4 ([#175](https://github.com/yeoman/yeoman-api/issues/175)) ([5174b5e](https://github.com/yeoman/yeoman-api/commit/5174b5ed03d550f8de7c8b2e69b1b62e8b1d38d7))
+* **types:** allow @yeoman/adapter v3 ([#142](https://github.com/yeoman/yeoman-api/issues/142)) ([bac5472](https://github.com/yeoman/yeoman-api/commit/bac5472d4e057e56cf55b991ca8f76eba503466e))
+* **types:** remove mem-fs-editor from peerDependencies ([#220](https://github.com/yeoman/yeoman-api/issues/220)) ([d9129c7](https://github.com/yeoman/yeoman-api/commit/d9129c75557b44e8be062d81856d9da4dc0c6e3c))
+
+
+### Bug Fixes
+
+* another File type incompatibility ([a08b998](https://github.com/yeoman/yeoman-api/commit/a08b99880d67762ae86b2887dbdcb524ff58dfec))
+* fix file type ([f580ba8](https://github.com/yeoman/yeoman-api/commit/f580ba854818f50a933567d4898ee4c710ca8a80))
+* fix File type ([39b32e3](https://github.com/yeoman/yeoman-api/commit/39b32e3ecd517aaee0fc298a1de684faf4b1edcc))
+* keep only a single generator constructor ([#127](https://github.com/yeoman/yeoman-api/issues/127)) ([a982714](https://github.com/yeoman/yeoman-api/commit/a982714e64036eebae8386b66a1de221c75231ad))
+* **types:** fix @yeoman/adapter dependency ([#178](https://github.com/yeoman/yeoman-api/issues/178)) ([f32a7fe](https://github.com/yeoman/yeoman-api/commit/f32a7fe4fa3015ffac9f5929d3c907f001042b09))
+
 ## [1.11.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.10.3...@yeoman/types@1.11.0) (2026-04-28)
 
 ### Features
