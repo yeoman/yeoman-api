@@ -5,10 +5,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.11.1](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.11.0...@yeoman/types@1.11.1) (2026-04-29)
 
-
 ### Bug Fixes
 
-* **types:** allow boolean in customCommitTask feature ([#293](https://github.com/yeoman/yeoman-api/issues/293)) ([88b0bb3](https://github.com/yeoman/yeoman-api/commit/88b0bb397074774019cbdfa75996a49cb9caaf4f))
+- **types:** allow boolean in customCommitTask feature ([#293](https://github.com/yeoman/yeoman-api/issues/293)) ([88b0bb3](https://github.com/yeoman/yeoman-api/commit/88b0bb397074774019cbdfa75996a49cb9caaf4f))
 
 ## [1.11.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.10.3...@yeoman/types@1.11.0) (2026-04-28)
 
