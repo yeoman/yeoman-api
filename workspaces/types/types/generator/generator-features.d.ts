@@ -8,8 +8,10 @@ export type GeneratorFeatures = {
   /**
    * Inject a commit task into Environment.
    * This feature is first served, the first composed generator that implements it will take precedence.
+   *
+   * If set to a truthy value, the default commit task will not be run. And the generator should handle the commit task itself.
    */
-  customCommitTask?: () => Promise<void> | void;
+  customCommitTask?: boolean | (() => Promise<void> | void);
   /**
    * Inject an install task into Environment.
    * This feature is first served, the first composed generator that implements it will take precedence.
