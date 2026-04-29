@@ -4,5 +4,5 @@
   "workspaces/eslint": "1.1.0",
   "workspaces/namespace": "2.1.0",
   "workspaces/transform": "2.1.1",
-  "workspaces/types": "1.11.0"
+  "workspaces/types": "1.11.1"
 }
