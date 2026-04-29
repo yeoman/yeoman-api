@@ -8,7 +8,10 @@
     "api"
   ],
   "homepage": "http://yeoman.io",
-  "repository": "yeoman/yeoman-api",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yeoman/yeoman-api.git"
+  },
   "license": "MIT",
   "author": "The Yeoman Team",
   "type": "module",
@@ -50,7 +53,6 @@
     "@types/cli-table": "^0.3.4",
     "@types/dateformat": "^5.0.3",
     "@types/node": "^22.5.0",
-    "@types/textextensions": "^5.0.0",
     "@yeoman/adapter": "*"
   },
   "acceptDependencies": {

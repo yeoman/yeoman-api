@@ -8,7 +8,10 @@
     "api"
   ],
   "homepage": "http://yeoman.io",
-  "repository": "yeoman/yeoman-api",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yeoman/yeoman-api.git"
+  },
   "license": "MIT",
   "author": "The Yeoman Team",
   "type": "module",
