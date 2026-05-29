@@ -5,10 +5,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [2.1.2](https://github.com/yeoman/yeoman-api/compare/@yeoman/transform@2.1.1...@yeoman/transform@2.1.2) (2026-05-29)
 
-
 ### Bug Fixes
 
-* **transform:** declare local PipelineOptions to avoid node types conflicts ([#309](https://github.com/yeoman/yeoman-api/issues/309)) ([d83dcac](https://github.com/yeoman/yeoman-api/commit/d83dcac81a5cb808598f7ddacb9d687dae03a952))
+- **transform:** declare local PipelineOptions to avoid node types conflicts ([#309](https://github.com/yeoman/yeoman-api/issues/309)) ([d83dcac](https://github.com/yeoman/yeoman-api/commit/d83dcac81a5cb808598f7ddacb9d687dae03a952))
 
 ## [2.1.1](https://github.com/yeoman/yeoman-api/compare/@yeoman/transform@2.1.0...@yeoman/transform@2.1.1) (2026-04-22)
 
