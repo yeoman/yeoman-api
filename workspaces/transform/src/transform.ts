@@ -1,17 +1,15 @@
-import {
-  type PipelineOptions,
-  type PipelineSource,
-  type PipelineTransform,
-  type PipelineTransformSource,
-  Transform,
-  type TransformCallback,
-} from 'node:stream';
+import { type PipelineSource, type PipelineTransform, type PipelineTransformSource, Transform, type TransformCallback } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 import { Minimatch, type MinimatchOptions } from 'minimatch';
+import type { Abortable } from 'node:events';
 
 export { pipeline } from 'node:stream/promises';
 
 export type File = { path: string; contents: any };
+
+interface PipelineOptions extends Abortable {
+  end?: boolean | undefined;
+}
 
 type TransformFile<F extends File = File> = (this: Transform, file: F) => Promise<F | undefined> | F | undefined;
 
