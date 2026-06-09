@@ -1,5 +1,5 @@
 {
-  "workspaces/adapter": "4.0.2",
+  "workspaces/adapter": "5.0.0",
   "workspaces/conflicter": "4.1.0",
   "workspaces/eslint": "1.1.0",
   "workspaces/namespace": "2.1.0",
