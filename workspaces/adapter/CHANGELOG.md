@@ -5,14 +5,13 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [5.0.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/adapter@4.0.2...@yeoman/adapter@5.0.0) (2026-06-09)
 
-
 ### ⚠ BREAKING CHANGES
 
-* **deps:** bump inquirer from 13.4.2 to 14.0.0 in the inquirer group ([#307](https://github.com/yeoman/yeoman-api/issues/307))
+- **deps:** bump inquirer from 13.4.2 to 14.0.0 in the inquirer group ([#307](https://github.com/yeoman/yeoman-api/issues/307))
 
 ### Features
 
-* **deps:** bump inquirer from 13.4.2 to 14.0.0 in the inquirer group ([#307](https://github.com/yeoman/yeoman-api/issues/307)) ([f5b097e](https://github.com/yeoman/yeoman-api/commit/f5b097e57404302a6401cb8234d4f7251015d9f6))
+- **deps:** bump inquirer from 13.4.2 to 14.0.0 in the inquirer group ([#307](https://github.com/yeoman/yeoman-api/issues/307)) ([f5b097e](https://github.com/yeoman/yeoman-api/commit/f5b097e57404302a6401cb8234d4f7251015d9f6))
 
 ## [4.0.2](https://github.com/yeoman/yeoman-api/compare/@yeoman/adapter@1.6.0...@yeoman/adapter@4.0.2) (2026-02-28)
 
