@@ -5,22 +5,20 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [5.0.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/adapter@4.0.2...@yeoman/adapter@5.0.0) (2026-08-23)
 
-
 ### ⚠ BREAKING CHANGES
 
-* **adapter:** drop node 20 support ([#312](https://github.com/yeoman/yeoman-api/issues/312))
-* **deps:** bump inquirer from 13.4.2 to 14.0.0 in the inquirer group ([#307](https://github.com/yeoman/yeoman-api/issues/307))
+- **adapter:** drop node 20 support ([#312](https://github.com/yeoman/yeoman-api/issues/312))
+- **deps:** bump inquirer from 13.4.2 to 14.0.0 in the inquirer group ([#307](https://github.com/yeoman/yeoman-api/issues/307))
 
 ### Features
 
-* **adapter:** drop node 20 support ([#312](https://github.com/yeoman/yeoman-api/issues/312)) ([95b60f9](https://github.com/yeoman/yeoman-api/commit/95b60f97131622b19418ec2be77336ea16c68ebd))
-* **deps:** bump @inquirer/core in the inquirer group ([#333](https://github.com/yeoman/yeoman-api/issues/333)) ([ac62a85](https://github.com/yeoman/yeoman-api/commit/ac62a8577cefd8c7ecf1ce825aa7567681154cae))
-* **deps:** bump inquirer from 13.4.2 to 14.0.0 in the inquirer group ([#307](https://github.com/yeoman/yeoman-api/issues/307)) ([f5b097e](https://github.com/yeoman/yeoman-api/commit/f5b097e57404302a6401cb8234d4f7251015d9f6))
-
+- **adapter:** drop node 20 support ([#312](https://github.com/yeoman/yeoman-api/issues/312)) ([95b60f9](https://github.com/yeoman/yeoman-api/commit/95b60f97131622b19418ec2be77336ea16c68ebd))
+- **deps:** bump @inquirer/core in the inquirer group ([#333](https://github.com/yeoman/yeoman-api/issues/333)) ([ac62a85](https://github.com/yeoman/yeoman-api/commit/ac62a8577cefd8c7ecf1ce825aa7567681154cae))
+- **deps:** bump inquirer from 13.4.2 to 14.0.0 in the inquirer group ([#307](https://github.com/yeoman/yeoman-api/issues/307)) ([f5b097e](https://github.com/yeoman/yeoman-api/commit/f5b097e57404302a6401cb8234d4f7251015d9f6))
 
 ### Bug Fixes
 
-* use Separator from @inquirer/prompts ([#339](https://github.com/yeoman/yeoman-api/issues/339)) ([c91f53a](https://github.com/yeoman/yeoman-api/commit/c91f53ab254590c82fbe5f5e592f254a0ec41ec5))
+- use Separator from @inquirer/prompts ([#339](https://github.com/yeoman/yeoman-api/issues/339)) ([c91f53a](https://github.com/yeoman/yeoman-api/commit/c91f53ab254590c82fbe5f5e592f254a0ec41ec5))
 
 ## [4.0.2](https://github.com/yeoman/yeoman-api/compare/@yeoman/adapter@1.6.0...@yeoman/adapter@4.0.2) (2026-02-28)
 
