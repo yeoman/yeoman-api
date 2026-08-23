@@ -78,6 +78,11 @@ export type GeneratorMeta = BaseGeneratorMeta & {
   instantiate: <G extends BaseGenerator>(arguments_?: string[], options?: any) => Promise<G>;
   /** Intantiate the Generator passing help option */
   instantiateHelp: <G extends BaseGenerator>() => Promise<G>;
+  /**
+   * @since yeoman-environment 6.2.0
+   * Get the package.json in packagePath
+   */
+  getPackageJson?: <T = unknown>() => Promise<T | undefined>;
 };
 
 export type InstantiateOptions<G extends BaseGenerator = BaseGenerator> = {
