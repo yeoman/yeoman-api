@@ -1,4 +1,5 @@
 import type { BaseEnvironment } from '../environment/environment.js';
+import type { BaseGeneratorMeta } from '../environment/methods-options.js';
 
 export type GeneratorCustomOptions = Record<string, unknown>;
 
@@ -52,6 +53,11 @@ type GeneratorEnvironmentOptions = {
 
   /** The path to the current generator */
   resolved: string;
+  /**
+   * @since yeoman-environment 6.2.0
+   * Generator metadata, provided by the environment at instantiation time.
+   */
+  _meta?: BaseGeneratorMeta;
 };
 
 type GeneratorHelpOptions<H extends boolean | undefined> = {
