@@ -1,7 +1,7 @@
 import process from 'node:process';
 import console from 'node:console';
 import chalk from 'chalk';
-import { Separator } from '@inquirer/core';
+import { Separator } from '@inquirer/prompts';
 import type { InputOutputAdapter, Logger, PromptAnswers, PromptQuestions } from '../types/index.js';
 import { createLogger } from './log.js';
 import { PromptModule, createAdapterPromptModule } from './inquirer.js';
