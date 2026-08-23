@@ -1,8 +1,8 @@
 {
-  "workspaces/adapter": "4.0.2",
+  "workspaces/adapter": "5.0.0",
   "workspaces/conflicter": "4.1.0",
   "workspaces/eslint": "1.1.0",
   "workspaces/namespace": "2.1.0",
   "workspaces/transform": "2.1.2",
-  "workspaces/types": "1.11.1"
+  "workspaces/types": "1.12.0"
 }
