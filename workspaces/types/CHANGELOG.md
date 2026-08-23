@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.12.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.11.1...@yeoman/types@1.12.0) (2026-08-23)
+
+### Features
+
+- add \_meta to GeneratorEnvironmentOptions ([#338](https://github.com/yeoman/yeoman-api/issues/338)) ([07f3970](https://github.com/yeoman/yeoman-api/commit/07f39703d9024c59c930e6911f776e6abfe957ec))
+- add getPackageJson to GeneratorMeta ([#337](https://github.com/yeoman/yeoman-api/issues/337)) ([15b4e12](https://github.com/yeoman/yeoman-api/commit/15b4e1210cf4d305a6e881449dac2c6b28a2ed2c))
+
 ## [1.11.1](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.11.0...@yeoman/types@1.11.1) (2026-04-29)
 
 ### Bug Fixes
