@@ -82,7 +82,7 @@ export type GeneratorMeta = BaseGeneratorMeta & {
    * @since yeoman-environment 6.2.0
    * Get the package.json in packagePath
    */
-  getPackageJson?: <T = unknown>() => Promise<T | undefined>;
+  getPackageJson?: <T = unknown>() => T | undefined;
 };
 
 export type InstantiateOptions<G extends BaseGenerator = BaseGenerator> = {
