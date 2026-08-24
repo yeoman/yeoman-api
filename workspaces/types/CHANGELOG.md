@@ -5,10 +5,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.12.1](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.12.0...@yeoman/types@1.12.1) (2026-08-24)
 
-
 ### Bug Fixes
 
-* convert getPackageJson to sync ([#340](https://github.com/yeoman/yeoman-api/issues/340)) ([6d44180](https://github.com/yeoman/yeoman-api/commit/6d4418033da99aedc311a0519534c16a043d59fb))
+- convert getPackageJson to sync ([#340](https://github.com/yeoman/yeoman-api/issues/340)) ([6d44180](https://github.com/yeoman/yeoman-api/commit/6d4418033da99aedc311a0519534c16a043d59fb))
 
 ## [1.12.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.11.1...@yeoman/types@1.12.0) (2026-08-23)
 
