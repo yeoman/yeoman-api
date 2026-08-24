@@ -5,10 +5,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.13.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.12.1...@yeoman/types@1.13.0) (2026-08-24)
 
-
 ### Features
 
-* accept @yeoman/adapter v5 ([#342](https://github.com/yeoman/yeoman-api/issues/342)) ([3aea020](https://github.com/yeoman/yeoman-api/commit/3aea020784b257d9a5e129210656c5b40261a5c1))
+- accept @yeoman/adapter v5 ([#342](https://github.com/yeoman/yeoman-api/issues/342)) ([3aea020](https://github.com/yeoman/yeoman-api/commit/3aea020784b257d9a5e129210656c5b40261a5c1))
 
 ## [1.12.1](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.12.0...@yeoman/types@1.12.1) (2026-08-24)
 
