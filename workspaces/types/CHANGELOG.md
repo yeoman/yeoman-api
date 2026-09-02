@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.13.1](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.13.0...@yeoman/types@1.13.1) (2026-09-02)
+
+### Bug Fixes
+
+- accept mem-fs v6 ([#347](https://github.com/yeoman/yeoman-api/issues/347)) ([f6d74bf](https://github.com/yeoman/yeoman-api/commit/f6d74bf65744e2aa724b3291384d0389fe2b5c59))
+
 ## [1.13.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.12.1...@yeoman/types@1.13.0) (2026-08-24)
 
 ### Features
