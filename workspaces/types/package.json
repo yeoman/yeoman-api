@@ -36,7 +36,7 @@
   "peerDependencies": {
     "@types/node": ">=16.18.26",
     "@yeoman/adapter": "^1.6.0 || ^2.0.0-beta.0 || ^3.0.0 || ^4.0.0 || ^5.0.0",
-    "mem-fs": "^3.0.0 || ^4.0.0-beta.1"
+    "mem-fs": "^3.0.0 || ^4.0.0-beta.1 || ^6.0.0"
   },
   "peerDependenciesMeta": {
     "@yeoman/adapter": {
