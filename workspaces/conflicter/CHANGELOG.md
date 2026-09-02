@@ -5,10 +5,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [4.2.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@4.1.0...@yeoman/conflicter@4.2.0) (2026-09-02)
 
-
 ### Features
 
-* **conflicter:** allow mem-fs v6 ([#349](https://github.com/yeoman/yeoman-api/issues/349)) ([bd52a17](https://github.com/yeoman/yeoman-api/commit/bd52a17038a41fbce023f7213dbb05ada103dcf9))
+- **conflicter:** allow mem-fs v6 ([#349](https://github.com/yeoman/yeoman-api/issues/349)) ([bd52a17](https://github.com/yeoman/yeoman-api/commit/bd52a17038a41fbce023f7213dbb05ada103dcf9))
 
 ## [4.1.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@4.0.1...@yeoman/conflicter@4.1.0) (2026-04-24)
 
