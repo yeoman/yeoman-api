@@ -142,5 +142,13 @@ describe('TestAdapter', () => {
         throw new Error('Error was expected but not thrown');
       });
     });
+    describe('TestAdapter#close()', () => {
+      it('should abort the adapter without uncaught errors', async () => {
+        const adapter = new TestAdapter();
+        adapter.close();
+        await new Promise(resolve => setTimeout(resolve, 10));
+        expect(adapter.signal.aborted).toBe(true);
+      });
+    });
   });
 });
