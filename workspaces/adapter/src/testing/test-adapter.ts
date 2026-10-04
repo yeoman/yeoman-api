@@ -5,6 +5,7 @@ import type { Logger, PromptAnswers, PromptQuestions, QueuedAdapter, Task } from
 
 import { createLogger } from '../log.js';
 import { PromptModule, createAdapterPromptModule } from '../inquirer.js';
+import { abortWithSignal } from '../signal.js';
 
 type TestQuestion = {
   name: string;
@@ -31,6 +32,8 @@ type SpyFactory<SpyType = any> = ({ returns }: { returns?: any }) => SpyType;
 export type TestAdapterOptions<SpyType = any> = DummyPromptOptions & {
   log?: any;
   spyFactory?: SpyFactory<SpyType>;
+  /** Aborts the adapter when it aborts, like an operation cancelled: its prompts and what uses its signal stop. */
+  signal?: AbortSignal;
 };
 
 export type DefineTestAdapterConfig = Pick<TestAdapterOptions, 'log' | 'spyFactory' | 'throwOnMissingAnswer'>;
@@ -105,6 +108,7 @@ export class TestAdapter<LogType extends Logger = Logger, SpyType = any> impleme
       mockedAnswers,
       callback,
       throwOnMissingAnswer,
+      signal,
     } = options;
 
     this.spyFactory = spyFactory;
@@ -146,6 +150,8 @@ export class TestAdapter<LogType extends Logger = Logger, SpyType = any> impleme
     for (const methodName of logMethods) {
       (this.log as any)[methodName] = this.spyFactory({ returns: this.log });
     }
+
+    abortWithSignal(signal, reason => this.abort(reason));
   }
 
   async queue<TaskResultType>(function_: Task<TaskResultType>): Promise<TaskResultType> {
