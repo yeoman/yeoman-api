@@ -5,15 +5,13 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [5.1.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/adapter@5.0.0...@yeoman/adapter@5.1.0) (2026-10-04)
 
-
 ### Features
 
-* **adapter:** abort an adapter with a signal given ([#357](https://github.com/yeoman/yeoman-api/issues/357)) ([9f090de](https://github.com/yeoman/yeoman-api/commit/9f090de0dcaa28f2c8a4e94c69829d64940c0958))
-
+- **adapter:** abort an adapter with a signal given ([#357](https://github.com/yeoman/yeoman-api/issues/357)) ([9f090de](https://github.com/yeoman/yeoman-api/commit/9f090de0dcaa28f2c8a4e94c69829d64940c0958))
 
 ### Bug Fixes
 
-* **adapter:** avoid uncaught AbortError in TestAdapter on Node.js 26.10 ([#356](https://github.com/yeoman/yeoman-api/issues/356)) ([bcb7341](https://github.com/yeoman/yeoman-api/commit/bcb7341404918998fa6b20c586d79c14ad20045f))
+- **adapter:** avoid uncaught AbortError in TestAdapter on Node.js 26.10 ([#356](https://github.com/yeoman/yeoman-api/issues/356)) ([bcb7341](https://github.com/yeoman/yeoman-api/commit/bcb7341404918998fa6b20c586d79c14ad20045f))
 
 ## [5.0.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/adapter@4.0.2...@yeoman/adapter@5.0.0) (2026-08-23)
 
