@@ -1,5 +1,5 @@
 import events from 'node:events';
-import { Duplex } from 'node:stream';
+import { Duplex, Writable } from 'node:stream';
 import { createPrompt } from '@inquirer/core';
 import type { Logger, PromptAnswers, PromptQuestions, QueuedAdapter, Task } from '../../types/index.js';
 
@@ -114,7 +114,7 @@ export class TestAdapter<LogType extends Logger = Logger, SpyType = any> impleme
     this.spyFactory = spyFactory;
     this.promptModule = createAdapterPromptModule({
       input: Duplex.from('should not read from input'),
-      output: Duplex.from(async () => {}),
+      output: new Writable({ write: (_chunk, _encoding, callback) => callback() }),
       skipTTYChecks: true,
       signal: this.abortController.signal,
     });
