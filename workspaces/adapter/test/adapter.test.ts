@@ -245,6 +245,34 @@ describe('QueuedAdapter/TerminalAdapter', () => {
   });
 
   describe('signal', () => {
+    describe('given', () => {
+      it('aborts the TerminalAdapter when it aborts, with its reason', () => {
+        const controller = new AbortController();
+        const terminalAdapter = new TerminalAdapter({ signal: controller.signal });
+        expect(terminalAdapter.signal.aborted).toBe(false);
+        controller.abort('cancelled');
+        expect(terminalAdapter.signal.aborted).toBe(true);
+        expect(terminalAdapter.signal.reason).toBe('cancelled');
+      });
+
+      it('creates the TerminalAdapter aborted when it is aborted', () => {
+        expect(new TerminalAdapter({ signal: AbortSignal.abort('cancelled') }).signal.reason).toBe('cancelled');
+      });
+
+      it('aborts the QueuedAdapter and its adapter, its queued tasks not run', async () => {
+        for (const options of [{}, { adapter: new TerminalAdapter() }]) {
+          const controller = new AbortController();
+          const queuedAdapter = new QueuedAdapter({ ...options, signal: controller.signal });
+          controller.abort('cancelled');
+          expect(queuedAdapter.signal.aborted).toBe(true);
+          expect(queuedAdapter.actualAdapter.signal?.reason).toBe('cancelled');
+          const task = vitest.fn();
+          await expect(queuedAdapter.queue(task)).rejects.toBe('cancelled');
+          expect(task).not.toHaveBeenCalled();
+        }
+      });
+    });
+
     describe('TerminalAdapter#prompt()', () => {
       let terminalAdapter: TerminalAdapter;
 

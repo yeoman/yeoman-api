@@ -12,6 +12,7 @@ import type {
   QueuedAdapter as QueuedAdapterApi,
 } from '../types/index.js';
 import { TerminalAdapter, type TerminalAdapterOptions } from './adapter.js';
+import { abortWithSignal } from './signal.js';
 
 export type AdapterWithProgress = QueuedAdapterApi;
 
@@ -54,6 +55,10 @@ export class QueuedAdapter implements QueuedAdapterApi {
     this.#queue = queue ?? new PQueue({ concurrency: 1 });
     this.actualAdapter = adapter ?? new TerminalAdapter(adapterOptions);
     this.signal = this.actualAdapter.signal!;
+    if (adapter) {
+      // The terminal adapter created takes the signal itself.
+      abortWithSignal(adapterOptions.signal, reason => this.abort(reason));
+    }
     this.separator = this.actualAdapter.separator;
 
     // Deffered logger

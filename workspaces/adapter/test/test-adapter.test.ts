@@ -123,6 +123,15 @@ describe('TestAdapter', () => {
   });
 
   describe('signal', () => {
+    it('aborts the TestAdapter when a signal given aborts, with its reason', () => {
+      const controller = new AbortController();
+      const adapter = new TestAdapter({ signal: controller.signal });
+      controller.abort('cancelled');
+      expect(adapter.signal.aborted).toBe(true);
+      expect(adapter.signal.reason).toBe('cancelled');
+      expect(new TestAdapter({ signal: AbortSignal.abort('cancelled') }).signal.aborted).toBe(true);
+    });
+
     describe('TestAdapter#prompt()', () => {
       it('if prompt fails it should abort the adapter', async () => {
         const adapter = new TestAdapter();

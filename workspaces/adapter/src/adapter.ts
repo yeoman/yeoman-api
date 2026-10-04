@@ -5,6 +5,7 @@ import { Separator } from '@inquirer/prompts';
 import type { InputOutputAdapter, Logger, PromptAnswers, PromptQuestions } from '../types/index.js';
 import { createLogger } from './log.js';
 import { PromptModule, createAdapterPromptModule } from './inquirer.js';
+import { abortWithSignal } from './signal.js';
 
 export type TerminalAdapterOptions = {
   promptModule?: PromptModule;
@@ -13,6 +14,8 @@ export type TerminalAdapterOptions = {
   stderr?: NodeJS.WriteStream;
   console?: Console;
   log?: any;
+  /** Aborts the adapter when it aborts, like an operation cancelled: its prompts and what uses its signal stop. */
+  signal?: AbortSignal;
 };
 
 export class TerminalAdapter implements InputOutputAdapter {
@@ -50,6 +53,7 @@ export class TerminalAdapter implements InputOutputAdapter {
         signal: this.abortController.signal,
       });
     this.log = options?.log ?? createLogger(this);
+    abortWithSignal(options?.signal, reason => this.abort(reason));
   }
 
   get _colorDiffAdded() {
