@@ -53,6 +53,13 @@ type GeneratorEnvironmentOptions = {
 
   /** The path to the current generator */
   resolved: string;
+
+  /**
+   * @since yeoman-environment 8.3.0
+   * The namespace the generator was created for, with its instance id (`namespace#id`), provided by the environment
+   * at instantiation time. `namespace` stays the one of the generator, without the instance id.
+   */
+  namespaceId?: string;
   /**
    * @since yeoman-environment 6.2.0
    * Generator metadata, provided by the environment at instantiation time.
