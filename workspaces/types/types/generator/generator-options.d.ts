@@ -56,8 +56,9 @@ type GeneratorEnvironmentOptions = {
 
   /**
    * @since yeoman-environment 8.3.0
-   * The namespace the generator was created for, with its instance id (`namespace#id`), provided by the environment
-   * at instantiation time. `namespace` stays the one of the generator, without the instance id.
+   * The namespace the generator was created for, complete with its version, instance id, methods and flags
+   * (`namespace@semver@#id+method?`), provided by the environment at instantiation time. `namespace` stays the one of
+   * the generator, without them.
    */
   namespaceId?: string;
   /**
