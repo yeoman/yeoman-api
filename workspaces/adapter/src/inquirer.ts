@@ -1,10 +1,15 @@
-import { createPromptModule } from 'inquirer';
+import { createRequire } from 'node:module';
+import type { createPromptModule } from 'inquirer';
 export type * from '@inquirer/prompts';
+
+const require = createRequire(import.meta.url);
 
 /**
  * Creates a prompt module with a deprecated `list` prompt aliasing the `select` prompt.
  */
 export const createAdapterPromptModule: typeof createPromptModule = parameter => {
+  // inquirer is loaded by the first prompt module.
+  const { createPromptModule } = require('inquirer') as typeof import('inquirer');
   const promptModule = createPromptModule(parameter);
   const originalRestoreDefaultPrompts = promptModule.restoreDefaultPrompts;
   promptModule.restoreDefaultPrompts = () => {

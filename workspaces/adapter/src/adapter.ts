@@ -1,11 +1,13 @@
 import process from 'node:process';
+import { createRequire } from 'node:module';
 import console from 'node:console';
 import chalk from 'chalk';
-import { Separator } from '@inquirer/prompts';
 import type { InputOutputAdapter, Logger, PromptAnswers, PromptQuestions } from '../types/index.js';
 import { createLogger } from './log.js';
 import { PromptModule, createAdapterPromptModule } from './inquirer.js';
 import { abortWithSignal } from './signal.js';
+
+const require = createRequire(import.meta.url);
 
 export type TerminalAdapterOptions = {
   promptModule?: PromptModule;
@@ -24,7 +26,7 @@ export class TerminalAdapter implements InputOutputAdapter {
   stderr: NodeJS.WriteStream;
   console: Console;
   log: Logger;
-  promptModule: PromptModule;
+  #promptModule?: PromptModule;
   private abortController = new AbortController();
   readonly signal: AbortSignal = this.abortController.signal;
 
@@ -44,16 +46,24 @@ export class TerminalAdapter implements InputOutputAdapter {
     this.stderr = options?.stderr ?? options?.stdout ?? process.stderr;
     this.console = options?.console ?? new console.Console(this.stdout, this.stderr);
 
-    this.promptModule =
-      options?.promptModule ??
-      createAdapterPromptModule({
-        skipTTYChecks: true,
-        input: this.stdin,
-        output: this.stdout,
-        signal: this.abortController.signal,
-      });
+    this.#promptModule = options?.promptModule;
     this.log = options?.log ?? createLogger(this);
     abortWithSignal(options?.signal, reason => this.abort(reason));
+  }
+
+  /** The prompt module, created at its first use: inquirer is loaded by the first prompt. */
+  get promptModule(): PromptModule {
+    this.#promptModule ??= createAdapterPromptModule({
+      skipTTYChecks: true,
+      input: this.stdin,
+      output: this.stdout,
+      signal: this.abortController.signal,
+    });
+    return this.#promptModule;
+  }
+
+  set promptModule(promptModule: PromptModule) {
+    this.#promptModule = promptModule;
   }
 
   get _colorDiffAdded() {
@@ -102,6 +112,7 @@ export class TerminalAdapter implements InputOutputAdapter {
   }
 
   separator(separator?: string) {
+    const { Separator } = require('@inquirer/prompts') as typeof import('@inquirer/prompts');
     return new Separator(separator);
   }
 }
