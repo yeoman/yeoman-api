@@ -5,10 +5,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [5.1.1](https://github.com/yeoman/yeoman-api/compare/@yeoman/adapter@5.1.0...@yeoman/adapter@5.1.1) (2026-10-21)
 
-
 ### Performance Improvements
 
-* **adapter:** load inquirer and ora when used ([#369](https://github.com/yeoman/yeoman-api/issues/369)) ([b5a2f27](https://github.com/yeoman/yeoman-api/commit/b5a2f2763c88dbdbb980ecf18cbddb486b62bdc2))
+- **adapter:** load inquirer and ora when used ([#369](https://github.com/yeoman/yeoman-api/issues/369)) ([b5a2f27](https://github.com/yeoman/yeoman-api/commit/b5a2f2763c88dbdbb980ecf18cbddb486b62bdc2))
 
 ## [5.1.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/adapter@5.0.0...@yeoman/adapter@5.1.0) (2026-10-04)
 
