@@ -1,6 +1,7 @@
 import process from 'node:process';
+import { createRequire } from 'node:module';
 import { format } from 'node:util';
-import ora, { type Ora } from 'ora';
+import type { Ora } from 'ora';
 import PQueue from 'p-queue';
 import type {
   InputOutputAdapter,
@@ -13,6 +14,8 @@ import type {
 } from '../types/index.js';
 import { TerminalAdapter, type TerminalAdapterOptions } from './adapter.js';
 import { abortWithSignal } from './signal.js';
+
+const require = createRequire(import.meta.url);
 
 export type AdapterWithProgress = QueuedAdapterApi;
 
@@ -37,7 +40,9 @@ export class QueuedAdapter implements QueuedAdapterApi {
   delta: number;
   log: Logger;
   #nextChildPriority: number;
-  #ora: Ora;
+  // The spinner of the progress, created by the first progress shown.
+  #ora?: Ora;
+  #oraStream: NodeJS.WritableStream;
   separator?: QueuedAdapterApi['separator'];
   readonly signal: AbortSignal;
 
@@ -81,9 +86,7 @@ export class QueuedAdapter implements QueuedAdapterApi {
     this.delta = (delta ?? MAIN_ADAPTER_PRIORITY) * 100;
     this.#nextChildPriority = MAIN_ADAPTER_PRIORITY - 1;
 
-    this.#ora = ora({
-      stream: options?.stdout ?? options?.stderr ?? process.stderr,
-    });
+    this.#oraStream = options?.stdout ?? options?.stderr ?? process.stderr;
   }
 
   newAdapter(delta?: number) {
@@ -152,7 +155,7 @@ export class QueuedAdapter implements QueuedAdapterApi {
    * @returns
    */
   async progress<ReturnType>(function_: ProgressCallback<ReturnType>, options?: ProgressOptions): Promise<ReturnType> {
-    if (this.#queue.size > 0 || this.#queue.pending > 0 || options?.disabled || this.#ora.isSpinning) {
+    if (this.#queue.size > 0 || this.#queue.pending > 0 || options?.disabled || this.#ora?.isSpinning) {
       // Don't show progress if queue is not empty or already spinning.
       return Promise.resolve(function_({ step() {} })).finally(() => {
         if (options?.name) {
@@ -161,22 +164,24 @@ export class QueuedAdapter implements QueuedAdapterApi {
       });
     }
 
+    const { default: ora } = require('ora') as typeof import('ora');
+    const spinner = (this.#ora ??= ora({ stream: this.#oraStream }));
     try {
-      this.#ora.start(options?.name);
+      spinner.start(options?.name);
     } catch {
-      this.#ora.stop();
+      spinner.stop();
     }
 
     const step = (prefix: string, message: string, ...arguments_: any[]) => {
-      if (this.#ora.isSpinning) {
-        this.#ora.suffixText = `: ${prefix} ${format(message, ...arguments_)}`;
+      if (spinner.isSpinning) {
+        spinner.suffixText = `: ${prefix} ${format(message, ...arguments_)}`;
       }
     };
 
     return this.queue(() => function_({ step })).finally(() => {
-      if (this.#ora.isSpinning) {
-        this.#ora.suffixText = '';
-        this.#ora.succeed(options?.name);
+      if (spinner.isSpinning) {
+        spinner.suffixText = '';
+        spinner.succeed(options?.name);
       }
     });
   }
