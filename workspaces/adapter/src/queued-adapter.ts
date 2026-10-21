@@ -15,6 +15,15 @@ import type {
 import { TerminalAdapter, type TerminalAdapterOptions } from './adapter.js';
 import { abortWithSignal } from './signal.js';
 
+declare global {
+  // The types of p-queue use the DOM AddEventListenerOptions, which @types/node does not declare globally.
+  interface AddEventListenerOptions extends EventListenerOptions {
+    once?: boolean;
+    passive?: boolean;
+    signal?: AbortSignal;
+  }
+}
+
 const require = createRequire(import.meta.url);
 
 export type AdapterWithProgress = QueuedAdapterApi;
