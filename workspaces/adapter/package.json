@@ -52,7 +52,7 @@
     "inquirer": "^14.0.0",
     "log-symbols": "^7.0.1",
     "ora": "^9.4.0",
-    "p-queue": "^9.1.2",
+    "p-queue": "^10.0.0",
     "text-table": "^0.2.0"
   },
   "devDependencies": {
