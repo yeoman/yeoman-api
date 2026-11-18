@@ -1,6 +1,6 @@
 {
   "name": "@yeoman/transform",
-  "version": "2.1.2",
+  "version": "3.0.0",
   "private": false,
   "description": "Namespace parsing for yeoman's generator/environment stack",
   "keywords": [
