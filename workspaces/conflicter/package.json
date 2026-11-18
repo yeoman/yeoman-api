@@ -36,14 +36,14 @@
     "test": "vitest run --coverage"
   },
   "dependencies": {
-    "@yeoman/transform": "^2.1.1",
+    "@yeoman/transform": "^3.0.0",
     "binary-extensions": "^3.1.0",
     "cli-table": "^0.3.11",
     "dateformat": "^5.0.3",
     "diff": "^9.0.0",
     "isbinaryfile": "^5.0.4",
     "mem-fs-editor": "^12.0.4",
-    "minimatch": "^10.2.5",
+    "minimatch": "^11.0.8",
     "p-transform": "^5.0.1",
     "pretty-bytes": "^7.1.0",
     "slash": "^5.1.0",
