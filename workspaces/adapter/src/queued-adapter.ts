@@ -15,6 +15,15 @@ import type {
 import { TerminalAdapter, type TerminalAdapterOptions } from './adapter.js';
 import { abortWithSignal } from './signal.js';
 
+declare global {
+  // The types of p-queue use the DOM AddEventListenerOptions, which @types/node does not declare globally.
+  interface AddEventListenerOptions extends EventListenerOptions {
+    once?: boolean;
+    passive?: boolean;
+    signal?: AbortSignal;
+  }
+}
+
 const require = createRequire(import.meta.url);
 
 export type AdapterWithProgress = QueuedAdapterApi;
@@ -67,8 +76,16 @@ export class QueuedAdapter implements QueuedAdapterApi {
     this.separator = this.actualAdapter.separator;
 
     // Deffered logger
+    const queueLog = (function_: Task<void>) => {
+      this.queueLog(function_).catch((error: unknown) => {
+        // A pending log is dropped when the queue is cleared by abort.
+        if ((error as Error | undefined)?.name !== 'AbortError') {
+          console.error(error);
+        }
+      });
+    };
     const defferredLogger = (...arguments_: any[]) => {
-      this.queueLog(() => {
+      queueLog(() => {
         this.actualAdapter.log(...arguments_);
       });
       return defferredLogger;
@@ -76,9 +93,9 @@ export class QueuedAdapter implements QueuedAdapterApi {
 
     Object.assign(defferredLogger, this.actualAdapter.log);
     defferredLogger.write = (...arguments_: any[]) => {
-      this.queueLog(() => {
+      queueLog(() => {
         this.actualAdapter.log.write(...arguments_);
-      }).catch(console.error);
+      });
       return defferredLogger;
     };
 

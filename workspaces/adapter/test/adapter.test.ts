@@ -150,6 +150,26 @@ describe('QueuedAdapter/TerminalAdapter', () => {
       await adapter.onIdle();
       expect(spyerror).toHaveBeenCalled();
     });
+
+    it('drops the pending logs on abort', async () => {
+      const consoleError = vitest.spyOn(console, 'error').mockImplementation(() => {});
+      const unhandled = vitest.fn();
+      process.on('unhandledRejection', unhandled);
+      try {
+        const blocking = adapter.queue(async () => new Promise(resolve => setTimeout(resolve, 10)));
+        adapter.log('pending log');
+        adapter.log.write('pending write');
+        adapter.abort();
+        await expect(blocking).rejects.toThrow();
+        await new Promise(resolve => setTimeout(resolve, 20));
+        expect(unhandled).not.toHaveBeenCalled();
+        expect(consoleError).not.toHaveBeenCalled();
+        expect(logMessage).toBe('');
+      } finally {
+        process.off('unhandledRejection', unhandled);
+        consoleError.mockRestore();
+      }
+    });
   });
 
   describe('#log', () => {
