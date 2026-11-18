@@ -5,10 +5,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [4.3.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@4.2.0...@yeoman/conflicter@4.3.0) (2026-11-18)
 
-
 ### Features
 
-* **conflicter:** bump @yeoman/transform to v3 and minimatch to v11 ([#386](https://github.com/yeoman/yeoman-api/issues/386)) ([e0ee78c](https://github.com/yeoman/yeoman-api/commit/e0ee78cd24dec717c43265d46779c2f28f80d4e9))
+- **conflicter:** bump @yeoman/transform to v3 and minimatch to v11 ([#386](https://github.com/yeoman/yeoman-api/issues/386)) ([e0ee78c](https://github.com/yeoman/yeoman-api/commit/e0ee78cd24dec717c43265d46779c2f28f80d4e9))
 
 ## [4.2.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/conflicter@4.1.0...@yeoman/conflicter@4.2.0) (2026-09-02)
 
