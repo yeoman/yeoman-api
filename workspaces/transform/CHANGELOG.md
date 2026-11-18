@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/transform@2.1.2...@yeoman/transform@3.0.0) (2026-11-18)
+
+
+### ⚠ BREAKING CHANGES
+
+* **transform:** requires node 20 || >=22.
+
+### Bug Fixes
+
+* **transform:** bump minimatch to v11 ([#382](https://github.com/yeoman/yeoman-api/issues/382)) ([9575030](https://github.com/yeoman/yeoman-api/commit/9575030dadc613b73191631b7d95e62ec9b7652d))
+
 ## [2.1.2](https://github.com/yeoman/yeoman-api/compare/@yeoman/transform@2.1.1...@yeoman/transform@2.1.2) (2026-05-29)
 
 ### Bug Fixes
