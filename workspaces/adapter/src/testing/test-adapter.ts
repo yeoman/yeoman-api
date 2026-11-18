@@ -1,11 +1,13 @@
 import events from 'node:events';
+import { createRequire } from 'node:module';
 import { Duplex, Writable } from 'node:stream';
-import { createPrompt } from '@inquirer/core';
 import type { Logger, PromptAnswers, PromptQuestions, QueuedAdapter, Task } from '../../types/index.js';
 
 import { createLogger } from '../log.js';
 import { PromptModule, createAdapterPromptModule } from '../inquirer.js';
 import { abortWithSignal } from '../signal.js';
+
+const require = createRequire(import.meta.url);
 
 type TestQuestion = {
   name: string;
@@ -55,6 +57,9 @@ const isValueSet = (type: string, answer: any) => {
 
 const createDummyPrompt = ({ calls }: { calls: PromptCalls[] }, options: DummyPromptOptions = {}) => {
   const { mockedAnswers = {}, callback = answer => answer, throwOnMissingAnswer = false } = options;
+  // @inquirer/core is a dependency of inquirer, resolved from it to use the same version without declaring it.
+  const requireFromInquirer = createRequire(require.resolve('inquirer'));
+  const { createPrompt } = requireFromInquirer('@inquirer/core') as typeof import('@inquirer/core');
   return createPrompt<any, TestQuestion>((config, done) => {
     let answer = mockedAnswers[config.name!];
 
