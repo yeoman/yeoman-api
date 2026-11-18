@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.2.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/adapter@5.1.1...@yeoman/adapter@5.2.0) (2026-11-18)
+
+### Features
+
+- **adapter:** bump p-queue to v10 ([#385](https://github.com/yeoman/yeoman-api/issues/385)) ([2251084](https://github.com/yeoman/yeoman-api/commit/2251084973cddcf25e883b7dcfe26975561f0193))
+- **deps:** bump ora from 9.4.1 to 10.0.0 ([#376](https://github.com/yeoman/yeoman-api/issues/376)) ([f52f4cb](https://github.com/yeoman/yeoman-api/commit/f52f4cbf8c0c8a1a649aa7ef76a7a4502df408d9))
+
+### Bug Fixes
+
+- **adapter:** resolve @inquirer/core from inquirer in the test adapter ([#381](https://github.com/yeoman/yeoman-api/issues/381)) ([e64152a](https://github.com/yeoman/yeoman-api/commit/e64152afd6bb4ac602c1ea25b11a3f9602acc032)), closes [#377](https://github.com/yeoman/yeoman-api/issues/377)
+
 ## [5.1.1](https://github.com/yeoman/yeoman-api/compare/@yeoman/adapter@5.1.0...@yeoman/adapter@5.1.1) (2026-10-21)
 
 ### Performance Improvements
