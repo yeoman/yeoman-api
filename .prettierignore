@@ -3,4 +3,4 @@ workspaces/*/dist/**
 workspaces/*/coverage/**
 package-lock.json
 **/fixtures/**
-
+CHANGELOG.md
