@@ -84,6 +84,7 @@ export type GeneratorMeta = BaseGeneratorMeta & {
    */
   getPackageJson?: <T = unknown>() => T | undefined;
   /**
+   * @since yeoman-environment 8.8.0
    * Get the version of the package: `yeoman.meta.packageVersion` of its package.json, or its `version`.
    */
   getPackageVersion?: () => string | undefined;
