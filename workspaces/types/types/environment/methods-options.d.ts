@@ -107,16 +107,6 @@ export type GeneratorMeta = BaseGeneratorMeta & {
 export type InstantiateOptions<G extends BaseGenerator = BaseGenerator> = {
   generatorArgs?: string[];
   generatorOptions?: Partial<Omit<GetGeneratorOptions<G>, 'env' | 'resolved' | 'namespace'>> | undefined;
-  /**
-   * @since yeoman-environment 8.6.0
-   * The namespace of a generator class that is not registered, instead of the one the class keeps.
-   */
-  namespace?: string;
-  /**
-   * @since yeoman-environment 8.6.0
-   * The path of a generator class that is not registered, instead of the one the class keeps.
-   */
-  resolved?: string;
 };
 
 export type ComposeOptions<G extends BaseGenerator = BaseGenerator> = InstantiateOptions<G> & SchedulingOptions<G>;
