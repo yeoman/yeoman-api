@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.14.0](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.13.1...@yeoman/types@1.14.0) (2026-11-20)
+
+
+### Features
+
+* **types:** declare the meta functions given by the environment ([#389](https://github.com/yeoman/yeoman-api/issues/389)) ([7b147d2](https://github.com/yeoman/yeoman-api/commit/7b147d234340711bebdd9171965b093d79112f8d))
+* **types:** declare the namespaceId generator option ([#359](https://github.com/yeoman/yeoman-api/issues/359)) ([c651512](https://github.com/yeoman/yeoman-api/commit/c651512a025a4459276df8bafa657324a2413525))
+
 ## [1.13.1](https://github.com/yeoman/yeoman-api/compare/@yeoman/types@1.13.0...@yeoman/types@1.13.1) (2026-09-02)
 
 ### Bug Fixes
