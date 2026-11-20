@@ -83,11 +83,40 @@ export type GeneratorMeta = BaseGeneratorMeta & {
    * Get the package.json in packagePath
    */
   getPackageJson?: <T = unknown>() => T | undefined;
+  /**
+   * Get the version of the package: `yeoman.meta.packageVersion` of its package.json, or its `version`.
+   */
+  getPackageVersion?: () => string | undefined;
+  /**
+   * @since yeoman-environment 7.2.0
+   * Require the module `require(meta.resolved)`, throws if the module cannot be required synchronously.
+   */
+  requireModule?: () => unknown;
+  /**
+   * @since yeoman-environment 8.4.0
+   * Require the sibling module of the name, like `command.ts` next to `index.ts`, `undefined` if missing.
+   */
+  requireSibling?: (name: string) => unknown;
+  /**
+   * @since yeoman-environment 8.4.0
+   * Import the sibling module of the name, like `requireSibling` for a module that can not be required.
+   */
+  importSibling?: (name: string) => Promise<unknown>;
 };
 
 export type InstantiateOptions<G extends BaseGenerator = BaseGenerator> = {
   generatorArgs?: string[];
   generatorOptions?: Partial<Omit<GetGeneratorOptions<G>, 'env' | 'resolved' | 'namespace'>> | undefined;
+  /**
+   * @since yeoman-environment 8.6.0
+   * The namespace of a generator class that is not registered, instead of the one the class keeps.
+   */
+  namespace?: string;
+  /**
+   * @since yeoman-environment 8.6.0
+   * The path of a generator class that is not registered, instead of the one the class keeps.
+   */
+  resolved?: string;
 };
 
 export type ComposeOptions<G extends BaseGenerator = BaseGenerator> = InstantiateOptions<G> & SchedulingOptions<G>;
